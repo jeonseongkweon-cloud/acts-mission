@@ -1,31 +1,24 @@
-ACTS Mission Alliance GitHub Pages 홈페이지
-==========================================
+ACTS Mission Alliance Website v2.0
+=================================
 
-1) ZIP 압축을 풉니다.
-2) GitHub 저장소의 최상위(root)에 파일/폴더를 모두 업로드합니다.
-3) GitHub Settings > Pages > Deploy from a branch > main / root 로 설정합니다.
-4) index.html이 메인 화면입니다.
+GitHub Pages 업로드 방법
+1) 이 폴더 안의 파일과 assets 폴더를 모두 선택합니다.
+2) GitHub 저장소 acts-mission > Add file > Upload files 로 들어갑니다.
+3) 기존 파일과 같은 이름의 파일을 모두 업로드합니다.
+4) Commit changes 를 누릅니다.
+5) GitHub Pages가 자동 갱신될 때까지 1~3분 정도 기다린 뒤 새로고침합니다.
 
-주요 파일
-- index.html : 메인 홈페이지
-- mission.html : 미션과 비전
-- programs.html : 프로그램
-- academy.html : 디지털 아카데미
-- network.html : Mission Center 국제 네트워크
-- join.html : 참여 안내
-- idp.html : 국제드론순찰대 연결
-- assets/acts-mission-hero.png : 메인 비전 이미지
-- styles.css : 전체 디자인
-- app.js : 간단 스크립트
-
-외부 연결
-- 태권검도 디지털 트레이닝:
-  https://jeonseongkweon-cloud.github.io/taegeom-training/training.html
-- 국제드론순찰대 홈페이지(임시 연결):
-  https://idp.ai.kr/
-- IDP 시뮬레이터(예상 GitHub Pages 주소):
-  https://jeonseongkweon-cloud.github.io/idp-simulator/
+주요 업데이트
+- 신앙원칙(Statement of Faith) 페이지 faith.html 추가
+- 대한예수교장로회·고신 등 정통 교단의 신앙 전통을 존중한다는 방향 명시
+- 교단명보다 하나님과 예수 그리스도의 십자가·부활 복음이 우선이라는 원칙 명시
+- 해외 선교사 대상 디지털 트레이닝 및 선교 라이선스 무료 정책 강조
+- 태권검도 디지털 트레이닝 직접 연결
+- 국제드론순찰대 연결 유지
+- 모든 주요 페이지 하단에 총괄대표 전성권 연락처 표시
+  전화: 010-4477-2277
+  이메일: jeonseongkweon@gmail.com
 
 주의
-- IDP 실제 홈페이지 주소가 다르면 idp.html의 href 주소만 수정하세요.
-- ACTS Mission Alliance라는 명칭은 현재 '프로토타입 브랜드명'으로 넣었습니다. 최종 확정 전 국내외 단체명/상표/도메인 중복 확인을 권장합니다.
+- 특정 교단과 공식 협약/승인이 없는 경우 해당 교단의 공식 산하기관·공식 후원단체라고 표기하지 않습니다.
+- '라이선스 무료'는 선교 목적 정책이며 실제 발급은 교육·평가·신앙 및 소속 확인 절차를 두는 것을 권장합니다.
