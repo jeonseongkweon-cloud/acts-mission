@@ -1,4 +1,8 @@
+// ACTS Mission Alliance v3.0
+// Google Sheets: 파일 > 공유 > 웹에 게시 > CSV 주소를 아래 따옴표 안에 넣으세요.
+// 예: window.ACTS_GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/.../pub?output=csv';
+window.ACTS_GOOGLE_SHEET_CSV = '';
+
 document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
-const mobile=document.querySelector('.mobile');
-const menu=document.querySelector('.menu');
-if(mobile&&menu){mobile.addEventListener('click',()=>{menu.style.display=menu.style.display==='flex'?'none':'flex';menu.style.position='absolute';menu.style.top='72px';menu.style.left='0';menu.style.right='0';menu.style.padding='18px 4%';menu.style.background='#071a2e';menu.style.flexWrap='wrap';});}
+const mobile=document.querySelector('.mobile'),menu=document.querySelector('.menu');
+if(mobile&&menu){mobile.addEventListener('click',()=>{menu.classList.toggle('open')})}
