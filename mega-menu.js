@@ -1,4 +1,4 @@
-// ACTS MISSION ALLIANCE v5.1.2 — STICKY DESKTOP MEGA MENU
+// ACTS MISSION ALLIANCE v5.1.3 — STICKY DESKTOP MEGA MENU
 // Desktop: hover/click opens a menu and it stays open until another menu,
 // an outside click, Escape, or a submenu link is selected.
 (() => {

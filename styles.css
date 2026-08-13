@@ -156,3 +156,17 @@ header .menu{gap:10px!important;font-size:10.5px!important}@media(max-width:1180
 }
 
 /* v5.1.2 sticky desktop mega menu: JS intentionally does not close on mouseleave. */
+
+
+/* =========================================================
+   v5.1.3 — Public committee directory & member profiles
+   ========================================================= */
+.committee-card-linkable{display:flex;flex-direction:column;min-height:190px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.committee-card-linkable:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(8,31,53,.10);border-color:#d7b35f}
+.committee-detail-btn{display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;margin-top:auto;padding:10px 16px;border-radius:999px;background:#071a2e;color:#fff!important;text-decoration:none!important;font-size:12px;font-weight:900;letter-spacing:.1px;border:1px solid #071a2e;transition:.2s ease}
+.committee-detail-btn:hover{background:#d5a640;color:#071a2e!important;border-color:#d5a640;transform:translateX(2px)}
+.committee-detail-topbar{display:flex;justify-content:flex-start;margin-bottom:28px}.committee-back-btn{display:inline-flex;align-items:center;padding:10px 15px;border:1px solid #d9e0e7;border-radius:999px;background:#fff;color:#17314a;text-decoration:none;font-size:12px;font-weight:900}.committee-back-btn:hover{border-color:#d5a640;color:#8b6416}
+.committee-public-section{margin-top:26px}.committee-intro-box{background:#fff;border:1px solid #dde5ec;border-radius:18px;padding:28px;box-shadow:0 8px 24px rgba(7,26,46,.05)}.committee-intro-box p{margin:0 0 18px;color:#516579;line-height:1.8}.committee-intro-box ul{margin:0;padding-left:20px;display:grid;gap:8px;color:#243b51;line-height:1.6}
+.committee-member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.committee-member-card{overflow:hidden;background:#fff;border:1px solid #dfe6ec;border-radius:18px;box-shadow:0 8px 24px rgba(7,26,46,.06)}.committee-member-photo{aspect-ratio:4/5;background:linear-gradient(145deg,#0b2947,#163f66);display:flex;align-items:center;justify-content:center;color:#d5a640;font-size:24px;font-weight:900;letter-spacing:1px}.committee-member-photo img{width:100%;height:100%;object-fit:cover;display:block}.committee-member-body{padding:18px}.committee-member-role{display:inline-block;color:#9a741d;font-size:11px;font-weight:900;margin-bottom:7px}.committee-member-body h3{margin:0;color:#071a2e;font-size:19px}.committee-member-body p{margin:10px 0 0;color:#68798a;font-size:12px;line-height:1.65}.committee-empty{padding:34px;text-align:center;border:1px dashed #cad4de;border-radius:18px;background:#fafbfd;color:#778797;font-size:13px}
+@media(max-width:980px){.committee-member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.committee-member-grid{grid-template-columns:1fr}.committee-card-linkable{min-height:0}.committee-intro-box{padding:20px}}
