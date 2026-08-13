@@ -1,0 +1,9 @@
+ACTS MISSION ALLIANCE v5.0 — DIGITAL MISSION HQ
+
+수정 완료
+- v5 신규 메뉴 한국어화
+- 기도센터 12개 기도문 이미지를 prayer.html 내부에 직접 내장
+- 미디어 자료실 VERSION 5.0 통일
+- 기존 _v4.4-preserved 보존
+
+GitHub에는 ZIP 파일 자체가 아니라 압축을 푼 내용물을 업로드하세요.
