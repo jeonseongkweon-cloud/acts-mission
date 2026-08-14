@@ -17,13 +17,13 @@
 <meta name="twitter:title" content="ACTS MISSION ALLIANCE | 액츠 선교연합">
 <meta name="twitter:description" content="복음을 전하고, 사람을 세우며, 세상을 섬기는 ACTS의 사명은 계속됩니다.">
 <meta name="twitter:image" content="https://acts.pe.kr/assets/acts-kakao-share.png">
-<link rel="stylesheet" href="styles.css?v=5.2.0"></head>
+<link rel="stylesheet" href="styles.css?v=5.2.1"></head>
 <body class="v5-body">
 <header class="mega-header" id="siteHeader">
   <div class="mega-nav-wrap">
     <a class="mega-brand" href="index.html" aria-label="ACTS Mission Alliance 홈">
       <img src="assets/official/official-logo.webp" alt="ACTS Mission Alliance">
-      <span><b>ACTS MISSION ALLIANCE</b><small>DIGITAL MISSION HQ · VERSION 5.2</small></span>
+      <span><b>ACTS MISSION ALLIANCE</b><small>DIGITAL MISSION HQ · VERSION 5.2.1</small></span>
     </a>
     <button class="mega-mobile-btn" type="button" aria-expanded="false" aria-controls="megaMenu" aria-label="전체 메뉴 열기">☰</button>
     <nav class="mega-menu" id="megaMenu" aria-label="주요 메뉴">
@@ -108,7 +108,7 @@
 <div class="v52-orbit orbit-a" aria-hidden="true"></div><div class="v52-orbit orbit-b" aria-hidden="true"></div>
 <div class="v5-container v52-grid">
   <div class="v52-copy">
-    <span class="v52-kicker">ACTS MISSION ALLIANCE · VERSION 5.2</span>
+    <span class="v52-kicker">ACTS MISSION ALLIANCE · VERSION 5.2.1</span>
     <h1><span>ACTS</span><em>DIGITAL MISSION HQ</em></h1>
     <p class="v52-lead">복음을 전하고, 사람을 세우며, 세상을 섬기는 사명을 디지털로 연결합니다. <b>기도 · 교육 · 선교 · 섬김 · 세계 네트워크</b>가 하나의 플랫폼에서 이어집니다.</p>
     <div class="v52-actions"><a class="v52-btn primary" href="mission-hq.html">디지털 선교본부 둘러보기 <i>→</i></a><a class="v52-btn glass" href="prayer.html">Prayer Center <i>✦</i></a></div>
@@ -166,12 +166,60 @@
   <div class="v5-footer-grid">
     <div><b>ACTS MISSION ALLIANCE</b><p>액츠 선교연합 · ACTION · CHRIST · TRAINING · SERVICE</p></div>
     <div><b>DIGITAL MISSION HQ</b><p>대한민국에서 시작하여 세계 선교사·교회·지도자·전문인을 연결하는 디지털 선교본부</p></div>
-    <div><b>VERSION</b><p>ACTS MISSION ALLIANCE · VERSION 5.2 · 2026.08</p></div>
+    <div><b>VERSION</b><p>ACTS MISSION ALLIANCE · VERSION 5.2.1 · 2026.08</p></div>
   </div>
 </footer>
 <script>
 document.querySelectorAll('.v5-menu a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('v5-menu-open')));
 </script><script>
-(()=>{const c=document.getElementById('missionNetwork');if(!c)return;const x=c.getContext('2d');let w,h,dpr,pts=[];function size(){dpr=Math.min(devicePixelRatio||1,2);w=c.clientWidth;h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0);pts=Array.from({length:Math.min(54,Math.floor(w/24))},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.12,r:Math.random()*1.3+.5}))}function draw(){x.clearRect(0,0,w,h);for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fillStyle='rgba(226,181,92,.55)';x.fill()}for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);if(d<125){x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.strokeStyle=`rgba(87,160,214,${.12*(1-d/125)})`;x.stroke()}}requestAnimationFrame(draw)}addEventListener('resize',size,{passive:true});size();if(!matchMedia('(prefers-reduced-motion: reduce)').matches)draw();})();
+(()=>{
+  const c=document.getElementById('missionNetwork');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  let w=0,h=0,dpr=1,pts=[],raf=0;
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    w=Math.max(1,c.clientWidth); h=Math.max(1,c.clientHeight);
+    c.width=Math.round(w*dpr); c.height=Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const count=Math.max(34,Math.min(72,Math.floor(w/20)));
+    pts=Array.from({length:count},()=>({x:rnd(0,w),y:rnd(0,h),vx:rnd(-.34,.34),vy:rnd(-.24,.24),r:rnd(.8,2.1),p:rnd(0,Math.PI*2)}));
+  }
+  function draw(t=0){
+    ctx.clearRect(0,0,w,h);
+    for(const p of pts){
+      p.x+=p.vx; p.y+=p.vy; p.p+=.035;
+      if(p.x<0||p.x>w){p.vx*=-1;p.x=Math.max(0,Math.min(w,p.x));}
+      if(p.y<0||p.y>h){p.vy*=-1;p.y=Math.max(0,Math.min(h,p.y));}
+      const glow=1.2+Math.sin(p.p)*.7;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r+glow*.25,0,Math.PI*2);
+      ctx.fillStyle='rgba(237,190,91,.78)'; ctx.fill();
+    }
+    for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+      const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+      if(d<150){
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(78,164,225,${.26*(1-d/150)})`;
+        ctx.lineWidth=.7;ctx.stroke();
+      }
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize,{passive:true});
+  resize(); draw();
+
+  const hero=document.getElementById('missionHero');
+  const command=hero?.querySelector('.v52-command');
+  if(hero&&command){
+    hero.addEventListener('pointermove',e=>{
+      const r=hero.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+      command.style.setProperty('--px',`${px*12}px`);
+      command.style.setProperty('--py',`${py*9}px`);
+    },{passive:true});
+    hero.addEventListener('pointerleave',()=>{command.style.setProperty('--px','0px');command.style.setProperty('--py','0px');},{passive:true});
+  }
+})();
 </script>
 <script src="mega-menu.js?v=5.1.2"></script></body></html>
