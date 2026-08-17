@@ -196,6 +196,27 @@ body{margin:0;background:#f4f6f9;color:#1f2937}
   }
 }
 
+
+/* ACTS 게시판 전용 이미지 배너 */
+.board-image-banner{
+  width:100%;
+  margin:0;
+  padding:0;
+  background:#fff;
+  overflow:hidden;
+}
+.board-image-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0 auto;
+}
+@media (min-width:1921px){
+  .board-image-banner img{
+    max-width:1920px;
+  }
+}
+
 </style>
 </head>
 <body class="v5-body">
@@ -219,12 +240,8 @@ body{margin:0;background:#f4f6f9;color:#1f2937}
   </div>
 </header>
 
-<section class="prayer-hero">
-  <div class="prayer-hero-inner">
-    <span class="prayer-badge">ACTS PRAYER</span>
-    <h1>기도나눔</h1>
-    <p>기도제목과 기도응답을 함께 나눕니다. 혼자 기도하지 않습니다. ACTS가 함께 기도합니다.</p>
-  </div>
+<section class="board-image-banner" aria-label="ACTS PRAYER 기도제목과 기도응답">
+  <img src="assets/board-banners/01-prayer.png" alt="ACTS PRAYER 기도제목과 기도응답">
 </section>
 
 <main class="board-wrap">

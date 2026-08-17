@@ -379,7 +379,28 @@
       .acts-comment-submit{min-height:44px;width:100%}
     }
 
-  </style>
+  
+/* ACTS 게시판 전용 이미지 배너 */
+.board-image-banner{
+  width:100%;
+  margin:0;
+  padding:0;
+  background:#fff;
+  overflow:hidden;
+}
+.board-image-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0 auto;
+}
+@media (min-width:1921px){
+  .board-image-banner img{
+    max-width:1920px;
+  }
+}
+
+</style>
 </head>
 
 <body class="v5-body">
@@ -545,23 +566,8 @@
   </div>
 </header>
 
-<section class="board-hero">
-  <div class="board-hero-inner">
-
-    <span class="board-badge">
-      ACTS COMMUNITY
-    </span>
-
-    <h1>
-      회원소통
-    </h1>
-
-    <p>
-      ACTS 회원과 선교사, 교회, 지도자, 전문인과 동역자들이
-      서로의 활동을 나누고 협력의 기회를 연결하는 소통 공간입니다.
-    </p>
-
-  </div>
+<section class="board-image-banner" aria-label="ACTS COMMUNITY 회원 교류와 협력">
+  <img src="assets/board-banners/05-community.png" alt="ACTS COMMUNITY 회원 교류와 협력">
 </section>
 
 <main class="board-wrap">

@@ -410,7 +410,28 @@
       .acts-comment-submit{min-height:44px;width:100%}
     }
 
-  </style>
+  
+/* ACTS 게시판 전용 이미지 배너 */
+.board-image-banner{
+  width:100%;
+  margin:0;
+  padding:0;
+  background:#fff;
+  overflow:hidden;
+}
+.board-image-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0 auto;
+}
+@media (min-width:1921px){
+  .board-image-banner img{
+    max-width:1920px;
+  }
+}
+
+</style>
 </head>
 
 <body class="v5-body">
@@ -770,26 +791,8 @@
 
 
 <!-- 선교활동 HERO -->
-<section class="board-hero">
-
-  <div class="board-hero-inner">
-
-    <span class="board-badge">
-      ACTS MISSION
-    </span>
-
-    <h1>
-      선교활동
-    </h1>
-
-    <p>
-      ACTS MISSION ALLIANCE의
-      국내외 선교 현장과 프로젝트,
-      선교사 지원과 협력 사역의 이야기를 전합니다.
-    </p>
-
-  </div>
-
+<section class="board-image-banner" aria-label="ACTS MISSION 국내외 선교 프로젝트와 참여">
+  <img src="assets/board-banners/04-mission.png" alt="ACTS MISSION 국내외 선교 프로젝트와 참여">
 </section>
 
 

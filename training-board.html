@@ -410,7 +410,28 @@
       .acts-comment-submit{min-height:44px;width:100%}
     }
 
-  </style>
+  
+/* ACTS 게시판 전용 이미지 배너 */
+.board-image-banner{
+  width:100%;
+  margin:0;
+  padding:0;
+  background:#fff;
+  overflow:hidden;
+}
+.board-image-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0 auto;
+}
+@media (min-width:1921px){
+  .board-image-banner img{
+    max-width:1920px;
+  }
+}
+
+</style>
 </head>
 
 <body class="v5-body">
@@ -779,26 +800,8 @@
 
 
 <!-- 교육·세미나 HERO -->
-<section class="board-hero">
-
-  <div class="board-hero-inner">
-
-    <span class="board-badge">
-      ACTS TRAINING
-    </span>
-
-    <h1>
-      교육·세미나
-    </h1>
-
-    <p>
-      ACTS MISSION ALLIANCE의
-      온라인 교육, 세미나, 지도자 과정,
-      전문과정과 교육 프로그램 소식을 안내합니다.
-    </p>
-
-  </div>
-
+<section class="board-image-banner" aria-label="ACTS TRAINING 교육·세미나·자격과정">
+  <img src="assets/board-banners/03-training.png" alt="ACTS TRAINING 교육·세미나·자격과정">
 </section>
 
 
