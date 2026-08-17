@@ -51,23 +51,33 @@ body{margin:0;background:#f4f6f9;color:#1f2937}
 .comments{margin-top:16px;border-top:1px solid #edf0f4;padding-top:14px}
 .comment-toggle{border:1px solid #e2e6ec;background:#f8fafc;color:#061A33;border-radius:999px;padding:8px 13px;font-weight:800;cursor:pointer;transition:.2s}
 .comment-toggle:hover{border-color:#d6ae55;background:#fff9e9}
-.comment-area{display:none;margin-top:14px;padding:16px;background:#fbfcfe;border:1px solid #edf0f4;border-radius:12px}
+.comment-area{display:none;margin-top:12px;padding:16px;background:#fbfcfe;border:1px solid #edf0f4;border-radius:12px;width:100%;min-width:0}
 .comment-area.open{display:block}
-.comment-list{display:grid;gap:10px;margin-bottom:14px;width:100%}
-.comment-item{background:#fff;border:1px solid #e7ebf0;border-radius:10px;padding:12px 14px;width:100%;display:block}
-.comment-meta{font-size:12px;color:#8a94a3;margin-bottom:6px;font-weight:700;white-space:nowrap}
-.comment-text{white-space:pre-wrap;line-height:1.7;color:#374151;font-size:14px;word-break:keep-all;overflow-wrap:anywhere}
-.comment-form{display:grid;grid-template-columns:170px minmax(360px,1fr) 100px;gap:10px;align-items:stretch;width:100%}
-.comment-form input,.comment-form textarea{width:100%;min-width:0;border:1px solid #d8dee7;border-radius:9px;padding:11px 12px;font:inherit;background:#fff;outline:none}
+.comment-list{display:flex;flex-direction:column;gap:9px;margin:0 0 14px;width:100%;min-width:0}
+.comment-item{display:block;width:100%;min-width:0;background:#fff;border:1px solid #e7ebf0;border-radius:10px;padding:11px 14px}
+.comment-meta{display:block;font-size:12px;color:#8a94a3;margin:0 0 5px;font-weight:700;white-space:normal;word-break:keep-all}
+.comment-text{display:block;width:100%;white-space:pre-wrap;line-height:1.65;color:#374151;font-size:14px;word-break:keep-all;overflow-wrap:break-word}
+.comment-form{display:grid;grid-template-columns:minmax(130px,160px) minmax(0,1fr) 100px;gap:10px;align-items:stretch;width:100%;min-width:0}
+.comment-form input,.comment-form textarea{display:block;width:100%;min-width:0;border:1px solid #d8dee7;border-radius:9px;padding:11px 12px;font:inherit;background:#fff;outline:none}
 .comment-form input:focus,.comment-form textarea:focus{border-color:#d6ae55;box-shadow:0 0 0 3px rgba(214,174,85,.12)}
-.comment-form textarea{min-height:52px;max-height:160px;resize:vertical;line-height:1.55;overflow:auto}
-.comment-submit{border:0;background:#061A33;color:#fff;border-radius:9px;padding:10px 13px;font-weight:800;cursor:pointer;white-space:nowrap;min-width:100px}
+.comment-form textarea{min-height:54px;max-height:160px;resize:vertical;line-height:1.55;overflow:auto}
+.comment-submit{display:block;border:0;background:#061A33;color:#fff;border-radius:9px;padding:10px 12px;font-weight:800;cursor:pointer;white-space:nowrap;min-width:100px}
 .comment-submit:hover{background:#0B2B50}
-.comment-note{font-size:11px;color:#8a94a3;margin-top:8px;line-height:1.5;text-align:right}
-.comment-status{font-weight:700;color:#0B2B50}
+.comment-note{display:block;width:100%;font-size:11px;color:#8a94a3;margin-top:8px;line-height:1.5;text-align:left;white-space:normal;word-break:keep-all}
+.comment-status{font-weight:700;color:#0B2B50;margin-left:6px}
 
-@media(max-width:900px){.comment-form{grid-template-columns:140px minmax(0,1fr) 96px}.comment-note{text-align:left}}
-@media(max-width:700px){.prayer-hero{padding:50px 18px}.board-wrap{padding:30px 15px 60px}.form-grid{grid-template-columns:1fr}.comment-area{padding:12px}.comment-form{grid-template-columns:1fr}.comment-form textarea{min-height:90px}.comment-submit{min-height:44px;width:100%}.comment-note{text-align:left}.comment-meta{white-space:normal}.card{padding:20px}.card h3{font-size:18px}}
+@media(max-width:700px){
+ .prayer-hero{padding:50px 18px}
+ .board-wrap{padding:30px 15px 60px}
+ .form-grid{grid-template-columns:1fr}
+ .card{padding:18px}
+ .card h3{font-size:18px}
+ .comment-area{padding:12px}
+ .comment-form{grid-template-columns:1fr}
+ .comment-form textarea{min-height:88px}
+ .comment-submit{min-height:44px;width:100%}
+}
+
 </style>
 </head>
 <body class="v5-body">
