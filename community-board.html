@@ -417,6 +417,37 @@
 }
 .detail-link-btn:hover{background:#0B2B50}
 
+
+/* ACTS 게시판 배너 compact size v1 */
+.board-image-banner{
+  width:100%;
+  max-width:1100px;
+  height:300px;
+  margin:0 auto 26px;
+  overflow:hidden;
+  background:#fff;
+}
+.board-image-banner img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+}
+@media(max-width:900px){
+  .board-image-banner{
+    max-width:100%;
+    height:240px;
+    margin-bottom:22px;
+  }
+}
+@media(max-width:700px){
+  .board-image-banner{
+    height:180px;
+    margin-bottom:18px;
+  }
+}
+
 </style>
 </head>
 
