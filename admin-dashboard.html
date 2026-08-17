@@ -48,6 +48,10 @@
       cursor: pointer;
     }
 
+    .logout-btn:hover {
+      opacity: 0.9;
+    }
+
     .container {
       max-width: 1200px;
       margin: 40px auto;
@@ -90,6 +94,7 @@
 
     .card:hover {
       transform: translateY(-4px);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.10);
     }
 
     .card h3 {
@@ -121,7 +126,7 @@
     <p>ACTS MISSION ALLIANCE 관리자 시스템</p>
   </div>
 
-<button class="logout-btn" onclick="logout()">
+  <button type="button" class="logout-btn" id="logoutBtn">
     로그아웃
   </button>
 </header>
@@ -170,34 +175,74 @@
   </footer>
 
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const SUPABASE_URL = 'https://ojxarsfaewehwjidwgac.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
+  const SUPABASE_URL =
+    'https://ojxarsfaewehwjidwgac.supabase.co';
 
-  const supabase = window.supabase.createClient(
+  const SUPABASE_ANON_KEY =
+    'sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
+
+  const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
 
   async function checkAdminLogin() {
-    const {
-      data: { session }
-    } = await supabase.auth.getSession();
+    try {
+      const {
+        data: { session },
+        error
+      } = await supabaseClient.auth.getSession();
 
-    if (!session) {
-      window.location.href = 'admin.html';
-      return;
+      if (error) {
+        console.error('세션 확인 오류:', error);
+        window.location.replace('admin.html');
+        return;
+      }
+
+      if (!session) {
+        window.location.replace('admin.html');
+        return;
+      }
+
+      console.log('ACTS 관리자 로그인 확인 완료');
+    } catch (error) {
+      console.error('로그인 확인 오류:', error);
+      window.location.replace('admin.html');
     }
   }
 
-  async function logout() {
-    await supabase.auth.signOut();
-    window.location.href = 'admin.html';
+  async function adminLogout() {
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) {
+        console.error('로그아웃 오류:', error);
+        alert('로그아웃 중 오류가 발생했습니다.');
+        return;
+      }
+
+      window.location.replace('admin.html');
+
+    } catch (error) {
+      console.error('로그아웃 처리 오류:', error);
+      alert('로그아웃 중 오류가 발생했습니다.');
+    }
   }
 
-  checkAdminLogin();
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', adminLogout);
+    }
+
+    checkAdminLogin();
+  });
 </script>
 
 </body>
