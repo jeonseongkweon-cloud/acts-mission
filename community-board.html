@@ -151,6 +151,22 @@
       margin-top:10px;
     }
 
+    .post-image-wrap {
+      margin-top:18px;
+      overflow:hidden;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#f8fafc;
+    }
+
+    .post-image {
+      display:block;
+      width:100%;
+      max-height:560px;
+      object-fit:contain;
+      background:#f8fafc;
+    }
+
     .post-preview {
       color:#4b5563;
       line-height:1.8;
@@ -168,7 +184,9 @@
       white-space:pre-wrap;
     }
 
-    .post-full.open { display:block; }
+    .post-full.open {
+      display:block;
+    }
 
     .post-actions {
       margin-top:18px;
@@ -182,6 +200,10 @@
       border-radius:7px;
       font-weight:800;
       cursor:pointer;
+    }
+
+    .read-more-btn:hover {
+      opacity:.9;
     }
 
     .board-message {
@@ -198,6 +220,20 @@
       color:#9ca3af;
       margin-top:30px;
       font-size:13px;
+    }
+
+    @media(max-width:700px) {
+      .board-hero {
+        padding:50px 18px;
+      }
+
+      .board-wrap {
+        padding:30px 15px 60px;
+      }
+
+      .board-card {
+        padding:20px;
+      }
     }
   </style>
 </head>
@@ -525,7 +561,7 @@ async function loadPosts() {
     await supabaseClient
       .from('posts')
       .select(
-        'id,title,content,author,created_at'
+        'id,title,content,author,created_at,image_url'
       )
       .eq(
         'category',
@@ -588,6 +624,20 @@ async function loadPosts() {
     card.className =
       'board-card';
 
+    const imageHtml =
+      post.image_url
+        ? `
+          <div class="post-image-wrap">
+            <img
+              class="post-image"
+              src="${escapeHtml(post.image_url)}"
+              alt="${escapeHtml(post.title || '게시글 이미지')}"
+              loading="lazy"
+            >
+          </div>
+        `
+        : '';
+
     card.innerHTML = `
       <div class="card-top">
 
@@ -607,6 +657,8 @@ async function loadPosts() {
         ·
         ${dateText(post.created_at)}
       </div>
+
+      ${imageHtml}
 
       <div class="post-preview">
         ${escapeHtml(preview(post.content))}
@@ -650,6 +702,10 @@ async function loadPosts() {
               'content-'
               + btn.dataset.postId
             );
+
+          if (!target) {
+            return;
+          }
 
           const opened =
             target.classList.toggle(
