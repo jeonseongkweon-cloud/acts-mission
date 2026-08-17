@@ -326,6 +326,154 @@
       text-align: center;
     }
 
+
+    /* ACTS NEWS COMMENTS v1.0 */
+    .acts-comments {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #eef1f5;
+    }
+
+    .acts-comment-toggle {
+      appearance: none;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #061A33;
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .acts-comment-toggle:hover {
+      border-color: #d6ae55;
+      background: #fffaf0;
+    }
+
+    .acts-comment-area {
+      display: none;
+      margin-top: 12px;
+      padding: 16px;
+      border: 1px solid #e7ebf0;
+      background: #fbfcfe;
+      border-radius: 12px;
+    }
+
+    .acts-comment-area.open {
+      display: block;
+    }
+
+    .acts-comment-list {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .acts-comment-item {
+      background: #fff;
+      border: 1px solid #e7ebf0;
+      border-radius: 10px;
+      padding: 11px 14px;
+    }
+
+    .acts-comment-meta {
+      font-size: 12px;
+      color: #8a94a3;
+      font-weight: 700;
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+
+    .acts-comment-text {
+      white-space: pre-wrap;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      color: #374151;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .acts-comment-form {
+      display: grid;
+      grid-template-columns: 160px minmax(0,1fr) 104px;
+      gap: 10px;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .acts-comment-form input,
+    .acts-comment-form textarea {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid #d8dee7;
+      border-radius: 9px;
+      padding: 11px 12px;
+      font: inherit;
+      background: #fff;
+      outline: none;
+    }
+
+    .acts-comment-form input:focus,
+    .acts-comment-form textarea:focus {
+      border-color: #d6ae55;
+      box-shadow: 0 0 0 3px rgba(214,174,85,.12);
+    }
+
+    .acts-comment-form textarea {
+      min-height: 58px;
+      max-height: 160px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .acts-comment-submit {
+      border: 0;
+      background: #061A33;
+      color: #fff;
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .acts-comment-submit:hover {
+      background: #0B2B50;
+    }
+
+    .acts-comment-note {
+      margin-top: 8px;
+      color: #8a94a3;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .acts-comment-status {
+      margin-left: 6px;
+      font-weight: 700;
+      color: #0B2B50;
+    }
+
+    @media (max-width: 700px) {
+      .acts-comment-area {
+        padding: 12px;
+      }
+
+      .acts-comment-form {
+        grid-template-columns: 1fr;
+      }
+
+      .acts-comment-form textarea {
+        min-height: 90px;
+      }
+
+      .acts-comment-submit {
+        min-height: 44px;
+        width: 100%;
+      }
+    }
+
   </style>
 </head>
 
@@ -1527,6 +1675,65 @@
   }
 
 
+
+  async function loadNewsComments(postIds) {
+    const map = {};
+
+    if (!postIds || postIds.length === 0) {
+      return map;
+    }
+
+    const { data, error } = await supabaseClient
+      .from('post_comments')
+      .select('id,post_id,author,content,created_at')
+      .in('post_id', postIds.map(String))
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.warn('ACTS News comments load error:', error);
+      return map;
+    }
+
+    (data || []).forEach(row => {
+      const id = String(row.post_id);
+      if (!map[id]) map[id] = [];
+      map[id].push(row);
+    });
+
+    return map;
+  }
+
+
+  async function addNewsComment(postId, author, content, statusEl) {
+    const lastKey = 'acts_news_comment_last_' + postId;
+    const last = Number(localStorage.getItem(lastKey) || 0);
+
+    if (Date.now() - last < 30000) {
+      statusEl.textContent = '댓글은 30초 후 다시 등록할 수 있습니다.';
+      return false;
+    }
+
+    const { error } = await supabaseClient
+      .from('post_comments')
+      .insert({
+        post_id: String(postId),
+        author: author.trim(),
+        content: content.trim(),
+        visitor_id: ACTS_VISITOR_ID
+      });
+
+    if (error) {
+      console.error('ACTS News comment insert error:', error);
+      statusEl.textContent = '댓글 등록에 실패했습니다.';
+      return false;
+    }
+
+    localStorage.setItem(lastKey, String(Date.now()));
+    statusEl.textContent = '댓글이 등록되었습니다.';
+    return true;
+  }
+
+
   async function loadNews() {
 
     const newsList =
@@ -1623,6 +1830,12 @@
       data.length
       +
       '건';
+
+
+    const commentsByPost =
+      await loadNewsComments(
+        data.map(post => String(post.id))
+      );
 
 
     newsList.innerHTML = '';
@@ -1736,6 +1949,80 @@
               <button type="button" class="acts-reaction-btn" data-reaction="heart" data-post-id="${post.id}">❤️ 공감 <span class="acts-reaction-count">0</span></button>
             </div>
 
+            <div class="acts-comments">
+              <button
+                type="button"
+                class="acts-comment-toggle"
+                data-post-id="${post.id}"
+              >
+                💬 댓글 ${(commentsByPost[String(post.id)] || []).length}
+              </button>
+
+              <div
+                class="acts-comment-area"
+                id="comments-${post.id}"
+              >
+                <div class="acts-comment-list">
+                  ${
+                    (commentsByPost[String(post.id)] || []).length
+                      ? (commentsByPost[String(post.id)] || [])
+                          .map(comment => `
+                            <div class="acts-comment-item">
+                              <div class="acts-comment-meta">
+                                ${escapeHtml(comment.author)}
+                                ·
+                                ${formatDate(comment.created_at)}
+                              </div>
+
+                              <div class="acts-comment-text">
+                                ${escapeHtml(comment.content)}
+                              </div>
+                            </div>
+                          `)
+                          .join('')
+                      : `
+                          <div class="acts-comment-item">
+                            <div class="acts-comment-text">
+                              아직 댓글이 없습니다. 응원과 격려의 댓글을 남겨주세요.
+                            </div>
+                          </div>
+                        `
+                  }
+                </div>
+
+                <form
+                  class="acts-comment-form"
+                  data-post-id="${post.id}"
+                >
+                  <input
+                    name="author"
+                    maxlength="40"
+                    required
+                    placeholder="이름/별칭"
+                  >
+
+                  <textarea
+                    name="content"
+                    maxlength="1000"
+                    required
+                    placeholder="ACTS 소식에 응원과 격려의 댓글을 남겨주세요."
+                  ></textarea>
+
+                  <button
+                    type="submit"
+                    class="acts-comment-submit"
+                  >
+                    댓글 등록
+                  </button>
+                </form>
+
+                <div class="acts-comment-note">
+                  전화번호·주소 등 개인정보는 댓글에 적지 마세요.
+                  <span class="acts-comment-status"></span>
+                </div>
+              </div>
+            </div>
+
             <div class="news-actions">
 
               <button
@@ -1770,6 +2057,85 @@
           () => toggleActsReaction(button)
         );
       });
+
+
+    document
+      .querySelectorAll('.acts-comment-toggle')
+      .forEach(button => {
+        button.addEventListener(
+          'click',
+          () => {
+            const area =
+              document.getElementById(
+                'comments-' + button.dataset.postId
+              );
+
+            if (area) {
+              area.classList.toggle('open');
+            }
+          }
+        );
+      });
+
+
+    document
+      .querySelectorAll('.acts-comment-form')
+      .forEach(form => {
+        form.addEventListener(
+          'submit',
+          async event => {
+            event.preventDefault();
+
+            const postId =
+              form.dataset.postId;
+
+            const author =
+              form.elements.author.value;
+
+            const content =
+              form.elements.content.value;
+
+            const statusEl =
+              form.parentElement
+                .querySelector(
+                  '.acts-comment-status'
+                );
+
+            if (
+              !author.trim()
+              ||
+              !content.trim()
+            ) {
+              statusEl.textContent =
+                '이름과 댓글을 입력해 주세요.';
+              return;
+            }
+
+            const ok =
+              await addNewsComment(
+                postId,
+                author,
+                content,
+                statusEl
+              );
+
+            if (ok) {
+              form.reset();
+              await loadNews();
+
+              const area =
+                document.getElementById(
+                  'comments-' + postId
+                );
+
+              if (area) {
+                area.classList.add('open');
+              }
+            }
+          }
+        );
+      });
+
 
     document
       .querySelectorAll(
