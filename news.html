@@ -276,6 +276,56 @@
         font-size: 18px;
       }
     }
+
+    /* ACTS REACTIONS v1.0 */
+    .acts-reactions {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #eef1f5;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .acts-reaction-btn {
+      appearance: none;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      color: #334155;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .acts-reaction-btn:hover {
+      transform: translateY(-1px);
+      border-color: #d6ae55;
+      background: #fffaf0;
+    }
+
+    .acts-reaction-btn.active {
+      border-color: #d6ae55;
+      background: #fff7df;
+      color: #061A33;
+      box-shadow: inset 0 0 0 1px rgba(214,174,85,.15);
+    }
+
+    .acts-reaction-btn:disabled {
+      opacity: .55;
+      cursor: wait;
+      transform: none;
+    }
+
+    .acts-reaction-count {
+      min-width: 1.2em;
+      display: inline-block;
+      text-align: center;
+    }
+
   </style>
 </head>
 
@@ -1293,6 +1343,106 @@
     );
 
 
+  const ACTS_REACTION_TYPES = [
+    'pray',
+    'amen',
+    'support',
+    'heart'
+  ];
+
+  function getActsVisitorId() {
+    const key = 'acts_reaction_visitor_id';
+    let value = localStorage.getItem(key);
+
+    if (!value) {
+      value =
+        (window.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : 'visitor-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+      localStorage.setItem(key, value);
+    }
+
+    return value;
+  }
+
+  const ACTS_VISITOR_ID = getActsVisitorId();
+
+  async function loadActsReactions(postIds) {
+    if (!postIds || postIds.length === 0) return;
+
+    const ids = postIds.map(String);
+
+    const { data, error } = await supabaseClient
+      .from('post_reactions')
+      .select('post_id,reaction_type,visitor_id')
+      .in('post_id', ids);
+
+    if (error) {
+      console.warn('ACTS reactions load error:', error);
+      return;
+    }
+
+    const counts = {};
+    const mine = {};
+
+    (data || []).forEach(row => {
+      const postId = String(row.post_id);
+      const type = row.reaction_type;
+      const k = postId + ':' + type;
+      counts[k] = (counts[k] || 0) + 1;
+      if (row.visitor_id === ACTS_VISITOR_ID) mine[k] = true;
+    });
+
+    document.querySelectorAll('.acts-reaction-btn').forEach(button => {
+      const postId = String(button.dataset.postId || '');
+      const type = button.dataset.reaction || '';
+      const k = postId + ':' + type;
+      const countEl = button.querySelector('.acts-reaction-count');
+      if (countEl) countEl.textContent = counts[k] || 0;
+      button.classList.toggle('active', !!mine[k]);
+    });
+  }
+
+  async function toggleActsReaction(button) {
+    const postId = String(button.dataset.postId || '');
+    const reactionType = button.dataset.reaction || '';
+
+    if (!postId || !ACTS_REACTION_TYPES.includes(reactionType)) return;
+
+    button.disabled = true;
+
+    try {
+      if (button.classList.contains('active')) {
+        const { error } = await supabaseClient
+          .from('post_reactions')
+          .delete()
+          .eq('post_id', postId)
+          .eq('reaction_type', reactionType)
+          .eq('visitor_id', ACTS_VISITOR_ID);
+
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseClient
+          .from('post_reactions')
+          .insert({
+            post_id: postId,
+            reaction_type: reactionType,
+            visitor_id: ACTS_VISITOR_ID
+          });
+
+        if (error && error.code !== '23505') throw error;
+      }
+
+      await loadActsReactions([postId]);
+    } catch (error) {
+      console.error('ACTS reaction toggle error:', error);
+      alert('반응을 저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+
   function escapeHtml(value) {
 
     return String(value || '')
@@ -1579,6 +1729,13 @@
             </div>
 
 
+            <div class="acts-reactions" data-reactions-for="${post.id}" aria-label="게시글 반응">
+              <button type="button" class="acts-reaction-btn" data-reaction="pray" data-post-id="${post.id}">🙏 함께 기도 <span class="acts-reaction-count">0</span></button>
+              <button type="button" class="acts-reaction-btn" data-reaction="amen" data-post-id="${post.id}">🙌 아멘 <span class="acts-reaction-count">0</span></button>
+              <button type="button" class="acts-reaction-btn" data-reaction="support" data-post-id="${post.id}">👍 응원 <span class="acts-reaction-count">0</span></button>
+              <button type="button" class="acts-reaction-btn" data-reaction="heart" data-post-id="${post.id}">❤️ 공감 <span class="acts-reaction-count">0</span></button>
+            </div>
+
             <div class="news-actions">
 
               <button
@@ -1600,6 +1757,19 @@
       }
     );
 
+
+    await loadActsReactions(
+      data.map(post => String(post.id))
+    );
+
+    document
+      .querySelectorAll('.acts-reaction-btn')
+      .forEach(button => {
+        button.addEventListener(
+          'click',
+          () => toggleActsReaction(button)
+        );
+      });
 
     document
       .querySelectorAll(
