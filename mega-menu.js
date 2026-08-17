@@ -7,6 +7,44 @@
 
   const desktopMQ = window.matchMedia('(min-width: 981px)');
   const mobileBtn = header.querySelector('.mega-mobile-btn');
+
+  // ACTS MISSION TOOLS: shared navigation injected on every page that uses this menu script.
+  // This avoids editing dozens of duplicated HTML headers individually.
+  const menu = header.querySelector('#megaMenu');
+  if (menu && !menu.querySelector('[data-mission-tools-menu]')) {
+    const item = document.createElement('div');
+    item.className = 'mega-item';
+    item.setAttribute('data-mission-tools-menu', 'true');
+    item.innerHTML = `
+      <button class="mega-trigger" type="button">MISSION TOOLS <span>⌄</span></button>
+      <div class="mega-panel mega-panel-3">
+        <section>
+          <h3>MISSION TOOLS</h3>
+          <a href="mission-tools.html">선교도구 안내</a>
+          <a href="mission-tools.html#free-for-mission">FREE FOR MISSION</a>
+        </section>
+        <section>
+          <h3>TAEKWONKUMDO</h3>
+          <a href="taekwonkumdo-mission.html">태권검도 선교교육</a>
+          <a href="taekwonkumdo-mission.html#materials">무료 교본·영상</a>
+          <a href="taekwonkumdo-mission.html#training">교육·지도자 과정</a>
+        </section>
+        <section>
+          <h3>SELF-DEFENSE</h3>
+          <a href="self-defense-mission.html">호신술 선교교육</a>
+          <a href="self-defense-mission.html#curriculum">기초 교육과정</a>
+          <a href="self-defense-mission.html#mission-use">선교현장 활용</a>
+        </section>
+      </div>`;
+
+    // Place it immediately before Prayer Center when possible.
+    const prayerTrigger = [...menu.querySelectorAll('.mega-trigger')]
+      .find(btn => btn.textContent.includes('기도센터'));
+    const prayerItem = prayerTrigger?.closest('.mega-item');
+    if (prayerItem) menu.insertBefore(item, prayerItem);
+    else menu.appendChild(item);
+  }
+
   const items = [...header.querySelectorAll('.mega-item')];
 
   const setOpen = (item, open) => {
