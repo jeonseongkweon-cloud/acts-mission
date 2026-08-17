@@ -60,14 +60,14 @@
       font-weight: bold;
     }
 
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .btn-gold {
       background: #d6ae55;
       color: #061A33;
-    }
-
-    .btn-navy {
-      background: #061A33;
-      color: white;
     }
 
     .btn-gray {
@@ -86,11 +86,16 @@
       padding: 0 20px 50px;
     }
 
-    .top-panel {
+    .top-panel,
+    .editor,
+    .list-panel {
       background: white;
-      padding: 24px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .top-panel {
+      padding: 24px;
       margin-bottom: 25px;
     }
 
@@ -127,10 +132,7 @@
     }
 
     .editor {
-      background: white;
       padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
       margin-bottom: 30px;
     }
 
@@ -172,25 +174,11 @@
       gap: 18px;
     }
 
-    .editor-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
     .image-upload-box {
       border: 1px dashed #cbd5e1;
       background: #f8fafc;
       border-radius: 10px;
       padding: 16px;
-    }
-
-    .image-upload-box input[type="file"] {
-      width: 100%;
-      padding: 10px;
-      background: white;
-      border: 1px solid #d1d5db;
-      border-radius: 7px;
     }
 
     .image-help {
@@ -224,23 +212,28 @@
       margin-top: 10px;
     }
 
-    .post-thumb {
-      display: block;
-      width: 180px;
-      max-width: 100%;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      margin: 0 0 12px;
-      background: #f3f4f6;
+    .editor-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #15803d;
+    }
+
+    .error {
+      color: #b91c1c;
     }
 
     .list-panel {
-      background: white;
       padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     }
 
     .list-panel h3 {
@@ -255,10 +248,6 @@
       margin-bottom: 13px;
     }
 
-    .post-item:last-child {
-      margin-bottom: 0;
-    }
-
     .post-title {
       font-size: 17px;
       font-weight: bold;
@@ -271,6 +260,17 @@
       font-size: 13px;
       margin-bottom: 12px;
       line-height: 1.6;
+    }
+
+    .post-thumb {
+      display: block;
+      width: 180px;
+      max-width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 12px;
     }
 
     .badge {
@@ -312,20 +312,6 @@
       padding: 35px 10px;
     }
 
-    .status {
-      margin-top: 15px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .success {
-      color: #15803d;
-    }
-
-    .error {
-      color: #b91c1c;
-    }
-
     @media (max-width: 700px) {
       .form-row {
         grid-template-columns: 1fr;
@@ -361,64 +347,58 @@
   </div>
 </header>
 
+
 <main class="container">
 
   <section class="top-panel">
-    <h2 id="boardTitle">ACTS 게시판 관리</h2>
+
+    <h2 id="boardTitle">
+      ACTS 게시판 관리
+    </h2>
 
     <p>
-      게시글을 등록·수정·삭제하고 공개 여부를 관리할 수 있습니다.
+      게시글을 등록·수정·삭제하고 공개 여부와 대표 이미지를 관리할 수 있습니다.
     </p>
 
     <div class="category-bar">
-      <button
-        class="category-btn"
-        data-category="prayer"
-      >
+
+      <button class="category-btn" data-category="prayer">
         🙏 기도나눔 · Prayer
       </button>
 
-      <button
-        class="category-btn"
-        data-category="news"
-      >
+      <button class="category-btn" data-category="news">
         📰 ACTS 소식 · News
       </button>
 
-      <button
-        class="category-btn"
-        data-category="training"
-      >
+      <button class="category-btn" data-category="training">
         🎓 교육·세미나 · Training
       </button>
 
-      <button
-        class="category-btn"
-        data-category="mission"
-      >
+      <button class="category-btn" data-category="mission">
         🌍 선교활동 · Mission
       </button>
 
-      <button
-        class="category-btn"
-        data-category="community"
-      >
+      <button class="category-btn" data-category="community">
         🤝 회원소통 · Community
       </button>
+
     </div>
+
   </section>
 
+
   <section class="editor">
+
     <h3 id="editorTitle">
       새 게시글 작성
     </h3>
 
-    <input
-      type="hidden"
-      id="postId"
-    >
+    <input type="hidden" id="postId">
+    <input type="hidden" id="currentImageUrl">
+
 
     <div class="form-group">
+
       <label for="title">
         제목
       </label>
@@ -428,9 +408,12 @@
         id="title"
         placeholder="게시글 제목을 입력하세요"
       >
+
     </div>
 
+
     <div class="form-group">
+
       <label for="content">
         본문
       </label>
@@ -439,14 +422,18 @@
         id="content"
         placeholder="게시글 내용을 입력하세요"
       ></textarea>
+
     </div>
 
+
     <div class="form-group">
+
       <label for="imageFile">
         대표 이미지
       </label>
 
       <div class="image-upload-box">
+
         <input
           type="file"
           id="imageFile"
@@ -454,22 +441,24 @@
         >
 
         <div class="image-help">
-          JPG, PNG, WEBP 등 이미지 파일을 선택할 수 있습니다.
-          최대 10MB까지 업로드하도록 설정했습니다.
-          이미지를 선택하지 않으면 기존처럼 글만 저장됩니다.
+          JPG, PNG, WEBP 등의 이미지를 선택할 수 있습니다.
+          최대 10MB까지 업로드할 수 있습니다.
+          사진이 필요 없는 글은 이미지를 선택하지 않아도 됩니다.
         </div>
 
         <div
           class="image-preview-wrap"
           id="imagePreviewWrap"
         >
+
           <img
             class="image-preview"
             id="imagePreview"
-            alt="게시글 이미지 미리보기"
+            alt="대표 이미지 미리보기"
           >
 
           <div class="image-preview-actions">
+
             <button
               type="button"
               class="btn btn-red"
@@ -477,19 +466,20 @@
             >
               이미지 제거
             </button>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
-    <input
-      type="hidden"
-      id="currentImageUrl"
-    >
 
     <div class="form-row">
 
       <div class="form-group">
+
         <label for="author">
           작성자
         </label>
@@ -499,14 +489,18 @@
           id="author"
           value="ACTS MISSION ALLIANCE"
         >
+
       </div>
 
+
       <div class="form-group">
+
         <label for="published">
           공개 상태
         </label>
 
         <select id="published">
+
           <option value="true">
             공개
           </option>
@@ -514,10 +508,13 @@
           <option value="false">
             비공개
           </option>
+
         </select>
+
       </div>
 
     </div>
+
 
     <div class="editor-actions">
 
@@ -545,6 +542,7 @@
 
   </section>
 
+
   <section class="list-panel">
 
     <h3>
@@ -552,14 +550,17 @@
     </h3>
 
     <div id="postsList">
+
       <div class="empty">
         게시글을 불러오는 중입니다...
       </div>
+
     </div>
 
   </section>
 
 </main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -577,16 +578,12 @@
     );
 
 
-  /*
-   * 게시판 이름
-   *
-   * 데이터베이스에서 사용하는
-   * prayer / news / training / mission / community
-   * 값은 그대로 유지합니다.
-   *
-   * 화면에 보이는 이름만
-   * 한글 중심으로 표시합니다.
-   */
+  const STORAGE_BUCKET =
+    'post-images';
+
+  const MAX_IMAGE_SIZE =
+    10 * 1024 * 1024;
+
 
   const boardNames = {
 
@@ -609,17 +606,9 @@
 
 
   const allowedCategories =
-    Object.keys(boardNames);
-
-
-  const STORAGE_BUCKET =
-    'post-images';
-
-  const MAX_IMAGE_SIZE =
-    10 * 1024 * 1024;
-
-  let removeCurrentImage =
-    false;
+    Object.keys(
+      boardNames
+    );
 
 
   const params =
@@ -629,7 +618,12 @@
 
 
   let currentCategory =
-    params.get('category') || 'news';
+    params.get('category')
+    || 'news';
+
+
+  let removeCurrentImage =
+    false;
 
 
   if (
@@ -637,26 +631,48 @@
       currentCategory
     )
   ) {
-    currentCategory = 'news';
+
+    currentCategory =
+      'news';
   }
 
 
-  /*
-   * 관리자 로그인 확인
-   */
-
   async function checkAdminLogin() {
 
-    const {
-      data: { session },
-      error
-    } =
-      await supabaseClient
-        .auth
-        .getSession();
+    try {
+
+      const {
+        data: { session },
+        error
+      } =
+        await supabaseClient
+          .auth
+          .getSession();
 
 
-    if (error || !session) {
+      if (
+        error
+        ||
+        !session
+      ) {
+
+        window.location.replace(
+          'admin.html'
+        );
+
+        return false;
+      }
+
+
+      return true;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
 
       window.location.replace(
         'admin.html'
@@ -664,38 +680,40 @@
 
       return false;
     }
-
-
-    return true;
   }
 
-
-  /*
-   * 현재 선택된 게시판 표시
-   */
 
   function updateBoardUI() {
 
     document
-      .getElementById('boardTitle')
+      .getElementById(
+        'boardTitle'
+      )
       .textContent =
-        boardNames[currentCategory]
-        + ' 관리';
+        boardNames[
+          currentCategory
+        ]
+        +
+        ' 관리';
 
 
     document
       .querySelectorAll(
         '.category-btn'
       )
-      .forEach(button => {
+      .forEach(
+        button => {
 
-        button.classList.toggle(
-          'active',
-          button.dataset.category
-            === currentCategory
-        );
-
-      });
+          button
+            .classList
+            .toggle(
+              'active',
+              button.dataset.category
+              ===
+              currentCategory
+            );
+        }
+      );
 
 
     const url =
@@ -718,10 +736,6 @@
   }
 
 
-  /*
-   * 상태 메시지
-   */
-
   function showStatus(
     message,
     type = 'success'
@@ -738,7 +752,9 @@
 
 
     status.className =
-      'status ' + type;
+      'status '
+      +
+      type;
   }
 
 
@@ -750,28 +766,30 @@
       );
 
 
-    status.textContent = '';
+    status.textContent =
+      '';
+
 
     status.className =
       'status';
   }
 
 
-  /*
-   * 이미지 관련 유틸리티
-   */
-
-  function showImagePreview(src) {
+  function showImagePreview(
+    src
+  ) {
 
     const wrap =
       document.getElementById(
         'imagePreviewWrap'
       );
 
+
     const preview =
       document.getElementById(
         'imagePreview'
       );
+
 
     if (!src) {
 
@@ -786,8 +804,10 @@
       return;
     }
 
+
     preview.src =
       src;
+
 
     wrap.classList.add(
       'show'
@@ -795,74 +815,19 @@
   }
 
 
-  function getStoragePathFromUrl(url) {
-
-    if (!url) {
-      return '';
-    }
-
-    const marker =
-      '/storage/v1/object/public/'
-      + STORAGE_BUCKET
-      + '/';
-
-    const index =
-      url.indexOf(
-        marker
-      );
-
-    if (index === -1) {
-      return '';
-    }
-
-    return decodeURIComponent(
-      url.substring(
-        index + marker.length
-      )
-    );
-  }
-
-
-  async function removeStorageImageByUrl(url) {
-
-    const path =
-      getStoragePathFromUrl(
-        url
-      );
-
-    if (!path) {
-      return;
-    }
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .storage
-        .from(
-          STORAGE_BUCKET
-        )
-        .remove([
-          path
-        ]);
-
-    if (error) {
-      console.warn(
-        'Storage 이미지 삭제 실패:',
-        error
-      );
-    }
-  }
-
-
-  function validateImageFile(file) {
+  function validateImageFile(
+    file
+  ) {
 
     if (!file) {
+
       return true;
     }
 
+
     if (
-      !file.type ||
+      !file.type
+      ||
       !file.type.startsWith(
         'image/'
       )
@@ -876,8 +841,10 @@
       return false;
     }
 
+
     if (
-      file.size >
+      file.size
+      >
       MAX_IMAGE_SIZE
     ) {
 
@@ -889,38 +856,53 @@
       return false;
     }
 
+
     return true;
   }
 
 
-  async function uploadPostImage(file) {
-
-    if (!file) {
-      return null;
-    }
+  async function uploadPostImage(
+    file
+  ) {
 
     const extension =
-      (file.name.split('.').pop() || 'jpg')
-        .toLowerCase()
-        .replace(
-          /[^a-z0-9]/g,
-          ''
-        )
-      || 'jpg';
+      (
+        file.name
+          .split('.')
+          .pop()
+        ||
+        'jpg'
+      )
+      .toLowerCase()
+      .replace(
+        /[^a-z0-9]/g,
+        ''
+      )
+      ||
+      'jpg';
 
-    const randomPart =
+
+    const randomName =
       Math.random()
         .toString(36)
         .slice(2, 10);
 
-    const fileName =
+
+    const filePath =
       currentCategory
-      + '/'
-      + Date.now()
-      + '-'
-      + randomPart
-      + '.'
-      + extension;
+      +
+      '/'
+      +
+      Date.now()
+      +
+      '-'
+      +
+      randomName
+      +
+      '.'
+      +
+      extension;
+
 
     const {
       error
@@ -931,18 +913,26 @@
           STORAGE_BUCKET
         )
         .upload(
-          fileName,
+          filePath,
           file,
           {
-            cacheControl: '3600',
-            upsert: false,
-            contentType: file.type
+            cacheControl:
+              '3600',
+
+            upsert:
+              false,
+
+            contentType:
+              file.type
           }
         );
 
+
     if (error) {
+
       throw error;
     }
+
 
     const {
       data
@@ -953,75 +943,149 @@
           STORAGE_BUCKET
         )
         .getPublicUrl(
-          fileName
+          filePath
         );
 
+
     return {
-      path: fileName,
-      url: data.publicUrl
+      path:
+        filePath,
+
+      url:
+        data.publicUrl
     };
   }
 
 
-  /*
-   * 글쓰기 입력창 초기화
-   */
+  function getStoragePathFromUrl(
+    url
+  ) {
+
+    if (!url) {
+
+      return '';
+    }
+
+
+    const marker =
+      '/storage/v1/object/public/'
+      +
+      STORAGE_BUCKET
+      +
+      '/';
+
+
+    const index =
+      url.indexOf(
+        marker
+      );
+
+
+    if (
+      index === -1
+    ) {
+
+      return '';
+    }
+
+
+    return decodeURIComponent(
+      url.substring(
+        index
+        +
+        marker.length
+      )
+    );
+  }
+
+
+  async function removeStorageImageByUrl(
+    url
+  ) {
+
+    const path =
+      getStoragePathFromUrl(
+        url
+      );
+
+
+    if (!path) {
+
+      return;
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .storage
+        .from(
+          STORAGE_BUCKET
+        )
+        .remove([
+          path
+        ]);
+
+
+    if (error) {
+
+      console.warn(
+        '이미지 삭제 실패:',
+        error
+      );
+    }
+  }
+
 
   function resetEditor() {
 
     document
-      .getElementById('postId')
-      .value = '';
+      .getElementById(
+        'postId'
+      )
+      .value =
+        '';
 
 
     document
-      .getElementById('title')
-      .value = '';
+      .getElementById(
+        'title'
+      )
+      .value =
+        '';
 
 
     document
-      .getElementById('content')
-      .value = '';
+      .getElementById(
+        'content'
+      )
+      .value =
+        '';
 
 
     document
-      .getElementById('author')
+      .getElementById(
+        'author'
+      )
       .value =
         'ACTS MISSION ALLIANCE';
 
 
     document
-      .getElementById('published')
-      .value = 'true';
-
-
-    document
-      .getElementById('editorTitle')
-      .textContent =
-        '새 게시글 작성';
-
-
-    document
-      .getElementById('saveBtn')
-      .textContent =
-        '게시글 저장';
+      .getElementById(
+        'published'
+      )
+      .value =
+        'true';
 
 
     document
       .getElementById(
-        'cancelEditBtn'
-      )
-      .style.display =
-        'none';
-
-
-    const imageFile =
-      document.getElementById(
         'imageFile'
-      );
-
-    imageFile.value =
-      '';
+      )
+      .value =
+        '';
 
 
     document
@@ -1041,289 +1105,41 @@
     );
 
 
+    document
+      .getElementById(
+        'editorTitle'
+      )
+      .textContent =
+        '새 게시글 작성';
+
+
+    document
+      .getElementById(
+        'saveBtn'
+      )
+      .textContent =
+        '게시글 저장';
+
+
+    document
+      .getElementById(
+        'cancelEditBtn'
+      )
+      .style.display =
+        'none';
+
+
     clearStatus();
   }
 
 
-  /*
-   * 게시글 목록 불러오기
-   */
-
-  async function loadPosts() {
-
-    const postsList =
-      document.getElementById(
-        'postsList'
-      );
-
-
-    postsList.innerHTML =
-      '<div class="empty">'
-      + '게시글을 불러오는 중입니다...'
-      + '</div>';
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-
-        .from('posts')
-
-        .select('*')
-
-        .eq(
-          'category',
-          currentCategory
-        )
-
-        .order(
-          'created_at',
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error) {
-
-      console.error(error);
-
-
-      postsList.innerHTML =
-        '<div class="empty">'
-        + '게시글을 불러오지 못했습니다.'
-        + '</div>';
-
-
-      return;
-    }
-
-
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-      postsList.innerHTML =
-        '<div class="empty">'
-        + '등록된 게시글이 없습니다.'
-        + '</div>';
-
-
-      return;
-    }
-
-
-    postsList.innerHTML = '';
-
-
-    data.forEach(post => {
-
-      const item =
-        document.createElement(
-          'div'
-        );
-
-
-      item.className =
-        'post-item';
-
-
-      const date =
-        post.created_at
-
-          ? new Date(
-              post.created_at
-            ).toLocaleString(
-              'ko-KR'
-            )
-
-          : '';
-
-
-      const statusBadge =
-        post.is_published
-
-          ? '<span class="badge published">'
-            + '공개'
-            + '</span>'
-
-          : '<span class="badge private">'
-            + '비공개'
-            + '</span>';
-
-
-      const title =
-        document.createElement(
-          'div'
-        );
-
-
-      title.className =
-        'post-title';
-
-
-      title.textContent =
-        post.title ||
-        '(제목 없음)';
-
-
-      const meta =
-        document.createElement(
-          'div'
-        );
-
-
-      meta.className =
-        'post-meta';
-
-
-      meta.innerHTML =
-        '작성자: '
-        +
-        escapeHtml(
-          post.author ||
-          '관리자'
-        )
-        +
-        ' · '
-        +
-        date
-        +
-        statusBadge;
-
-
-      const thumbnail =
-        document.createElement(
-          'div'
-        );
-
-
-      if (post.image_url) {
-
-        const img =
-          document.createElement(
-            'img'
-          );
-
-        img.className =
-          'post-thumb';
-
-        img.src =
-          post.image_url;
-
-        img.alt =
-          post.title
-          || '게시글 이미지';
-
-        thumbnail.appendChild(
-          img
-        );
-      }
-
-
-      const actions =
-        document.createElement(
-          'div'
-        );
-
-
-      actions.className =
-        'post-actions';
-
-
-      const editBtn =
-        document.createElement(
-          'button'
-        );
-
-
-      editBtn.className =
-        'btn-gold';
-
-
-      editBtn.textContent =
-        '수정';
-
-
-      editBtn.addEventListener(
-        'click',
-        () => editPost(post)
-      );
-
-
-      const deleteBtn =
-        document.createElement(
-          'button'
-        );
-
-
-      deleteBtn.className =
-        'btn-red';
-
-
-      deleteBtn.textContent =
-        '삭제';
-
-
-      deleteBtn.addEventListener(
-        'click',
-        () => deletePost(
-          post
-        )
-      );
-
-
-      actions.appendChild(
-        editBtn
-      );
-
-
-      actions.appendChild(
-        deleteBtn
-      );
-
-
-      item.appendChild(
-        title
-      );
-
-
-      item.appendChild(
-        meta
-      );
-
-
-      if (post.image_url) {
-
-        item.appendChild(
-          thumbnail
-        );
-      }
-
-
-      item.appendChild(
-        actions
-      );
-
-
-      postsList.appendChild(
-        item
-      );
-
-    });
-  }
-
-
-  /*
-   * HTML 문자 안전 처리
-   */
-
-  function escapeHtml(value) {
-
-    return String(value)
+  function escapeHtml(
+    value
+  ) {
+
+    return String(
+      value || ''
+    )
 
       .replaceAll(
         '&',
@@ -1352,9 +1168,289 @@
   }
 
 
-  /*
-   * 게시글 저장 및 수정
-   */
+  async function loadPosts() {
+
+    const postsList =
+      document.getElementById(
+        'postsList'
+      );
+
+
+    postsList.innerHTML =
+      '<div class="empty">'
+      +
+      '게시글을 불러오는 중입니다...'
+      +
+      '</div>';
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+
+        .from(
+          'posts'
+        )
+
+        .select(
+          '*'
+        )
+
+        .eq(
+          'category',
+          currentCategory
+        )
+
+        .order(
+          'created_at',
+          {
+            ascending:
+              false
+          }
+        );
+
+
+    if (error) {
+
+      console.error(
+        error
+      );
+
+
+      postsList.innerHTML =
+        '<div class="empty">'
+        +
+        '게시글을 불러오지 못했습니다.'
+        +
+        '</div>';
+
+
+      return;
+    }
+
+
+    if (
+      !data
+      ||
+      data.length === 0
+    ) {
+
+      postsList.innerHTML =
+        '<div class="empty">'
+        +
+        '등록된 게시글이 없습니다.'
+        +
+        '</div>';
+
+
+      return;
+    }
+
+
+    postsList.innerHTML =
+      '';
+
+
+    data.forEach(
+      post => {
+
+        const item =
+          document.createElement(
+            'div'
+          );
+
+
+        item.className =
+          'post-item';
+
+
+        const title =
+          document.createElement(
+            'div'
+          );
+
+
+        title.className =
+          'post-title';
+
+
+        title.textContent =
+          post.title
+          ||
+          '(제목 없음)';
+
+
+        const meta =
+          document.createElement(
+            'div'
+          );
+
+
+        meta.className =
+          'post-meta';
+
+
+        const date =
+          post.created_at
+
+            ? new Date(
+                post.created_at
+              )
+              .toLocaleString(
+                'ko-KR'
+              )
+
+            : '';
+
+
+        const badge =
+          post.is_published
+
+            ? '<span class="badge published">공개</span>'
+
+            : '<span class="badge private">비공개</span>';
+
+
+        meta.innerHTML =
+          '작성자: '
+          +
+          escapeHtml(
+            post.author
+            ||
+            'ACTS MISSION ALLIANCE'
+          )
+          +
+          ' · '
+          +
+          date
+          +
+          badge;
+
+
+        item.appendChild(
+          title
+        );
+
+
+        item.appendChild(
+          meta
+        );
+
+
+        if (
+          post.image_url
+        ) {
+
+          const image =
+            document.createElement(
+              'img'
+            );
+
+
+          image.className =
+            'post-thumb';
+
+
+          image.src =
+            post.image_url;
+
+
+          image.alt =
+            post.title
+            ||
+            '게시글 이미지';
+
+
+          item.appendChild(
+            image
+          );
+        }
+
+
+        const actions =
+          document.createElement(
+            'div'
+          );
+
+
+        actions.className =
+          'post-actions';
+
+
+        const editButton =
+          document.createElement(
+            'button'
+          );
+
+
+        editButton.className =
+          'btn-gold';
+
+
+        editButton.textContent =
+          '수정';
+
+
+        editButton.addEventListener(
+          'click',
+          () => {
+
+            editPost(
+              post
+            );
+          }
+        );
+
+
+        const deleteButton =
+          document.createElement(
+            'button'
+          );
+
+
+        deleteButton.className =
+          'btn-red';
+
+
+        deleteButton.textContent =
+          '삭제';
+
+
+        deleteButton.addEventListener(
+          'click',
+          () => {
+
+            deletePost(
+              post
+            );
+          }
+        );
+
+
+        actions.appendChild(
+          editButton
+        );
+
+
+        actions.appendChild(
+          deleteButton
+        );
+
+
+        item.appendChild(
+          actions
+        );
+
+
+        postsList.appendChild(
+          item
+        );
+      }
+    );
+  }
+
 
   async function savePost() {
 
@@ -1394,7 +1490,6 @@
         )
         .value
         .trim()
-
       ||
       'ACTS MISSION ALLIANCE';
 
@@ -1405,7 +1500,8 @@
           'published'
         )
         .value
-      === 'true';
+      ===
+      'true';
 
 
     const imageFile =
@@ -1414,7 +1510,8 @@
           'imageFile'
         )
         .files[0]
-      || null;
+      ||
+      null;
 
 
     const oldImageUrl =
@@ -1423,7 +1520,8 @@
           'currentImageUrl'
         )
         .value
-      || '';
+      ||
+      '';
 
 
     if (!title) {
@@ -1467,14 +1565,11 @@
     saveBtn.disabled =
       true;
 
+
     saveBtn.textContent =
       imageFile
         ? '이미지 업로드 중...'
-        : (
-            id
-              ? '수정 저장 중...'
-              : '게시글 저장 중...'
-          );
+        : '게시글 저장 중...';
 
 
     let uploadedImage =
@@ -1487,16 +1582,20 @@
         oldImageUrl;
 
 
-      if (imageFile) {
+      if (
+        imageFile
+      ) {
 
         uploadedImage =
           await uploadPostImage(
             imageFile
           );
 
+
         nextImageUrl =
           uploadedImage.url;
       }
+
 
       else if (
         removeCurrentImage
@@ -1526,7 +1625,8 @@
 
         image_url:
           nextImageUrl
-          || null,
+          ||
+          null,
 
         updated_at:
           new Date()
@@ -1543,7 +1643,9 @@
         result =
           await supabaseClient
 
-            .from('posts')
+            .from(
+              'posts'
+            )
 
             .update(
               payload
@@ -1553,28 +1655,30 @@
               'id',
               id
             );
-
       }
+
 
       else {
 
         result =
           await supabaseClient
 
-            .from('posts')
+            .from(
+              'posts'
+            )
 
             .insert(
               payload
             );
-
       }
 
 
-      if (result.error) {
+      if (
+        result.error
+      ) {
 
         if (
-          uploadedImage &&
-          uploadedImage.url
+          uploadedImage
         ) {
 
           await removeStorageImageByUrl(
@@ -1582,19 +1686,25 @@
           );
         }
 
+
         throw result.error;
       }
 
 
       if (
-        id &&
-        oldImageUrl &&
+        id
+        &&
+        oldImageUrl
+        &&
         (
           removeCurrentImage
           ||
           (
-            uploadedImage &&
-            uploadedImage.url !== oldImageUrl
+            uploadedImage
+            &&
+            uploadedImage.url
+            !==
+            oldImageUrl
           )
         )
       ) {
@@ -1620,6 +1730,7 @@
 
     }
 
+
     catch (error) {
 
       console.error(
@@ -1640,39 +1751,30 @@
 
     }
 
+
     finally {
 
       saveBtn.disabled =
         false;
 
 
-      if (
+      saveBtn.textContent =
         document
           .getElementById(
             'postId'
           )
           .value
-      ) {
 
-        saveBtn.textContent =
-          '수정 내용 저장';
-      }
+          ? '수정 내용 저장'
 
-      else {
-
-        saveBtn.textContent =
-          '게시글 저장';
-      }
-
+          : '게시글 저장';
     }
   }
 
 
-  /*
-   * 게시글 수정
-   */
-
-  function editPost(post) {
+  function editPost(
+    post
+  ) {
 
     document
       .getElementById(
@@ -1687,7 +1789,9 @@
         'title'
       )
       .value =
-        post.title || '';
+        post.title
+        ||
+        '';
 
 
     document
@@ -1695,7 +1799,9 @@
         'content'
       )
       .value =
-        post.content || '';
+        post.content
+        ||
+        '';
 
 
     document
@@ -1703,7 +1809,8 @@
         'author'
       )
       .value =
-        post.author ||
+        post.author
+        ||
         'ACTS MISSION ALLIANCE';
 
 
@@ -1731,7 +1838,8 @@
       )
       .value =
         post.image_url
-        || '';
+        ||
+        '';
 
 
     removeCurrentImage =
@@ -1740,7 +1848,8 @@
 
     showImagePreview(
       post.image_url
-      || ''
+      ||
+      ''
     );
 
 
@@ -1769,21 +1878,18 @@
 
 
     window.scrollTo({
-
-      top: 0,
+      top:
+        0,
 
       behavior:
         'smooth'
-
     });
   }
 
 
-  /*
-   * 게시글 삭제
-   */
-
-  async function deletePost(post) {
+  async function deletePost(
+    post
+  ) {
 
     const confirmed =
       confirm(
@@ -1802,7 +1908,9 @@
     } =
       await supabaseClient
 
-        .from('posts')
+        .from(
+          'posts'
+        )
 
         .delete()
 
@@ -1820,12 +1928,9 @@
 
 
       alert(
-
-        '게시글을 삭제하지 못했습니다.
-'
+        '게시글을 삭제하지 못했습니다.\n'
         +
         error.message
-
       );
 
 
@@ -1850,10 +1955,6 @@
   }
 
 
-  /*
-   * 로그아웃
-   */
-
   async function logout() {
 
     await supabaseClient
@@ -1866,10 +1967,6 @@
     );
   }
 
-
-  /*
-   * 페이지 시작
-   */
 
   document.addEventListener(
     'DOMContentLoaded',
@@ -1891,10 +1988,6 @@
       await loadPosts();
 
 
-      /*
-       * 게시글 저장
-       */
-
       document
         .getElementById(
           'saveBtn'
@@ -1904,10 +1997,6 @@
           savePost
         );
 
-
-      /*
-       * 수정 취소
-       */
 
       document
         .getElementById(
@@ -1919,10 +2008,6 @@
         );
 
 
-      /*
-       * 로그아웃
-       */
-
       document
         .getElementById(
           'logoutBtn'
@@ -1932,10 +2017,6 @@
           logout
         );
 
-
-      /*
-       * 관리자 대시보드로 이동
-       */
 
       document
         .getElementById(
@@ -1947,14 +2028,9 @@
 
             window.location.href =
               'admin-dashboard.html';
-
           }
         );
 
-
-      /*
-       * 이미지 선택 미리보기
-       */
 
       document
         .getElementById(
@@ -1965,24 +2041,13 @@
           event => {
 
             const file =
-              event.target.files[0]
-              || null;
+              event.target
+                .files[0]
+              ||
+              null;
 
 
             if (!file) {
-
-              const existingUrl =
-                document
-                  .getElementById(
-                    'currentImageUrl'
-                  )
-                  .value;
-
-              showImagePreview(
-                removeCurrentImage
-                  ? ''
-                  : existingUrl
-              );
 
               return;
             }
@@ -2005,22 +2070,18 @@
               false;
 
 
-            const objectUrl =
+            const previewUrl =
               URL.createObjectURL(
                 file
               );
 
 
             showImagePreview(
-              objectUrl
+              previewUrl
             );
           }
         );
 
-
-      /*
-       * 현재 이미지 제거
-       */
 
       document
         .getElementById(
@@ -2049,10 +2110,6 @@
         );
 
 
-      /*
-       * 게시판 선택
-       */
-
       document
         .querySelectorAll(
           '.category-btn'
@@ -2065,7 +2122,8 @@
               async () => {
 
                 currentCategory =
-                  button.dataset.category;
+                  button.dataset
+                    .category;
 
 
                 updateBoardUI();
@@ -2075,10 +2133,8 @@
 
 
                 await loadPosts();
-
               }
             );
-
           }
         );
 
