@@ -26,6 +26,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     header h1 {
@@ -108,12 +110,29 @@
       line-height: 1.5;
     }
 
+    .card small {
+      display: block;
+      margin-top: 12px;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+
     footer {
       text-align: center;
       margin-top: 50px;
       padding: 20px;
       color: #9ca3af;
       font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 18px;
+      }
+
+      .container {
+        margin-top: 25px;
+      }
     }
   </style>
 </head>
@@ -126,7 +145,11 @@
     <p>ACTS MISSION ALLIANCE 관리자 시스템</p>
   </div>
 
-  <button type="button" class="logout-btn" id="logoutBtn">
+  <button
+    type="button"
+    class="logout-btn"
+    id="logoutBtn"
+  >
     로그아웃
   </button>
 </header>
@@ -138,34 +161,65 @@
     <p>
       ACTS MISSION ALLIANCE 홈페이지의 게시판과 콘텐츠를
       관리하는 관리자 전용 페이지입니다.
+      아래 관리 항목을 선택하면 해당 게시판 관리 화면으로 이동합니다.
     </p>
   </section>
 
   <section class="dashboard-grid">
 
-    <div class="card">
-      <h3>🙏 ACTS Prayer</h3>
+    <div
+      class="card"
+      data-category="prayer"
+      role="button"
+      tabindex="0"
+    >
+      <h3>🙏 기도나눔</h3>
       <p>기도제목과 기도응답 게시판 관리</p>
+      <small>ACTS Prayer</small>
     </div>
 
-    <div class="card">
-      <h3>📰 ACTS News</h3>
-      <p>ACTS 지부·회원·선교 활동 소식 관리</p>
+    <div
+      class="card"
+      data-category="news"
+      role="button"
+      tabindex="0"
+    >
+      <h3>📰 ACTS 소식</h3>
+      <p>지부·회원·선교 활동 소식 관리</p>
+      <small>ACTS News</small>
     </div>
 
-    <div class="card">
-      <h3>🎓 ACTS Training</h3>
+    <div
+      class="card"
+      data-category="training"
+      role="button"
+      tabindex="0"
+    >
+      <h3>🎓 교육·세미나</h3>
       <p>교육·세미나·자격과정 게시판 관리</p>
+      <small>ACTS Training</small>
     </div>
 
-    <div class="card">
-      <h3>🌍 ACTS Mission</h3>
+    <div
+      class="card"
+      data-category="mission"
+      role="button"
+      tabindex="0"
+    >
+      <h3>🌍 선교활동</h3>
       <p>국내외 선교 프로젝트 및 참여 게시판 관리</p>
+      <small>ACTS Mission</small>
     </div>
 
-    <div class="card">
-      <h3>🤝 ACTS Community</h3>
+    <div
+      class="card"
+      data-category="community"
+      role="button"
+      tabindex="0"
+    >
+      <h3>🤝 회원소통</h3>
       <p>회원 교류와 협력 게시판 관리</p>
+      <small>ACTS Community</small>
     </div>
 
   </section>
@@ -185,64 +239,158 @@
   const SUPABASE_ANON_KEY =
     'sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
   async function checkAdminLogin() {
     try {
       const {
         data: { session },
         error
-      } = await supabaseClient.auth.getSession();
+      } =
+        await supabaseClient.auth.getSession();
 
       if (error) {
-        console.error('세션 확인 오류:', error);
-        window.location.replace('admin.html');
+        console.error(
+          '세션 확인 오류:',
+          error
+        );
+
+        window.location.replace(
+          'admin.html'
+        );
+
         return;
       }
 
       if (!session) {
-        window.location.replace('admin.html');
+        window.location.replace(
+          'admin.html'
+        );
+
         return;
       }
 
-      console.log('ACTS 관리자 로그인 확인 완료');
+      console.log(
+        'ACTS 관리자 로그인 확인 완료'
+      );
+
     } catch (error) {
-      console.error('로그인 확인 오류:', error);
-      window.location.replace('admin.html');
+
+      console.error(
+        '로그인 확인 오류:',
+        error
+      );
+
+      window.location.replace(
+        'admin.html'
+      );
     }
   }
 
   async function adminLogout() {
     try {
-      const { error } = await supabaseClient.auth.signOut();
+
+      const { error } =
+        await supabaseClient.auth.signOut();
 
       if (error) {
-        console.error('로그아웃 오류:', error);
-        alert('로그아웃 중 오류가 발생했습니다.');
+
+        console.error(
+          '로그아웃 오류:',
+          error
+        );
+
+        alert(
+          '로그아웃 중 오류가 발생했습니다.'
+        );
+
         return;
       }
 
-      window.location.replace('admin.html');
+      window.location.replace(
+        'admin.html'
+      );
 
     } catch (error) {
-      console.error('로그아웃 처리 오류:', error);
-      alert('로그아웃 중 오류가 발생했습니다.');
+
+      console.error(
+        '로그아웃 처리 오류:',
+        error
+      );
+
+      alert(
+        '로그아웃 중 오류가 발생했습니다.'
+      );
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function openBoard(category) {
 
-    const logoutBtn = document.getElementById('logoutBtn');
+    window.location.href =
+      'admin-posts.html?category='
+      +
+      encodeURIComponent(category);
+  }
 
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', adminLogout);
+  document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+      const logoutBtn =
+        document.getElementById(
+          'logoutBtn'
+        );
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener(
+          'click',
+          adminLogout
+        );
+      }
+
+      document
+        .querySelectorAll(
+          '.card[data-category]'
+        )
+        .forEach(card => {
+
+          card.addEventListener(
+            'click',
+            function () {
+
+              openBoard(
+                card.dataset.category
+              );
+            }
+          );
+
+          card.addEventListener(
+            'keydown',
+            function (event) {
+
+              if (
+                event.key === 'Enter'
+                ||
+                event.key === ' '
+              ) {
+
+                event.preventDefault();
+
+                openBoard(
+                  card.dataset.category
+                );
+              }
+            }
+          );
+        });
+
+      checkAdminLogin();
     }
-
-    checkAdminLogin();
-  });
+  );
 </script>
 
 </body>
