@@ -121,7 +121,7 @@
     <p>ACTS MISSION ALLIANCE 관리자 시스템</p>
   </div>
 
-  <button class="logout-btn">
+<button class="logout-btn" onclick="logout()">
     로그아웃
   </button>
 </header>
@@ -170,6 +170,35 @@
   </footer>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = 'https://ojxarsfaewehwjidwgac.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  async function checkAdminLogin() {
+    const {
+      data: { session }
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      window.location.href = 'admin.html';
+      return;
+    }
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = 'admin.html';
+  }
+
+  checkAdminLogin();
+</script>
 
 </body>
 </html>
