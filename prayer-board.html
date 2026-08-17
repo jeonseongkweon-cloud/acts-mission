@@ -175,6 +175,22 @@
       line-height: 1.6;
     }
 
+    .prayer-image-wrap {
+      margin-top: 18px;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+    }
+
+    .prayer-image {
+      display: block;
+      width: 100%;
+      max-height: 560px;
+      object-fit: contain;
+      background: #f8fafc;
+    }
+
     .prayer-preview {
       margin-top: 16px;
       color: #4b5563;
@@ -317,9 +333,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>ABOUT ACTS</h3>
             <a href="about.html">ACTS 소개</a>
@@ -346,7 +360,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger"
@@ -356,9 +369,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>MISSION HQ</h3>
             <a href="mission-hq.html">디지털 선교본부</a>
@@ -385,7 +396,6 @@
         </div>
       </div>
 
-
       <div class="mega-item mega-wide">
         <button
           class="mega-trigger"
@@ -395,9 +405,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-4"
-        >
+        <div class="mega-panel mega-panel-4">
           <section>
             <h3>중앙본부</h3>
             <a href="organization.html#central">ACTS 조직도</a>
@@ -436,7 +444,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger"
@@ -446,9 +453,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>ACTS EDUCATION</h3>
             <a href="education-center.html">교육센터</a>
@@ -475,7 +480,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger"
@@ -485,9 +489,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>MISSION LIBRARY</h3>
             <a href="library-hq.html">자료실 본부</a>
@@ -515,7 +517,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger"
@@ -525,9 +526,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>PRAYER CENTER</h3>
             <a href="prayer.html">12개 기도문 전체</a>
@@ -554,7 +553,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger"
@@ -564,9 +562,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>PARTNERS</h3>
             <a href="partners.html">동역자 안내</a>
@@ -590,7 +586,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger"
@@ -600,9 +595,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3"
-        >
+        <div class="mega-panel mega-panel-3">
           <section>
             <h3>PROJECTS</h3>
             <a href="projects.html">프로젝트 본부</a>
@@ -626,7 +619,6 @@
         </div>
       </div>
 
-
       <div class="mega-item">
         <button
           class="mega-trigger mega-join-trigger"
@@ -636,9 +628,7 @@
           <span>⌄</span>
         </button>
 
-        <div
-          class="mega-panel mega-panel-3 mega-panel-right"
-        >
+        <div class="mega-panel mega-panel-3 mega-panel-right">
           <section>
             <h3>JOIN ACTS</h3>
             <a href="join-hq.html">참여 안내</a>
@@ -920,7 +910,7 @@
         .from('posts')
 
         .select(
-          'id,title,content,author,created_at,updated_at,is_published,category'
+          'id,title,content,author,created_at,updated_at,is_published,category,image_url'
         )
 
         .eq(
@@ -1045,6 +1035,21 @@
           );
 
 
+        const imageHtml =
+          post.image_url
+            ? `
+              <div class="prayer-image-wrap">
+                <img
+                  class="prayer-image"
+                  src="${escapeHtml(post.image_url)}"
+                  alt="${title}"
+                  loading="lazy"
+                >
+              </div>
+            `
+            : '';
+
+
         card.innerHTML =
           `
             <div class="prayer-card-top">
@@ -1066,6 +1071,9 @@
               ·
               ${date}
             </div>
+
+
+            ${imageHtml}
 
 
             <div class="prayer-preview">
