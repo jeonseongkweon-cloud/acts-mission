@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ACTS 관리자 대시보드</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      color: #1f2937;
+    }
+
+    header {
+      background: #061A33;
+      color: white;
+      padding: 22px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 22px;
+    }
+
+    header p {
+      font-size: 13px;
+      color: #d6ae55;
+      margin-top: 5px;
+    }
+
+    .logout-btn {
+      background: #d6ae55;
+      color: #061A33;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .welcome {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .welcome h2 {
+      color: #061A33;
+      margin-bottom: 10px;
+    }
+
+    .welcome p {
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      transition: 0.2s;
+      cursor: pointer;
+      border-top: 4px solid #d6ae55;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card h3 {
+      color: #061A33;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>ACTS ADMIN</h1>
+    <p>ACTS MISSION ALLIANCE 관리자 시스템</p>
+  </div>
+
+  <button class="logout-btn">
+    로그아웃
+  </button>
+</header>
+
+<main class="container">
+
+  <section class="welcome">
+    <h2>관리자 대시보드</h2>
+    <p>
+      ACTS MISSION ALLIANCE 홈페이지의 게시판과 콘텐츠를
+      관리하는 관리자 전용 페이지입니다.
+    </p>
+  </section>
+
+  <section class="dashboard-grid">
+
+    <div class="card">
+      <h3>🙏 ACTS Prayer</h3>
+      <p>기도제목과 기도응답 게시판 관리</p>
+    </div>
+
+    <div class="card">
+      <h3>📰 ACTS News</h3>
+      <p>ACTS 지부·회원·선교 활동 소식 관리</p>
+    </div>
+
+    <div class="card">
+      <h3>🎓 ACTS Training</h3>
+      <p>교육·세미나·자격과정 게시판 관리</p>
+    </div>
+
+    <div class="card">
+      <h3>🌍 ACTS Mission</h3>
+      <p>국내외 선교 프로젝트 및 참여 게시판 관리</p>
+    </div>
+
+    <div class="card">
+      <h3>🤝 ACTS Community</h3>
+      <p>회원 교류와 협력 게시판 관리</p>
+    </div>
+
+  </section>
+
+  <footer>
+    © ACTS MISSION ALLIANCE · Administrator System
+  </footer>
+
+</main>
+
+</body>
+</html>
