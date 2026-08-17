@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>교육·세미나 | ACTS Mission Alliance</title>
+
+  <meta
+    name="description"
+    content="ACTS MISSION ALLIANCE의 교육, 세미나, 지도자과정과 온라인 훈련 소식을 안내합니다."
+  >
+
+  <link rel="stylesheet" href="styles.css?v=5.1.2">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f4f6f9;
+      color: #1f2937;
+    }
+
+    .board-hero {
+      background: linear-gradient(135deg,#061A33 0%,#0B2B50 100%);
+      color: white;
+      padding: 70px 20px;
+      text-align: center;
+    }
+
+    .board-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .board-badge {
+      display: inline-block;
+      border: 1px solid rgba(214,174,85,.6);
+      background: rgba(214,174,85,.12);
+      color: #e7c36d;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin-bottom: 18px;
+    }
+
+    .board-hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(32px,5vw,52px);
+      font-weight: 800;
+    }
+
+    .board-hero p {
+      margin: 0 auto;
+      max-width: 780px;
+      line-height: 1.8;
+      color: #dbe6f1;
+    }
+
+    .board-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 45px 20px 80px;
+    }
+
+    .board-intro {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 5px 22px rgba(0,0,0,.06);
+      border-top: 4px solid #d6ae55;
+    }
+
+    .board-intro h2 {
+      margin: 0 0 10px;
+      color: #061A33;
+    }
+
+    .board-intro p {
+      margin: 0;
+      color: #6b7280;
+      line-height: 1.8;
+    }
+
+    .board-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .board-toolbar h2 {
+      margin: 0;
+      color: #061A33;
+    }
+
+    .board-count {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .board-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .board-card {
+      background: white;
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 16px rgba(0,0,0,.05);
+      transition: .2s ease;
+    }
+
+    .board-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.09);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .post-title {
+      margin: 0;
+      color: #061A33;
+      font-size: 20px;
+      line-height: 1.5;
+      font-weight: 800;
+    }
+
+    .post-label {
+      background: #061A33;
+      color: #d6ae55;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .post-meta {
+      margin-top: 10px;
+      color: #8a94a3;
+      font-size: 13px;
+    }
+
+    .post-preview {
+      margin-top: 16px;
+      color: #4b5563;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .post-full {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      color: #374151;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+
+    .post-full.open { display: block; }
+
+    .post-actions { margin-top: 18px; }
+
+    .read-more-btn {
+      border: 0;
+      background: #d6ae55;
+      color: #061A33;
+      padding: 9px 15px;
+      border-radius: 7px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .board-message {
+      background: white;
+      border-radius: 14px;
+      padding: 45px 20px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+      color: #8a94a3;
+    }
+
+    .board-footer-note {
+      margin-top: 30px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    @media(max-width:700px) {
+      .board-hero { padding: 50px 18px; }
+      .board-wrap { padding: 30px 15px 60px; }
+      .board-card { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body class="v5-body">
+
+<header class="mega-header" id="siteHeader">
+  <div class="mega-nav-wrap">
+
+    <a class="mega-brand" href="index.html" aria-label="ACTS Mission Alliance 홈">
+      <img src="assets/official/official-logo.webp" alt="ACTS Mission Alliance">
+      <span>
+        <b>ACTS MISSION ALLIANCE</b>
+        <small>DIGITAL MISSION HQ · VERSION 5.1.2</small>
+      </span>
+    </a>
+
+    <button class="mega-mobile-btn" type="button"
+      aria-expanded="false" aria-controls="megaMenu"
+      aria-label="전체 메뉴 열기">☰</button>
+
+    <nav class="mega-menu" id="megaMenu" aria-label="주요 메뉴">
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">소개 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>ABOUT ACTS</h3>
+            <a href="about.html">ACTS 소개</a>
+            <a href="mission.html">설립취지·미션</a>
+            <a href="faith.html">신앙원칙</a>
+            <a href="gallery.html">4대 가치·창립정신</a>
+          </section>
+          <section>
+            <h3>조직의 기초</h3>
+            <a href="organization.html">ACTS 조직도</a>
+            <a href="committees.html">전문위원회</a>
+            <a href="partners.html">동역자</a>
+          </section>
+          <section>
+            <h3>공식 자료</h3>
+            <a href="manuals.html">ACTS 15권 교본</a>
+            <a href="media.html">미디어·소개자료</a>
+            <a href="library-hq.html">Mission Library</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">선교본부 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>MISSION HQ</h3>
+            <a href="mission-hq.html">디지털 선교본부</a>
+            <a href="missionary-support.html">선교사 지원센터</a>
+            <a href="programs.html">선교 프로그램</a>
+          </section>
+          <section>
+            <h3>사역 분야</h3>
+            <a href="committees.html#mission">선교위원회</a>
+            <a href="committees.html#professional">전문인선교</a>
+            <a href="committees.html#sports">스포츠·무도선교</a>
+          </section>
+          <section>
+            <h3>세계 연결</h3>
+            <a href="network-hq.html">세계네트워크</a>
+            <a href="korea.html">ACTS KOREA</a>
+            <a href="world.html">WORLD ACTS</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item mega-wide">
+        <button class="mega-trigger" type="button">조직 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-4">
+          <section>
+            <h3>중앙본부</h3>
+            <a href="organization.html">ACTS 조직도</a>
+            <a href="organization.html#founder">설립자</a>
+            <a href="organization.html#secretary">사무총장</a>
+          </section>
+          <section>
+            <h3>전문위원회</h3>
+            <a href="committees.html">위원회 전체보기</a>
+            <a href="committees.html#education">교육위원회</a>
+            <a href="committees.html#digital">AI·디지털선교위원회</a>
+          </section>
+          <section>
+            <h3>지역·세계조직</h3>
+            <a href="korea.html">ACTS KOREA</a>
+            <a href="world.html">WORLD ACTS</a>
+          </section>
+          <section>
+            <h3>실무조직</h3>
+            <a href="education-center.html">ACTS 교육센터</a>
+            <a href="library-hq.html">Mission Library</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">교육 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>ACTS EDUCATION</h3>
+            <a href="education-center.html">교육센터</a>
+            <a href="academy-hq.html">ACTS Academy</a>
+            <a href="training-board.html">교육·세미나 게시판</a>
+          </section>
+          <section>
+            <h3>과정</h3>
+            <a href="education-center.html#basic">기본과정</a>
+            <a href="education-center.html#professional">전문과정</a>
+            <a href="education-center.html#leader">지도자과정</a>
+          </section>
+          <section>
+            <h3>수료·인증</h3>
+            <a href="credentials.html">교육인증 안내</a>
+            <a href="verify.html">인증조회</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">자료실 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>MISSION LIBRARY</h3>
+            <a href="library-hq.html">자료실 본부</a>
+            <a href="manuals.html">15권 교본</a>
+            <a href="media.html">영상·미디어</a>
+            <a href="news.html">ACTS 소식</a>
+          </section>
+          <section>
+            <h3>콘텐츠</h3>
+            <a href="content-lab.html">Content Lab</a>
+          </section>
+          <section>
+            <h3>디지털 도구</h3>
+            <a href="academy.html">온라인 훈련</a>
+            <a href="verify.html">인증조회</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">기도센터 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>PRAYER CENTER</h3>
+            <a href="prayer.html">12개 기도문 전체</a>
+            <a href="prayer-board.html">기도나눔 게시판</a>
+          </section>
+          <section>
+            <h3>사람을 위한 기도</h3>
+            <a href="prayer.html#prayer-7">다음세대</a>
+            <a href="prayer.html#prayer-8">가정</a>
+          </section>
+          <section>
+            <h3>세상을 위한 기도</h3>
+            <a href="prayer.html#prayer-5">나라와 민족</a>
+            <a href="prayer.html#prayer-10">평화·재난</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">동역자 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>PARTNERS</h3>
+            <a href="partners.html">동역자 안내</a>
+            <a href="join-hq.html">참여 신청</a>
+          </section>
+          <section>
+            <h3>함께하는 사람</h3>
+            <a href="community-board.html">회원소통</a>
+          </section>
+          <section>
+            <h3>함께하는 조직</h3>
+            <a href="network-hq.html">국가·지역 네트워크</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger" type="button">프로젝트 <span>⌄</span></button>
+        <div class="mega-panel mega-panel-3">
+          <section>
+            <h3>PROJECTS</h3>
+            <a href="projects.html">프로젝트 본부</a>
+            <a href="mission-board.html">선교활동 게시판</a>
+          </section>
+          <section>
+            <h3>분야별</h3>
+            <a href="projects.html#education">교육</a>
+            <a href="projects.html#martial">스포츠·무도</a>
+          </section>
+          <section>
+            <h3>제작·지원</h3>
+            <a href="support.html">후원·지원</a>
+          </section>
+        </div>
+      </div>
+
+      <div class="mega-item">
+        <button class="mega-trigger mega-join-trigger" type="button">
+          참여하기 <span>⌄</span>
+        </button>
+        <div class="mega-panel mega-panel-3 mega-panel-right">
+          <section>
+            <h3>JOIN ACTS</h3>
+            <a href="join-hq.html">참여 안내</a>
+          </section>
+          <section>
+            <h3>조직 참여</h3>
+            <a href="committees.html">위원회 참여</a>
+          </section>
+          <section>
+            <h3>교육·인증</h3>
+            <a href="education-center.html">교육센터</a>
+            <a href="credentials.html">인증 안내</a>
+          </section>
+        </div>
+      </div>
+
+    </nav>
+  </div>
+</header>
+
+<section class="board-hero">
+  <div class="board-hero-inner">
+    <span class="board-badge">ACTS TRAINING</span>
+    <h1>교육·세미나</h1>
+    <p>
+      ACTS MISSION ALLIANCE의 온라인 교육, 지도자과정,
+      세미나와 전문교육, 교육 일정과 새로운 훈련 프로그램을 안내합니다.
+    </p>
+  </div>
+</section>
+
+<main class="board-wrap">
+
+  <section class="board-intro">
+    <h2>ACTS TRAINING & SEMINAR</h2>
+    <p>
+      선교사·지도자·전문인과 다음 세대를 위한 교육과 훈련,
+      온라인 과정 및 세미나에 관한 소식을 확인할 수 있습니다.
+    </p>
+  </section>
+
+  <div class="board-toolbar">
+    <h2>교육·세미나 안내</h2>
+    <div class="board-count" id="boardCount">게시글을 불러오는 중입니다.</div>
+  </div>
+
+  <section class="board-list" id="boardList">
+    <div class="board-message">교육·세미나 게시글을 불러오는 중입니다...</div>
+  </section>
+
+  <div class="board-footer-note">
+    ACTS MISSION ALLIANCE · TRAIN · SERVE · SHARE
+  </div>
+
+</main>
+
+<footer class="v5-footer">
+  <div class="v5-footer-grid">
+    <div>
+      <b>ACTS MISSION ALLIANCE</b>
+      <p>액츠 선교연합 · ACTION · CHRIST · TRAINING · SERVICE</p>
+    </div>
+    <div>
+      <b>ACTS EDUCATION</b>
+      <p>사람을 세우고 현장을 섬기는 교육과 훈련</p>
+    </div>
+    <div>
+      <b>TRAINING & SEMINAR</b>
+      <p>온라인 교육 · 지도자과정 · 세미나 · 전문교육</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  'https://ojxarsfaewehwjidwgac.supabase.co';
+
+const SUPABASE_ANON_KEY =
+  'sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function makePreview(text,length=180) {
+  const clean = String(text || '')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  return clean.length <= length
+    ? clean
+    : clean.substring(0,length) + '...';
+}
+
+function formatDate(value) {
+  if (!value) return '';
+
+  return new Date(value)
+    .toLocaleDateString('ko-KR',{
+      year:'numeric',
+      month:'long',
+      day:'numeric'
+    });
+}
+
+async function loadPosts() {
+
+  const list =
+    document.getElementById('boardList');
+
+  const count =
+    document.getElementById('boardCount');
+
+  const { data,error } =
+    await supabaseClient
+      .from('posts')
+      .select('id,title,content,author,created_at')
+      .eq('category','training')
+      .eq('is_published',true)
+      .order('created_at',{ascending:false});
+
+  if (error) {
+    console.error(error);
+    list.innerHTML =
+      '<div class="board-message">게시글을 불러오지 못했습니다.</div>';
+    count.textContent = '불러오기 오류';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.innerHTML =
+      '<div class="board-message">현재 등록된 공개 교육·세미나 글이 없습니다.</div>';
+    count.textContent = '등록된 게시글 0건';
+    return;
+  }
+
+  count.textContent =
+    '등록된 게시글 ' + data.length + '건';
+
+  list.innerHTML = '';
+
+  data.forEach(post => {
+
+    const card =
+      document.createElement('article');
+
+    card.className = 'board-card';
+
+    card.innerHTML = `
+      <div class="card-top">
+        <h3 class="post-title">${escapeHtml(post.title)}</h3>
+        <span class="post-label">ACTS TRAINING</span>
+      </div>
+
+      <div class="post-meta">
+        작성자: ${escapeHtml(post.author || 'ACTS MISSION ALLIANCE')}
+        · ${formatDate(post.created_at)}
+      </div>
+
+      <div class="post-preview">
+        ${escapeHtml(makePreview(post.content))}
+      </div>
+
+      <div class="post-full" id="content-${post.id}">
+        ${escapeHtml(post.content)}
+      </div>
+
+      <div class="post-actions">
+        <button
+          class="read-more-btn"
+          type="button"
+          data-post-id="${post.id}"
+        >
+          자세히 보기
+        </button>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+
+  document
+    .querySelectorAll('.read-more-btn')
+    .forEach(button => {
+
+      button.addEventListener('click',() => {
+
+        const content =
+          document.getElementById(
+            'content-' + button.dataset.postId
+          );
+
+        const opened =
+          content.classList.toggle('open');
+
+        button.textContent =
+          opened ? '접기' : '자세히 보기';
+      });
+    });
+}
+
+document.addEventListener(
+  'DOMContentLoaded',
+  loadPosts
+);
+</script>
+
+<script src="mega-menu.js?v=5.1.2"></script>
+
+</body>
+</html>
