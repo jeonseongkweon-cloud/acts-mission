@@ -217,6 +217,23 @@ body{margin:0;background:#f4f6f9;color:#1f2937}
   }
 }
 
+
+.detail-link-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  border:0;
+  background:#061A33;
+  color:#fff;
+  border-radius:8px;
+  padding:9px 14px;
+  font-weight:800;
+  font-size:13px;
+  cursor:pointer;
+}
+.detail-link-btn:hover{background:#0B2B50}
+
 </style>
 </head>
 <body class="v5-body">
@@ -396,6 +413,7 @@ async function loadBoard(){
    <div class="reactions">
      ${Object.entries(labels).map(([k,l])=>`<button class="react-btn ${r.mine?.has(k)?'mine':''}" data-id="${p.id}" data-type="${k}" type="button">${l} ${r[k]||0}</button>`).join('')}
    </div>
+   <div style="margin-top:14px"><a class="detail-link-btn" href="post-detail.html?id=${p.id}&category=prayer">게시글 상세보기 →</a></div>
    <div class="comments">
      <button class="comment-toggle" type="button" data-post-id="${p.id}">💬 댓글 ${cs.length}</button>
      <div class="comment-area" id="comments-${p.id}">

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>게시글 상세보기 | ACTS Mission Alliance</title>
+<meta name="description" content="ACTS MISSION ALLIANCE 게시글 상세보기">
+<link rel="stylesheet" href="styles.css?v=5.2.1">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6f9;color:#1f2937}
+.detail-wrap{max-width:1100px;margin:0 auto;padding:42px 20px 80px}
+.detail-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border:1px solid #d8dee7;background:#fff;color:#061A33;border-radius:9px;padding:9px 13px;font-weight:800}
+.board-chip{display:inline-block;background:#061A33;color:#d6ae55;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:800}
+.detail-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px;box-shadow:0 5px 22px rgba(0,0,0,.06)}
+.detail-title{margin:0;color:#061A33;font-size:clamp(26px,4vw,38px);line-height:1.35}
+.detail-meta{margin-top:10px;color:#8a94a3;font-size:13px}
+.detail-image-wrap{margin-top:22px;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#f8fafc}
+.detail-image{display:block;width:100%;max-height:720px;object-fit:contain}
+.detail-content{margin-top:24px;white-space:pre-wrap;line-height:1.95;color:#374151;font-size:16px}
+.acts-reactions{margin-top:24px;padding-top:18px;border-top:1px solid #eef1f5;display:flex;gap:8px;flex-wrap:wrap}
+.acts-reaction-btn{appearance:none;border:1px solid #e2e8f0;background:#fff;color:#334155;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.acts-reaction-btn.active{border-color:#d6ae55;background:#fff7df;color:#061A33}
+.acts-reaction-btn:disabled{opacity:.55;cursor:wait}
+.comments{margin-top:18px;padding-top:16px;border-top:1px solid #eef1f5}
+.comments h3{margin:0 0 12px;color:#061A33}
+.comment-list{display:grid;gap:9px;margin-bottom:14px}
+.comment-item{background:#fbfcfe;border:1px solid #e7ebf0;border-radius:10px;padding:12px 14px}
+.comment-meta{font-size:12px;color:#8a94a3;font-weight:700;margin-bottom:5px}
+.comment-text{white-space:pre-wrap;word-break:keep-all;overflow-wrap:break-word;line-height:1.65;color:#374151}
+.comment-form{display:grid;grid-template-columns:160px minmax(0,1fr) 104px;gap:10px;align-items:stretch}
+.comment-form input,.comment-form textarea{width:100%;min-width:0;border:1px solid #d8dee7;border-radius:9px;padding:11px 12px;font:inherit;background:#fff;outline:none}
+.comment-form textarea{min-height:62px;max-height:180px;resize:vertical}
+.comment-submit{border:0;background:#061A33;color:#fff;border-radius:9px;font-weight:800;cursor:pointer}
+.comment-note{margin-top:8px;color:#8a94a3;font-size:11px}
+.detail-message{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:50px 20px;text-align:center;color:#7b8491}
+@media(max-width:700px){
+ .detail-wrap{padding:28px 15px 60px}
+ .detail-card{padding:20px}
+ .comment-form{grid-template-columns:1fr}
+ .comment-form textarea{min-height:95px}
+ .comment-submit{min-height:44px}
+}
+</style>
+</head>
+<body class="v5-body">
+<header class="mega-header" id="siteHeader">
+  <div class="mega-nav-wrap">
+    <a class="mega-brand" href="index.html" aria-label="ACTS Mission Alliance 홈">
+      <img src="assets/official/official-logo.webp" alt="ACTS Mission Alliance">
+      <span><b>ACTS MISSION ALLIANCE</b><small>DIGITAL MISSION HQ</small></span>
+    </a>
+    <button class="mega-mobile-btn" type="button" aria-expanded="false" aria-controls="megaMenu" aria-label="전체 메뉴 열기">☰</button>
+    <nav class="mega-menu" id="megaMenu" aria-label="주요 메뉴">
+      <div class="mega-item"><button class="mega-trigger" type="button">소개 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>ABOUT ACTS</h3><a href="about.html">ACTS 소개</a><a href="mission.html">설립취지·미션</a><a href="faith.html">신앙원칙</a></section><section><h3>조직</h3><a href="organization.html">ACTS 조직도</a><a href="committees.html">전문위원회</a></section><section><h3>자료</h3><a href="manuals.html">ACTS 15권 교본</a><a href="media.html">미디어</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">선교본부 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>MISSION HQ</h3><a href="mission-hq.html">디지털 선교본부</a><a href="mission-board.html">선교활동 게시판</a></section><section><h3>지원</h3><a href="missionary-support.html">선교사 지원센터</a></section><section><h3>세계</h3><a href="network-hq.html">세계네트워크</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">교육 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>ACTS EDUCATION</h3><a href="education-center.html">교육센터</a><a href="training-board.html">교육·세미나 게시판</a></section><section><h3>과정</h3><a href="academy.html">온라인교육</a></section><section><h3>인증</h3><a href="credentials.html">교육인증 안내</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">자료실 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>MISSION LIBRARY</h3><a href="library-hq.html">자료실 본부</a><a href="news.html">ACTS 소식</a></section><section><h3>콘텐츠</h3><a href="content-lab.html">Content Lab</a></section><section><h3>미디어</h3><a href="media.html">영상·미디어</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">기도센터 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>PRAYER CENTER</h3><a href="prayer.html">12개 기도문 전체</a><a href="prayer-board.html">🙏 기도나눔 게시판</a></section><section><h3>사람을 위한 기도</h3><a href="prayer.html#prayer-7">다음세대</a><a href="prayer.html#prayer-8">가정</a></section><section><h3>세상을 위한 기도</h3><a href="prayer.html#prayer-5">나라와 민족</a><a href="prayer.html#prayer-10">평화·재난</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">소통센터 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>COMMUNITY</h3><a href="prayer-board.html">🙏 기도나눔</a><a href="news.html">📰 ACTS 소식</a></section><section><h3>TRAINING & MISSION</h3><a href="training-board.html">🎓 교육·세미나</a><a href="mission-board.html">🌍 선교활동</a></section><section><h3>MEMBER</h3><a href="community-board.html">🤝 회원소통</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger mega-join-trigger" type="button">참여하기 <span>⌄</span></button><div class="mega-panel mega-panel-3 mega-panel-right"><section><h3>JOIN ACTS</h3><a href="join-hq.html">참여 안내</a></section><section><h3>조직 참여</h3><a href="committees.html">위원회 참여</a></section><section><h3>교육·인증</h3><a href="credentials.html">인증 안내</a></section></div></div>
+    </nav>
+  </div>
+</header>
+
+<main class="detail-wrap">
+  <div class="detail-toolbar">
+    <a id="backLink" class="back-btn" href="index.html">← 게시판으로 돌아가기</a>
+    <span id="boardChip" class="board-chip">ACTS</span>
+  </div>
+  <section id="detailRoot">
+    <div class="detail-message">게시글을 불러오는 중입니다...</div>
+  </section>
+</main>
+
+<footer class="v5-footer"><div class="v5-footer-grid"><div><b>ACTS MISSION ALLIANCE</b><p>액츠 선교연합 · ACTION · CHRIST · TRAINING · SERVICE</p></div><div><b>PRAYER COMMUNITY</b><p>함께 기도하고 서로를 격려하는 온라인 기도 공동체</p></div><div><b>ACTS PRAYER</b><p>기도제목 · 중보기도 · 기도응답</p></div></div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://ojxarsfaewehwjidwgac.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+const boardMap={
+ prayer:{name:'ACTS PRAYER',back:'prayer-board.html'},
+ news:{name:'ACTS NEWS',back:'news.html'},
+ training:{name:'ACTS TRAINING',back:'training-board.html'},
+ mission:{name:'ACTS MISSION',back:'mission-board.html'},
+ community:{name:'ACTS COMMUNITY',back:'community-board.html'}
+};
+const reactionLabels={pray:'🙏 함께 기도',amen:'🙌 아멘',support:'👍 응원',heart:'❤️ 공감'};
+const esc=v=>String(v||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+const fmt=v=>v?new Date(v).toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'}):'';
+
+const visitorKey='acts_reaction_visitor_id';
+let visitorId=localStorage.getItem(visitorKey);
+if(!visitorId){
+ visitorId=(crypto.randomUUID?crypto.randomUUID():'visitor-'+Date.now()+'-'+Math.random().toString(36).slice(2));
+ localStorage.setItem(visitorKey,visitorId);
+}
+
+function getParams(){
+ const p=new URLSearchParams(location.search);
+ return {id:p.get('id'),category:p.get('category')};
+}
+
+async function getReactionState(postId){
+ const state={pray:0,amen:0,support:0,heart:0,mine:new Set()};
+ const {data,error}=await supabaseClient.from('post_reactions')
+   .select('reaction_type,visitor_id').eq('post_id',String(postId));
+ if(error){console.warn(error);return state;}
+ (data||[]).forEach(r=>{
+   state[r.reaction_type]=(state[r.reaction_type]||0)+1;
+   if(r.visitor_id===visitorId) state.mine.add(r.reaction_type);
+ });
+ return state;
+}
+
+async function toggleReaction(postId,type){
+ const {data}=await supabaseClient.from('post_reactions').select('id')
+   .eq('post_id',String(postId)).eq('reaction_type',type).eq('visitor_id',visitorId).maybeSingle();
+ if(data?.id) await supabaseClient.from('post_reactions').delete().eq('id',data.id);
+ else await supabaseClient.from('post_reactions').insert({post_id:String(postId),reaction_type:type,visitor_id:visitorId});
+ await loadDetail();
+}
+
+async function getComments(postId){
+ const {data,error}=await supabaseClient.from('post_comments')
+   .select('id,post_id,author,content,created_at')
+   .eq('post_id',String(postId))
+   .order('created_at',{ascending:true});
+ if(error){console.warn(error);return [];}
+ return data||[];
+}
+
+async function addComment(postId,author,content,statusEl){
+ const lastKey='acts_detail_comment_last_'+postId;
+ const last=Number(localStorage.getItem(lastKey)||0);
+ if(Date.now()-last<30000){statusEl.textContent='댓글은 30초 후 다시 등록할 수 있습니다.';return false;}
+ const {error}=await supabaseClient.from('post_comments').insert({
+   post_id:String(postId),author:author.trim(),content:content.trim(),visitor_id:visitorId
+ });
+ if(error){console.error(error);statusEl.textContent='댓글 등록에 실패했습니다.';return false;}
+ localStorage.setItem(lastKey,String(Date.now()));
+ return true;
+}
+
+async function loadDetail(){
+ const {id,category}=getParams();
+ const root=document.getElementById('detailRoot');
+ const cfg=boardMap[category]||{name:'ACTS BOARD',back:'index.html'};
+ document.getElementById('backLink').href=cfg.back;
+ document.getElementById('boardChip').textContent=cfg.name;
+
+ if(!id||!category){root.innerHTML='<div class="detail-message">잘못된 게시글 주소입니다.</div>';return;}
+
+ const {data:post,error}=await supabaseClient.from('posts')
+   .select('id,title,content,author,created_at,image_url,category,is_published')
+   .eq('id',id).eq('category',category).eq('is_published',true).maybeSingle();
+
+ if(error||!post){root.innerHTML='<div class="detail-message">게시글을 찾을 수 없습니다.</div>';return;}
+
+ const reactions=await getReactionState(post.id);
+ const comments=await getComments(post.id);
+
+ root.innerHTML=`
+ <article class="detail-card">
+   <h1 class="detail-title">${esc(post.title)}</h1>
+   <div class="detail-meta">${esc(post.author||'ACTS MISSION ALLIANCE')} · ${fmt(post.created_at)}</div>
+   ${post.image_url?`<div class="detail-image-wrap"><img class="detail-image" src="${esc(post.image_url)}" alt="${esc(post.title)}" loading="lazy"></div>`:''}
+   <div class="detail-content">${esc(post.content)}</div>
+   <div class="acts-reactions">
+     ${Object.entries(reactionLabels).map(([k,l])=>`<button type="button" class="acts-reaction-btn ${reactions.mine.has(k)?'active':''}" data-type="${k}">${l} <span>${reactions[k]||0}</span></button>`).join('')}
+   </div>
+   <section class="comments">
+     <h3>💬 댓글 ${comments.length}</h3>
+     <div class="comment-list">
+       ${comments.length?comments.map(c=>`<div class="comment-item"><div class="comment-meta">${esc(c.author)} · ${fmt(c.created_at)}</div><div class="comment-text">${esc(c.content)}</div></div>`).join(''):'<div class="comment-item"><div class="comment-text">아직 댓글이 없습니다.</div></div>'}
+     </div>
+     <form id="commentForm" class="comment-form">
+       <input name="author" maxlength="40" required placeholder="이름/별칭">
+       <textarea name="content" maxlength="1000" required placeholder="응원과 격려의 댓글을 남겨주세요."></textarea>
+       <button class="comment-submit" type="submit">댓글 등록</button>
+     </form>
+     <div class="comment-note">전화번호·주소 등 개인정보는 댓글에 적지 마세요. <span id="commentStatus"></span></div>
+   </section>
+ </article>`;
+
+ document.querySelectorAll('.acts-reaction-btn').forEach(btn=>btn.addEventListener('click',()=>toggleReaction(post.id,btn.dataset.type)));
+ document.getElementById('commentForm').addEventListener('submit',async e=>{
+   e.preventDefault();
+   const status=document.getElementById('commentStatus');
+   const author=e.target.elements.author.value;
+   const content=e.target.elements.content.value;
+   if(!author.trim()||!content.trim()){status.textContent='이름과 댓글을 입력해 주세요.';return;}
+   const ok=await addComment(post.id,author,content,status);
+   if(ok){e.target.reset();await loadDetail();}
+ });
+}
+
+document.addEventListener('DOMContentLoaded',loadDetail);
+</script>
+<script src="mega-menu.js?v=5.1.2"></script>
+</body>
+</html>
