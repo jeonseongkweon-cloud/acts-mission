@@ -47,7 +47,22 @@ body{margin:0;background:#f4f6f9;color:#1f2937}
 .react-btn.mine{border-color:#d6ae55;background:#fff9e9}
 .message{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:40px 20px;text-align:center;color:#8a94a3}
 .footer-note{text-align:center;color:#9ca3af;font-size:13px;margin-top:28px}
-@media(max-width:700px){.prayer-hero{padding:50px 18px}.board-wrap{padding:30px 15px 60px}.form-grid{grid-template-columns:1fr}.card{padding:20px}.card h3{font-size:18px}}
+
+.comments{margin-top:16px;border-top:1px solid #edf0f4;padding-top:14px}
+.comment-toggle{border:0;background:#eef2f7;color:#061A33;border-radius:8px;padding:8px 11px;font-weight:800;cursor:pointer}
+.comment-area{display:none;margin-top:12px}
+.comment-area.open{display:block}
+.comment-list{display:grid;gap:9px;margin-bottom:12px}
+.comment-item{background:#f8fafc;border:1px solid #e7ebf0;border-radius:9px;padding:11px 12px}
+.comment-meta{font-size:12px;color:#8a94a3;margin-bottom:5px}
+.comment-text{white-space:pre-wrap;line-height:1.65;color:#374151;font-size:14px}
+.comment-form{display:grid;grid-template-columns:160px 1fr auto;gap:8px;align-items:end}
+.comment-form input,.comment-form textarea{border:1px solid #d8dee7;border-radius:8px;padding:9px 10px;font:inherit;background:#fff}
+.comment-form textarea{min-height:42px;max-height:120px;resize:vertical}
+.comment-submit{border:0;background:#061A33;color:#fff;border-radius:8px;padding:10px 13px;font-weight:800;cursor:pointer}
+.comment-note{font-size:11px;color:#8a94a3;margin-top:7px}
+
+@media(max-width:700px){.prayer-hero{padding:50px 18px}.board-wrap{padding:30px 15px 60px}.form-grid{grid-template-columns:1fr}.comment-form{grid-template-columns:1fr}.card{padding:20px}.card h3{font-size:18px}}
 </style>
 </head>
 <body class="v5-body">
@@ -162,22 +177,112 @@ async function toggleReaction(postId,type){
  await loadBoard();
 }
 
+async function loadComments(postIds){
+ const map={};
+ if(!postIds.length)return map;
+ const {data,error}=await supabaseClient
+   .from('post_comments')
+   .select('id,post_id,author,content,created_at')
+   .in('post_id',postIds.map(String))
+   .order('created_at',{ascending:true});
+ if(error){console.warn('comments load error',error);return map;}
+ (data||[]).forEach(c=>{
+   const id=String(c.post_id);
+   (map[id]??=[]).push(c);
+ });
+ return map;
+}
+
+async function addComment(postId,author,content,statusEl){
+ const lastKey='acts_comment_last_'+postId;
+ const last=Number(localStorage.getItem(lastKey)||0);
+ if(Date.now()-last<30000){
+   statusEl.textContent='댓글은 30초 후 다시 등록할 수 있습니다.';
+   return false;
+ }
+ const {error}=await supabaseClient.from('post_comments').insert({
+   post_id:String(postId),
+   author:author.trim(),
+   content:content.trim(),
+   visitor_id:visitorId
+ });
+ if(error){
+   console.error('comment insert error',error);
+   statusEl.textContent='댓글 등록에 실패했습니다.';
+   return false;
+ }
+ localStorage.setItem(lastKey,String(Date.now()));
+ statusEl.textContent='댓글이 등록되었습니다.';
+ return true;
+}
+
 async function loadBoard(){
  const list=document.getElementById('boardList'),count=document.getElementById('boardCount');
  const {data,error}=await supabaseClient.from('posts').select('id,title,content,author,created_at').eq('category','prayer').eq('is_published',true).order('created_at',{ascending:false}).limit(100);
  if(error){console.error(error);list.innerHTML='<div class="message">기도나눔을 불러오지 못했습니다.</div>';count.textContent='오류';return;}
  if(!data?.length){list.innerHTML='<div class="message">아직 등록된 기도제목이 없습니다. 첫 기도를 나눠 주세요.</div>';count.textContent='등록된 기도 0건';return;}
  count.textContent='등록된 기도 '+data.length+'건';
- const reactions=await loadReactions(data.map(p=>p.id));
+
+ const postIds=data.map(p=>p.id);
+ const reactions=await loadReactions(postIds);
+ const comments=await loadComments(postIds);
+
  list.innerHTML='';
  const labels={pray:'🙏 함께 기도',amen:'🙌 아멘',support:'👍 응원',heart:'❤️ 공감'};
+
  data.forEach(p=>{
   const r=reactions[String(p.id)]||{pray:0,amen:0,support:0,heart:0,mine:new Set()};
-  const art=document.createElement('article');art.className='card';
-  art.innerHTML=`<div class="card-top"><h3>${esc(p.title)}</h3><span class="label">ACTS PRAYER</span></div><div class="meta">${esc(p.author||'기도동역자')} · ${fmt(p.created_at)}</div><div class="content">${esc(p.content)}</div><div class="reactions">${Object.entries(labels).map(([k,l])=>`<button class="react-btn ${r.mine?.has(k)?'mine':''}" data-id="${p.id}" data-type="${k}" type="button">${l} ${r[k]||0}</button>`).join('')}</div>`;
+  const cs=comments[String(p.id)]||[];
+  const commentHtml=cs.length
+   ? cs.map(c=>`<div class="comment-item"><div class="comment-meta">${esc(c.author)} · ${fmt(c.created_at)}</div><div class="comment-text">${esc(c.content)}</div></div>`).join('')
+   : '<div class="comment-item"><div class="comment-text">아직 댓글이 없습니다. 함께 기도하는 마음을 남겨보세요.</div></div>';
+
+  const art=document.createElement('article');
+  art.className='card';
+  art.innerHTML=`
+   <div class="card-top"><h3>${esc(p.title)}</h3><span class="label">ACTS PRAYER</span></div>
+   <div class="meta">${esc(p.author||'기도동역자')} · ${fmt(p.created_at)}</div>
+   <div class="content">${esc(p.content)}</div>
+   <div class="reactions">
+     ${Object.entries(labels).map(([k,l])=>`<button class="react-btn ${r.mine?.has(k)?'mine':''}" data-id="${p.id}" data-type="${k}" type="button">${l} ${r[k]||0}</button>`).join('')}
+   </div>
+   <div class="comments">
+     <button class="comment-toggle" type="button" data-post-id="${p.id}">💬 댓글 ${cs.length}</button>
+     <div class="comment-area" id="comments-${p.id}">
+       <div class="comment-list">${commentHtml}</div>
+       <form class="comment-form" data-post-id="${p.id}">
+         <input name="author" maxlength="40" required placeholder="이름/별칭">
+         <textarea name="content" maxlength="1000" required placeholder="함께 기도하는 마음이나 응원의 댓글을 남겨주세요."></textarea>
+         <button class="comment-submit" type="submit">댓글 등록</button>
+       </form>
+       <div class="comment-note">댓글에는 전화번호·주소 등 개인정보를 적지 마세요. <span class="comment-status"></span></div>
+     </div>
+   </div>`;
   list.appendChild(art);
  });
+
  document.querySelectorAll('.react-btn').forEach(b=>b.addEventListener('click',()=>toggleReaction(b.dataset.id,b.dataset.type)));
+
+ document.querySelectorAll('.comment-toggle').forEach(b=>b.addEventListener('click',()=>{
+   const area=document.getElementById('comments-'+b.dataset.postId);
+   area.classList.toggle('open');
+ }));
+
+ document.querySelectorAll('.comment-form').forEach(form=>form.addEventListener('submit',async e=>{
+   e.preventDefault();
+   const postId=form.dataset.postId;
+   const author=form.elements.author.value;
+   const content=form.elements.content.value;
+   const statusEl=form.parentElement.querySelector('.comment-status');
+   if(!author.trim()||!content.trim()){statusEl.textContent='이름과 댓글을 입력해 주세요.';return;}
+   const ok=await addComment(postId,author,content,statusEl);
+   if(ok){
+     form.reset();
+     await loadBoard();
+     const area=document.getElementById('comments-'+postId);
+     if(area)area.classList.add('open');
+   }
+ }));
 }
 document.addEventListener('DOMContentLoaded',loadBoard);
 </script>
