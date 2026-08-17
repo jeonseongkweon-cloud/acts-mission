@@ -1,1166 +1,186 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
-  <title>기도나눔 | ACTS Mission Alliance</title>
-
-  <meta
-    name="description"
-    content="ACTS MISSION ALLIANCE의 기도제목과 기도응답을 함께 나누는 기도 게시판입니다."
-  >
-
-  <link
-    rel="stylesheet"
-    href="styles.css?v=5.1.2"
-  >
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: #f4f6f9;
-      color: #1f2937;
-    }
-
-    .prayer-board-hero {
-      background:
-        linear-gradient(
-          135deg,
-          #061A33 0%,
-          #0B2B50 100%
-        );
-      color: white;
-      padding: 70px 20px;
-      text-align: center;
-    }
-
-    .prayer-board-hero-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .prayer-board-badge {
-      display: inline-block;
-      border: 1px solid rgba(214,174,85,.6);
-      background: rgba(214,174,85,.12);
-      color: #e7c36d;
-      padding: 7px 13px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      margin-bottom: 18px;
-    }
-
-    .prayer-board-hero h1 {
-      margin: 0 0 14px;
-      font-size: clamp(32px, 5vw, 52px);
-      font-weight: 800;
-    }
-
-    .prayer-board-hero p {
-      margin: 0 auto;
-      max-width: 780px;
-      line-height: 1.8;
-      color: #dbe6f1;
-      font-size: 16px;
-    }
-
-    .prayer-board-wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 45px 20px 80px;
-    }
-
-    .prayer-board-intro {
-      background: white;
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 28px;
-      box-shadow:
-        0 5px 22px rgba(0,0,0,.06);
-      border-top: 4px solid #d6ae55;
-    }
-
-    .prayer-board-intro h2 {
-      margin: 0 0 10px;
-      color: #061A33;
-      font-size: 24px;
-    }
-
-    .prayer-board-intro p {
-      margin: 0;
-      color: #6b7280;
-      line-height: 1.8;
-    }
-
-    .prayer-board-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .prayer-board-toolbar h2 {
-      margin: 0;
-      color: #061A33;
-      font-size: 22px;
-    }
-
-    .prayer-board-count {
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .prayer-board-list {
-      display: grid;
-      gap: 18px;
-    }
-
-    .prayer-card {
-      background: white;
-      border-radius: 14px;
-      padding: 24px;
-      border: 1px solid #e5e7eb;
-      box-shadow:
-        0 4px 16px rgba(0,0,0,.05);
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-    }
-
-    .prayer-card:hover {
-      transform: translateY(-3px);
-      box-shadow:
-        0 8px 24px rgba(0,0,0,.09);
-    }
-
-    .prayer-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .prayer-title {
-      margin: 0;
-      color: #061A33;
-      font-size: 20px;
-      line-height: 1.5;
-      font-weight: 800;
-    }
-
-    .prayer-label {
-      flex: 0 0 auto;
-      background: #061A33;
-      color: #d6ae55;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .prayer-meta {
-      margin-top: 10px;
-      color: #8a94a3;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .prayer-image-wrap {
-      margin-top: 18px;
-      overflow: hidden;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      background: #f8fafc;
-    }
-
-    .prayer-image {
-      display: block;
-      width: 100%;
-      max-height: 560px;
-      object-fit: contain;
-      background: #f8fafc;
-    }
-
-    .prayer-preview {
-      margin-top: 16px;
-      color: #4b5563;
-      line-height: 1.8;
-      white-space: pre-wrap;
-    }
-
-    .prayer-full-content {
-      display: none;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #e5e7eb;
-      color: #374151;
-      line-height: 1.9;
-      white-space: pre-wrap;
-    }
-
-    .prayer-full-content.open {
-      display: block;
-    }
-
-    .prayer-actions {
-      margin-top: 18px;
-    }
-
-    .read-more-btn {
-      border: 0;
-      background: #d6ae55;
-      color: #061A33;
-      padding: 9px 15px;
-      border-radius: 7px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .read-more-btn:hover {
-      opacity: .9;
-    }
-
-    .prayer-empty,
-    .prayer-loading,
-    .prayer-error {
-      background: white;
-      border-radius: 14px;
-      padding: 45px 20px;
-      text-align: center;
-      border: 1px solid #e5e7eb;
-      color: #8a94a3;
-    }
-
-    .prayer-error {
-      color: #b91c1c;
-    }
-
-    .prayer-board-footer-note {
-      margin-top: 30px;
-      text-align: center;
-      color: #9ca3af;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    @media (max-width: 700px) {
-      .prayer-board-hero {
-        padding: 50px 18px;
-      }
-
-      .prayer-board-wrap {
-        padding:
-          30px 15px
-          60px;
-      }
-
-      .prayer-board-intro {
-        padding: 22px;
-      }
-
-      .prayer-card {
-        padding: 20px;
-      }
-
-      .prayer-title {
-        font-size: 18px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기도나눔 | ACTS Mission Alliance</title>
+<meta name="description" content="ACTS MISSION ALLIANCE 기도제목과 기도응답을 함께 나누는 기도 공동체 게시판">
+<link rel="stylesheet" href="styles.css?v=5.2.1">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6f9;color:#1f2937}
+.prayer-hero{background:linear-gradient(135deg,#061A33 0%,#0B2B50 100%);color:#fff;padding:70px 20px;text-align:center}
+.prayer-hero-inner{max-width:1100px;margin:0 auto}
+.prayer-badge{display:inline-block;border:1px solid rgba(214,174,85,.6);background:rgba(214,174,85,.12);color:#e7c36d;padding:7px 13px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.08em;margin-bottom:18px}
+.prayer-hero h1{margin:0 0 14px;font-size:clamp(32px,5vw,52px);font-weight:800}
+.prayer-hero p{margin:0 auto;max-width:760px;line-height:1.8;color:#dbe6f1;font-size:16px}
+.board-wrap{max-width:1100px;margin:0 auto;padding:42px 20px 80px}
+.write-panel,.intro{background:#fff;border-radius:16px;padding:26px;margin-bottom:24px;box-shadow:0 5px 22px rgba(0,0,0,.06);border-top:4px solid #d6ae55}
+.write-head{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.write-head h2,.intro h2{margin:0;color:#061A33}
+.write-toggle{border:0;background:#d6ae55;color:#061A33;border-radius:8px;padding:11px 16px;font-weight:800;cursor:pointer}
+.write-form{display:none;margin-top:22px}
+.write-form.open{display:block}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-weight:800;color:#061A33;font-size:14px}
+.field input,.field textarea{width:100%;border:1px solid #d8dee7;border-radius:9px;padding:12px 13px;font:inherit;background:#fff}
+.field textarea{min-height:150px;resize:vertical;line-height:1.7}
+.help{font-size:12px;color:#7b8491;line-height:1.6}
+.submit-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.submit-btn{border:0;background:#061A33;color:#fff;border-radius:8px;padding:11px 18px;font-weight:800;cursor:pointer}
+.status{font-size:14px;font-weight:700}
+.status.ok{color:#15803d}.status.err{color:#b91c1c}
+.honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:28px 0 18px}
+.toolbar h2{margin:0;color:#061A33}
+.count{font-size:14px;color:#6b7280}
+.list{display:grid;gap:18px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,.05)}
+.card-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.card h3{margin:0;color:#061A33;font-size:20px}
+.label{flex:0 0 auto;background:#061A33;color:#d6ae55;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800}
+.meta{margin-top:9px;color:#8a94a3;font-size:13px}
+.content{margin-top:15px;white-space:pre-wrap;line-height:1.85;color:#4b5563}
+.reactions{display:flex;gap:7px;flex-wrap:wrap;border-top:1px solid #edf0f4;margin-top:18px;padding-top:14px}
+.react-btn{border:1px solid #e2e6ec;background:#fff;border-radius:999px;padding:7px 10px;cursor:pointer;font-size:13px}
+.react-btn.mine{border-color:#d6ae55;background:#fff9e9}
+.message{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:40px 20px;text-align:center;color:#8a94a3}
+.footer-note{text-align:center;color:#9ca3af;font-size:13px;margin-top:28px}
+@media(max-width:700px){.prayer-hero{padding:50px 18px}.board-wrap{padding:30px 15px 60px}.form-grid{grid-template-columns:1fr}.card{padding:20px}.card h3{font-size:18px}}
+</style>
 </head>
-
 <body class="v5-body">
 
-<header
-  class="mega-header"
-  id="siteHeader"
->
+<header class="mega-header" id="siteHeader">
   <div class="mega-nav-wrap">
-
-    <a
-      class="mega-brand"
-      href="index.html"
-      aria-label="ACTS Mission Alliance 홈"
-    >
-      <img
-        src="assets/official/official-logo.webp"
-        alt="ACTS Mission Alliance"
-      >
-
-      <span>
-        <b>
-          ACTS MISSION ALLIANCE
-        </b>
-
-        <small>
-          DIGITAL MISSION HQ · VERSION 5.1.2
-        </small>
-      </span>
+    <a class="mega-brand" href="index.html" aria-label="ACTS Mission Alliance 홈">
+      <img src="assets/official/official-logo.webp" alt="ACTS Mission Alliance">
+      <span><b>ACTS MISSION ALLIANCE</b><small>DIGITAL MISSION HQ</small></span>
     </a>
-
-    <button
-      class="mega-mobile-btn"
-      type="button"
-      aria-expanded="false"
-      aria-controls="megaMenu"
-      aria-label="전체 메뉴 열기"
-    >
-      ☰
-    </button>
-
-    <nav
-      class="mega-menu"
-      id="megaMenu"
-      aria-label="주요 메뉴"
-    >
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          소개
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>ABOUT ACTS</h3>
-            <a href="about.html">ACTS 소개</a>
-            <a href="mission.html">설립취지·미션</a>
-            <a href="faith.html">신앙원칙</a>
-            <a href="gallery.html">4대 가치·창립정신</a>
-          </section>
-
-          <section>
-            <h3>조직의 기초</h3>
-            <a href="organization.html">ACTS 조직도</a>
-            <a href="committees.html">전문위원회</a>
-            <a href="partners.html">동역자</a>
-            <a href="resource-stewards.html">자원지기</a>
-          </section>
-
-          <section>
-            <h3>공식 자료</h3>
-            <a href="manuals.html">ACTS 15권 교본</a>
-            <a href="media.html">미디어·소개자료</a>
-            <a href="library-hq.html">Mission Library</a>
-            <a href="credentials.html">교육·인증 체계</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          선교본부
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>MISSION HQ</h3>
-            <a href="mission-hq.html">디지털 선교본부</a>
-            <a href="missionary-support.html">선교사 지원센터</a>
-            <a href="programs.html">선교 프로그램</a>
-            <a href="support.html">지원 안내</a>
-          </section>
-
-          <section>
-            <h3>사역 분야</h3>
-            <a href="committees.html#mission">선교위원회</a>
-            <a href="committees.html#professional">전문인선교</a>
-            <a href="committees.html#sports">스포츠·무도선교</a>
-            <a href="committees.html#nextgen">다음세대 사역</a>
-          </section>
-
-          <section>
-            <h3>세계 연결</h3>
-            <a href="network-hq.html">세계네트워크</a>
-            <a href="korea.html">ACTS KOREA</a>
-            <a href="world.html">WORLD ACTS</a>
-            <a href="partners.html">교회·기관 파트너</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item mega-wide">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          조직
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-4">
-          <section>
-            <h3>중앙본부</h3>
-            <a href="organization.html#central">ACTS 조직도</a>
-            <a href="organization.html#founder">설립자</a>
-            <a href="organization.html#secretary">사무총장</a>
-            <a href="organization.html#office">운영사무국</a>
-            <a href="organization.html#faith-advisory">신앙자문위원회</a>
-          </section>
-
-          <section>
-            <h3>전문위원회</h3>
-            <a href="committees.html">위원회 전체보기</a>
-            <a href="committees.html#prayer">기도위원회</a>
-            <a href="committees.html#education">교육위원회</a>
-            <a href="committees.html#missionary-support">선교사지원위원회</a>
-            <a href="committees.html#digital">AI·디지털선교위원회</a>
-            <a href="committees.html#media">홍보미디어위원회</a>
-          </section>
-
-          <section>
-            <h3>지역·세계조직</h3>
-            <a href="korea.html">ACTS KOREA</a>
-            <a href="korea.html#regions">국내 17개 시·도</a>
-            <a href="world.html">WORLD ACTS</a>
-            <a href="network-hq.html">국가본부·해외 파트너</a>
-          </section>
-
-          <section>
-            <h3>실무조직·사람</h3>
-            <a href="missionary-support.html">선교지원센터</a>
-            <a href="education-center.html">ACTS 교육센터</a>
-            <a href="library-hq.html">Mission Library</a>
-            <a href="content-lab.html">Content Lab</a>
-            <a href="resource-stewards.html">자원지기</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          교육
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>ACTS EDUCATION</h3>
-            <a href="education-center.html">교육센터</a>
-            <a href="academy-hq.html">ACTS Academy</a>
-            <a href="academy.html">디지털 트레이닝</a>
-            <a href="programs.html">교육 프로그램</a>
-          </section>
-
-          <section>
-            <h3>과정</h3>
-            <a href="education-center.html#basic">기본과정</a>
-            <a href="education-center.html#professional">전문과정</a>
-            <a href="education-center.html#leader">지도자과정</a>
-            <a href="education-center.html#online">온라인교육</a>
-          </section>
-
-          <section>
-            <h3>수료·인증</h3>
-            <a href="credentials.html">교육인증 안내</a>
-            <a href="verify.html">인증조회</a>
-            <a href="committees.html#certification">교육인증심사위원회</a>
-            <a href="library-hq.html">교육자료</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          자료실
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>MISSION LIBRARY</h3>
-            <a href="library-hq.html">자료실 본부</a>
-            <a href="manuals.html">15권 교본</a>
-            <a href="gallery.html">사진·소개자료</a>
-            <a href="media.html">영상·미디어</a>
-            <a href="news.html">ACTS 소식</a>
-          </section>
-
-          <section>
-            <h3>콘텐츠</h3>
-            <a href="content-lab.html">Content Lab</a>
-            <a href="library-hq.html#mission">선교자료</a>
-            <a href="library-hq.html#education">교육자료</a>
-            <a href="library-hq.html#promotion">홍보자료</a>
-          </section>
-
-          <section>
-            <h3>디지털 도구</h3>
-            <a href="academy.html">온라인 훈련</a>
-            <a href="verify.html">인증조회</a>
-            <a href="idp.html">IDP 연계</a>
-            <a href="projects.html">프로젝트 자료</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          기도센터
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>PRAYER CENTER</h3>
-            <a href="prayer.html">12개 기도문 전체</a>
-            <a href="prayer-board.html">기도나눔 게시판</a>
-            <a href="prayer.html#prayer-1">ACTS를 위한 기도</a>
-            <a href="prayer.html#prayer-2">세계선교를 위한 기도</a>
-          </section>
-
-          <section>
-            <h3>사람을 위한 기도</h3>
-            <a href="prayer.html#prayer-4">좋은 지도자를 위한 기도</a>
-            <a href="prayer.html#prayer-6">교회와 목회자</a>
-            <a href="prayer.html#prayer-7">다음세대</a>
-            <a href="prayer.html#prayer-8">가정</a>
-          </section>
-
-          <section>
-            <h3>세상을 위한 기도</h3>
-            <a href="prayer.html#prayer-5">나라와 민족</a>
-            <a href="prayer.html#prayer-9">아픈 이웃</a>
-            <a href="prayer.html#prayer-10">평화·재난</a>
-            <a href="prayer.html#prayer-12">헌신의 기도</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          동역자
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>PARTNERS</h3>
-            <a href="partners.html">동역자 안내</a>
-            <a href="resource-stewards.html">자원지기</a>
-            <a href="join-hq.html">참여 신청</a>
-          </section>
-
-          <section>
-            <h3>함께하는 사람</h3>
-            <a href="join-hq.html#prayer">기도동역자</a>
-            <a href="join-hq.html#missionary">선교사</a>
-            <a href="join-hq.html#professional">전문인·교육자</a>
-          </section>
-
-          <section>
-            <h3>함께하는 조직</h3>
-            <a href="partners.html#church">교회</a>
-            <a href="partners.html#organization">협력단체</a>
-            <a href="network-hq.html">국가·지역 네트워크</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger"
-          type="button"
-        >
-          프로젝트
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3">
-          <section>
-            <h3>PROJECTS</h3>
-            <a href="projects.html">프로젝트 본부</a>
-            <a href="projects.html#active">진행 프로젝트</a>
-            <a href="projects.html#planned">예정 프로젝트</a>
-          </section>
-
-          <section>
-            <h3>분야별</h3>
-            <a href="projects.html#education">교육</a>
-            <a href="projects.html#nextgen">다음세대</a>
-            <a href="projects.html#martial">스포츠·무도</a>
-          </section>
-
-          <section>
-            <h3>제작·지원</h3>
-            <a href="content-lab.html">콘텐츠 제작</a>
-            <a href="resource-stewards.html">재능·자원 연결</a>
-            <a href="support.html">후원·지원</a>
-          </section>
-        </div>
-      </div>
-
-      <div class="mega-item">
-        <button
-          class="mega-trigger mega-join-trigger"
-          type="button"
-        >
-          참여하기
-          <span>⌄</span>
-        </button>
-
-        <div class="mega-panel mega-panel-3 mega-panel-right">
-          <section>
-            <h3>JOIN ACTS</h3>
-            <a href="join-hq.html">참여 안내</a>
-            <a href="join.html">기존 참여 페이지</a>
-            <a href="resource-stewards.html">자원지기 참여</a>
-          </section>
-
-          <section>
-            <h3>조직 참여</h3>
-            <a href="organization.html#open-seats">열린 직책</a>
-            <a href="committees.html">위원회 참여</a>
-            <a href="network-hq.html">지역·국가 조직 참여</a>
-          </section>
-
-          <section>
-            <h3>교육·인증</h3>
-            <a href="education-center.html">교육센터</a>
-            <a href="credentials.html">인증 안내</a>
-            <a href="verify.html">인증조회</a>
-          </section>
-        </div>
-      </div>
-
+    <button class="mega-mobile-btn" type="button" aria-expanded="false" aria-controls="megaMenu" aria-label="전체 메뉴 열기">☰</button>
+    <nav class="mega-menu" id="megaMenu" aria-label="주요 메뉴">
+      <div class="mega-item"><button class="mega-trigger" type="button">소개 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>ABOUT ACTS</h3><a href="about.html">ACTS 소개</a><a href="mission.html">설립취지·미션</a><a href="faith.html">신앙원칙</a></section><section><h3>조직</h3><a href="organization.html">ACTS 조직도</a><a href="committees.html">전문위원회</a></section><section><h3>자료</h3><a href="manuals.html">ACTS 15권 교본</a><a href="media.html">미디어</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">선교본부 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>MISSION HQ</h3><a href="mission-hq.html">디지털 선교본부</a><a href="mission-board.html">선교활동 게시판</a></section><section><h3>지원</h3><a href="missionary-support.html">선교사 지원센터</a></section><section><h3>세계</h3><a href="network-hq.html">세계네트워크</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">교육 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>ACTS EDUCATION</h3><a href="education-center.html">교육센터</a><a href="training-board.html">교육·세미나 게시판</a></section><section><h3>과정</h3><a href="academy.html">온라인교육</a></section><section><h3>인증</h3><a href="credentials.html">교육인증 안내</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">자료실 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>MISSION LIBRARY</h3><a href="library-hq.html">자료실 본부</a><a href="news.html">ACTS 소식</a></section><section><h3>콘텐츠</h3><a href="content-lab.html">Content Lab</a></section><section><h3>미디어</h3><a href="media.html">영상·미디어</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">기도센터 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>PRAYER CENTER</h3><a href="prayer.html">12개 기도문 전체</a><a href="prayer-board.html">🙏 기도나눔 게시판</a></section><section><h3>사람을 위한 기도</h3><a href="prayer.html#prayer-7">다음세대</a><a href="prayer.html#prayer-8">가정</a></section><section><h3>세상을 위한 기도</h3><a href="prayer.html#prayer-5">나라와 민족</a><a href="prayer.html#prayer-10">평화·재난</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger" type="button">소통센터 <span>⌄</span></button><div class="mega-panel mega-panel-3"><section><h3>COMMUNITY</h3><a href="prayer-board.html">🙏 기도나눔</a><a href="news.html">📰 ACTS 소식</a></section><section><h3>TRAINING & MISSION</h3><a href="training-board.html">🎓 교육·세미나</a><a href="mission-board.html">🌍 선교활동</a></section><section><h3>MEMBER</h3><a href="community-board.html">🤝 회원소통</a></section></div></div>
+      <div class="mega-item"><button class="mega-trigger mega-join-trigger" type="button">참여하기 <span>⌄</span></button><div class="mega-panel mega-panel-3 mega-panel-right"><section><h3>JOIN ACTS</h3><a href="join-hq.html">참여 안내</a></section><section><h3>조직 참여</h3><a href="committees.html">위원회 참여</a></section><section><h3>교육·인증</h3><a href="credentials.html">인증 안내</a></section></div></div>
     </nav>
   </div>
 </header>
 
-
-<section class="prayer-board-hero">
-
-  <div class="prayer-board-hero-inner">
-
-    <span class="prayer-board-badge">
-      ACTS PRAYER
-    </span>
-
-    <h1>
-      기도나눔
-    </h1>
-
-    <p>
-      ACTS MISSION ALLIANCE와 함께
-      기도제목을 나누고,
-      하나님의 인도하심과 기도응답을 함께 기억하는
-      기도 공동체 공간입니다.
-    </p>
-
+<section class="prayer-hero">
+  <div class="prayer-hero-inner">
+    <span class="prayer-badge">ACTS PRAYER</span>
+    <h1>기도나눔</h1>
+    <p>기도제목과 기도응답을 함께 나눕니다. 혼자 기도하지 않습니다. ACTS가 함께 기도합니다.</p>
   </div>
-
 </section>
 
-
-<main class="prayer-board-wrap">
-
-  <section class="prayer-board-intro">
-
-    <h2>
-      ACTS PRAYER COMMUNITY
-    </h2>
-
-    <p>
-      선교사와 교회, 다음 세대와 가정,
-      나라와 민족, 아픈 이웃과 도움이 필요한 사람들을 위해
-      함께 기도합니다.
-      ACTS 관리자 시스템을 통해 등록된 공개 기도제목과
-      기도응답이 이곳에 표시됩니다.
-    </p>
-
+<main class="board-wrap">
+  <section class="intro">
+    <h2>ACTS PRAYER COMMUNITY</h2>
+    <p>누구나 기도제목을 나눌 수 있습니다. 개인정보·연락처·민감한 내용은 공개 게시글에 적지 않는 것을 권합니다.</p>
   </section>
 
-
-  <div class="prayer-board-toolbar">
-
-    <h2>
-      기도제목과 기도응답
-    </h2>
-
-    <div
-      class="prayer-board-count"
-      id="prayerCount"
-    >
-      기도나눔을 불러오는 중입니다.
+  <section class="write-panel">
+    <div class="write-head">
+      <div><h2>기도제목 나누기</h2><div class="help">로그인 없이 작성할 수 있습니다. 등록한 글은 공개 게시판에 바로 표시됩니다.</div></div>
+      <button class="write-toggle" id="writeToggle" type="button">✍ 기도제목 올리기</button>
     </div>
-
-  </div>
-
-
-  <section
-    class="prayer-board-list"
-    id="prayerList"
-  >
-
-    <div class="prayer-loading">
-      기도나눔 게시글을 불러오는 중입니다...
-    </div>
-
+    <form class="write-form" id="prayerForm">
+      <div class="form-grid">
+        <div class="field"><label for="author">이름 또는 별칭</label><input id="author" maxlength="40" required placeholder="예: 기도동역자"></div>
+        <div class="field"><label for="title">기도제목</label><input id="title" maxlength="120" required placeholder="기도제목을 입력해 주세요"></div>
+      </div>
+      <div class="field"><label for="content">기도 내용</label><textarea id="content" maxlength="3000" required placeholder="함께 기도할 내용을 적어 주세요."></textarea><div class="help">최대 3,000자 · 전화번호, 주소 등 개인정보는 올리지 마세요.</div></div>
+      <div class="honeypot" aria-hidden="true"><label>Website<input id="website" autocomplete="off" tabindex="-1"></label></div>
+      <div class="submit-row"><button class="submit-btn" id="submitBtn" type="submit">🙏 기도제목 등록</button><span class="status" id="formStatus"></span></div>
+    </form>
   </section>
 
-
-  <div class="prayer-board-footer-note">
-    ACTS MISSION ALLIANCE ·
-    함께 기도하고 · 함께 섬기고 · 함께 나아갑니다.
-  </div>
-
+  <div class="toolbar"><h2>최근 기도나눔</h2><div class="count" id="boardCount">불러오는 중입니다.</div></div>
+  <section class="list" id="boardList"><div class="message">기도나눔을 불러오는 중입니다...</div></section>
+  <div class="footer-note">ACTS MISSION ALLIANCE · ACTION · CHRIST · TRAINING · SERVICE</div>
 </main>
 
+<footer class="v5-footer"><div class="v5-footer-grid"><div><b>ACTS MISSION ALLIANCE</b><p>액츠 선교연합 · ACTION · CHRIST · TRAINING · SERVICE</p></div><div><b>PRAYER COMMUNITY</b><p>함께 기도하고 서로를 격려하는 온라인 기도 공동체</p></div><div><b>ACTS PRAYER</b><p>기도제목 · 중보기도 · 기도응답</p></div></div></footer>
 
-<footer class="v5-footer">
-
-  <div class="v5-footer-grid">
-
-    <div>
-      <b>
-        ACTS MISSION ALLIANCE
-      </b>
-
-      <p>
-        액츠 선교연합 ·
-        ACTION · CHRIST ·
-        TRAINING · SERVICE
-      </p>
-    </div>
-
-
-    <div>
-      <b>
-        PRAYER CENTER
-      </b>
-
-      <p>
-        세계선교와 선교사,
-        교회와 다음 세대,
-        가정과 이웃을 위해 함께 기도합니다.
-      </p>
-    </div>
-
-
-    <div>
-      <b>
-        ACTS PRAYER
-      </b>
-
-      <p>
-        기도제목을 나누고
-        기도응답을 함께 기억하는
-        ACTS 기도 공동체
-      </p>
-    </div>
-
-  </div>
-
-</footer>
-
-
-<script
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL =
-    'https://ojxarsfaewehwjidwgac.supabase.co';
-
-  const SUPABASE_ANON_KEY =
-    'sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
-
-
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
-
-
-  function escapeHtml(value) {
-
-    return String(value || '')
-
-      .replaceAll(
-        '&',
-        '&amp;'
-      )
-
-      .replaceAll(
-        '<',
-        '&lt;'
-      )
-
-      .replaceAll(
-        '>',
-        '&gt;'
-      )
-
-      .replaceAll(
-        '"',
-        '&quot;'
-      )
-
-      .replaceAll(
-        "'",
-        '&#039;'
-      );
-  }
-
-
-  function makePreview(
-    text,
-    length = 180
-  ) {
-
-    const clean =
-      String(text || '')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-
-    if (
-      clean.length <= length
-    ) {
-
-      return clean;
-    }
-
-
-    return (
-      clean.substring(
-        0,
-        length
-      )
-      +
-      '...'
-    );
-  }
-
-
-  function formatDate(value) {
-
-    if (!value) {
-
-      return '';
-    }
-
-
-    const date =
-      new Date(value);
-
-
-    return date.toLocaleDateString(
-      'ko-KR',
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }
-    );
-  }
-
-
-  async function loadPrayerPosts() {
-
-    const prayerList =
-      document.getElementById(
-        'prayerList'
-      );
-
-
-    const prayerCount =
-      document.getElementById(
-        'prayerCount'
-      );
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-
-        .from('posts')
-
-        .select(
-          'id,title,content,author,created_at,updated_at,is_published,category,image_url'
-        )
-
-        .eq(
-          'category',
-          'prayer'
-        )
-
-        .eq(
-          'is_published',
-          true
-        )
-
-        .order(
-          'created_at',
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error) {
-
-      console.error(
-        'ACTS Prayer load error:',
-        error
-      );
-
-
-      prayerList.innerHTML =
-        `
-          <div class="prayer-error">
-            기도나눔 게시글을 불러오지 못했습니다.
-            잠시 후 다시 이용해주세요.
-          </div>
-        `;
-
-
-      prayerCount.textContent =
-        '기도나눔을 불러오지 못했습니다.';
-
-
-      return;
-    }
-
-
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-      prayerList.innerHTML =
-        `
-          <div class="prayer-empty">
-            현재 등록된 공개 기도나눔이 없습니다.
-          </div>
-        `;
-
-
-      prayerCount.textContent =
-        '등록된 기도나눔 0건';
-
-
-      return;
-    }
-
-
-    prayerCount.textContent =
-      '등록된 기도나눔 '
-      +
-      data.length
-      +
-      '건';
-
-
-    prayerList.innerHTML = '';
-
-
-    data.forEach(
-      post => {
-
-        const card =
-          document.createElement(
-            'article'
-          );
-
-
-        card.className =
-          'prayer-card';
-
-
-        const title =
-          escapeHtml(
-            post.title
-          );
-
-
-        const author =
-          escapeHtml(
-            post.author ||
-            'ACTS MISSION ALLIANCE'
-          );
-
-
-        const date =
-          formatDate(
-            post.created_at
-          );
-
-
-        const preview =
-          escapeHtml(
-            makePreview(
-              post.content,
-              180
-            )
-          );
-
-
-        const fullContent =
-          escapeHtml(
-            post.content
-          );
-
-
-        const imageHtml =
-          post.image_url
-            ? `
-              <div class="prayer-image-wrap">
-                <img
-                  class="prayer-image"
-                  src="${escapeHtml(post.image_url)}"
-                  alt="${title}"
-                  loading="lazy"
-                >
-              </div>
-            `
-            : '';
-
-
-        card.innerHTML =
-          `
-            <div class="prayer-card-top">
-
-              <h3 class="prayer-title">
-                ${title}
-              </h3>
-
-              <span class="prayer-label">
-                ACTS PRAYER
-              </span>
-
-            </div>
-
-
-            <div class="prayer-meta">
-              작성자:
-              ${author}
-              ·
-              ${date}
-            </div>
-
-
-            ${imageHtml}
-
-
-            <div class="prayer-preview">
-              ${preview}
-            </div>
-
-
-            <div
-              class="prayer-full-content"
-              id="content-${post.id}"
-            >
-              ${fullContent}
-            </div>
-
-
-            <div class="prayer-actions">
-
-              <button
-                type="button"
-                class="read-more-btn"
-                data-post-id="${post.id}"
-              >
-                자세히 보기
-              </button>
-
-            </div>
-          `;
-
-
-        prayerList.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-    document
-      .querySelectorAll(
-        '.read-more-btn'
-      )
-      .forEach(
-        button => {
-
-          button.addEventListener(
-            'click',
-            () => {
-
-              const postId =
-                button.dataset.postId;
-
-
-              const content =
-                document.getElementById(
-                  'content-' + postId
-                );
-
-
-              const opened =
-                content.classList.toggle(
-                  'open'
-                );
-
-
-              button.textContent =
-                opened
-                  ? '접기'
-                  : '자세히 보기';
-
-            }
-          );
-
-        }
-      );
-  }
-
-
-  document.addEventListener(
-    'DOMContentLoaded',
-    loadPrayerPosts
-  );
+const SUPABASE_URL='https://ojxarsfaewehwjidwgac.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+const esc=v=>String(v||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+const fmt=v=>v?new Date(v).toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'}):'';
+const visitorKey='acts_prayer_visitor_id';
+let visitorId=localStorage.getItem(visitorKey);
+if(!visitorId){visitorId=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem(visitorKey,visitorId);}
+
+document.getElementById('writeToggle').addEventListener('click',()=>{
+ const f=document.getElementById('prayerForm'); f.classList.toggle('open');
+ document.getElementById('writeToggle').textContent=f.classList.contains('open')?'닫기':'✍ 기도제목 올리기';
+});
+
+document.getElementById('prayerForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const status=document.getElementById('formStatus'), btn=document.getElementById('submitBtn');
+ if(document.getElementById('website').value){return;}
+ const last=Number(localStorage.getItem('acts_prayer_last_post')||0);
+ if(Date.now()-last<60000){status.className='status err';status.textContent='연속 등록은 1분 후 가능합니다.';return;}
+ const author=document.getElementById('author').value.trim();
+ const title=document.getElementById('title').value.trim();
+ const content=document.getElementById('content').value.trim();
+ if(!author||!title||!content){status.className='status err';status.textContent='이름, 제목, 내용을 모두 입력해 주세요.';return;}
+ btn.disabled=true; status.className='status'; status.textContent='등록 중...';
+ const payload={category:'prayer',title,content,author,is_published:true,image_url:null,updated_at:new Date().toISOString()};
+ const {error}=await supabaseClient.from('posts').insert(payload);
+ btn.disabled=false;
+ if(error){console.error(error);status.className='status err';status.textContent='등록하지 못했습니다. 수파베이스 설정을 확인해 주세요.';return;}
+ localStorage.setItem('acts_prayer_last_post',String(Date.now()));
+ status.className='status ok';status.textContent='기도제목이 등록되었습니다.';
+ e.target.reset(); setTimeout(()=>document.getElementById('prayerForm').classList.remove('open'),800);
+ await loadBoard();
+});
+
+async function loadReactions(postIds){
+ const map={};
+ if(!postIds.length)return map;
+ const {data,error}=await supabaseClient.from('post_reactions').select('post_id,reaction_type,visitor_id').in('post_id',postIds.map(String));
+ if(error){console.warn(error);return map;}
+ (data||[]).forEach(r=>{const id=String(r.post_id);map[id]??={pray:0,amen:0,support:0,heart:0,mine:new Set()};map[id][r.reaction_type]=(map[id][r.reaction_type]||0)+1;if(r.visitor_id===visitorId)map[id].mine.add(r.reaction_type);});
+ return map;
+}
+
+async function toggleReaction(postId,type){
+ const {data}=await supabaseClient.from('post_reactions').select('id').eq('post_id',String(postId)).eq('reaction_type',type).eq('visitor_id',visitorId).maybeSingle();
+ if(data?.id) await supabaseClient.from('post_reactions').delete().eq('id',data.id);
+ else await supabaseClient.from('post_reactions').insert({post_id:String(postId),reaction_type:type,visitor_id:visitorId});
+ await loadBoard();
+}
+
+async function loadBoard(){
+ const list=document.getElementById('boardList'),count=document.getElementById('boardCount');
+ const {data,error}=await supabaseClient.from('posts').select('id,title,content,author,created_at').eq('category','prayer').eq('is_published',true).order('created_at',{ascending:false}).limit(100);
+ if(error){console.error(error);list.innerHTML='<div class="message">기도나눔을 불러오지 못했습니다.</div>';count.textContent='오류';return;}
+ if(!data?.length){list.innerHTML='<div class="message">아직 등록된 기도제목이 없습니다. 첫 기도를 나눠 주세요.</div>';count.textContent='등록된 기도 0건';return;}
+ count.textContent='등록된 기도 '+data.length+'건';
+ const reactions=await loadReactions(data.map(p=>p.id));
+ list.innerHTML='';
+ const labels={pray:'🙏 함께 기도',amen:'🙌 아멘',support:'👍 응원',heart:'❤️ 공감'};
+ data.forEach(p=>{
+  const r=reactions[String(p.id)]||{pray:0,amen:0,support:0,heart:0,mine:new Set()};
+  const art=document.createElement('article');art.className='card';
+  art.innerHTML=`<div class="card-top"><h3>${esc(p.title)}</h3><span class="label">ACTS PRAYER</span></div><div class="meta">${esc(p.author||'기도동역자')} · ${fmt(p.created_at)}</div><div class="content">${esc(p.content)}</div><div class="reactions">${Object.entries(labels).map(([k,l])=>`<button class="react-btn ${r.mine?.has(k)?'mine':''}" data-id="${p.id}" data-type="${k}" type="button">${l} ${r[k]||0}</button>`).join('')}</div>`;
+  list.appendChild(art);
+ });
+ document.querySelectorAll('.react-btn').forEach(b=>b.addEventListener('click',()=>toggleReaction(b.dataset.id,b.dataset.type)));
+}
+document.addEventListener('DOMContentLoaded',loadBoard);
 </script>
-
-
-<script
-  src="mega-menu.js?v=5.1.2"
-></script>
-
+<script src="mega-menu.js?v=5.1.2"></script>
 </body>
 </html>
