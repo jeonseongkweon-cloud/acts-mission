@@ -175,6 +175,22 @@
       line-height: 1.6;
     }
 
+    .news-image-wrap {
+      margin-top: 18px;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+    }
+
+    .news-image {
+      display: block;
+      width: 100%;
+      max-height: 560px;
+      object-fit: contain;
+      background: #f8fafc;
+    }
+
     .news-preview {
       margin-top: 16px;
       color: #4b5563;
@@ -1384,7 +1400,7 @@
         .from('posts')
 
         .select(
-          'id,title,content,author,created_at,updated_at,is_published,category'
+          'id,title,content,author,created_at,updated_at,is_published,category,image_url'
         )
 
         .eq(
@@ -1509,6 +1525,21 @@
           );
 
 
+        const imageHtml =
+          post.image_url
+            ? `
+              <div class="news-image-wrap">
+                <img
+                  class="news-image"
+                  src="${escapeHtml(post.image_url)}"
+                  alt="${title}"
+                  loading="lazy"
+                >
+              </div>
+            `
+            : '';
+
+
         card.innerHTML =
           `
             <div class="news-card-top">
@@ -1530,6 +1561,9 @@
               ·
               ${date}
             </div>
+
+
+            ${imageHtml}
 
 
             <div class="news-preview">
