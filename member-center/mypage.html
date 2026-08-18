@@ -46,6 +46,32 @@
 <div class="mc-field full"><label>프로필 사진</label><div class="mc-row"><img id="photoPreview" class="mc-photo" alt="프로필 사진"><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></div><div class="mc-note">최대 5MB. 새 사진을 선택하면 공통 사진으로 등록됩니다.</div></div>
 </div><div class="mc-divider"></div><div class="mc-row"><button id="saveProfile" class="mc-btn">프로필 저장</button><span id="profileStatus" class="mc-status"></span></div></form></section>
 
+
+<section class="mc-card" id="learningSummaryCard">
+  <div class="mc-row" style="justify-content:space-between">
+    <h2>나의 교육·수련 현황</h2>
+    <span class="mc-badge">IPMA LEARNING</span>
+  </div>
+
+  <div class="mc-learning-grid">
+    <div class="mc-learning-stat"><span>IPMA 호신술 총 시청시간</span><strong id="ipmaTotalTime">0분</strong></div>
+    <div class="mc-learning-stat"><span>완료 영상</span><strong id="ipmaCompletedCount">0 / 33</strong></div>
+    <div class="mc-learning-stat"><span>전체 평균 진행률</span><strong id="ipmaAverageProgress">0%</strong></div>
+  </div>
+
+  <div class="mc-learning-progress-wrap">
+    <div class="mc-learning-progress-label"><span>IPMA 호신술 전체 학습 진행</span><b id="ipmaOverallLabel">0%</b></div>
+    <div class="mc-learning-bar"><i id="ipmaOverallBar"></i></div>
+  </div>
+
+  <div id="ipmaRecentCourses" class="mc-learning-course-list"></div>
+
+  <a class="mc-btn mc-learning-link" href="https://ipma.kr/media/" target="_blank" rel="noopener">
+    IPMA 호신술 학습관 바로가기
+  </a>
+  <p class="mc-note">IPMA 홈페이지에서 로그인 후 학습한 기록이 자동으로 이 마이페이지에 반영됩니다.</p>
+</section>
+
 <section class="mc-card"><h2>나의 단체 가입현황</h2><div id="orgList" class="mc-orgs"></div><p class="mc-note">여기서 단체를 추가하면 기본정보와 사진을 다시 입력하지 않습니다. 단체별 자격·경력 같은 추가정보는 다음 단계에서 별도 입력창으로 연결합니다.</p></section>
 </div>
 
@@ -85,7 +111,7 @@ async function init(){
  if(error){loading.textContent='회원 프로필을 불러오지 못했습니다: '+error.message;return}
  member=data;
  pf.name.value=member.name||'';pf.email.value=member.email||user.email||'';pf.age.value=member.age||'';pf.region.value=member.region||'';pf.phone.value=member.phone||'';
- await showPhoto();await loadMemberships();loading.hidden=true;content.hidden=false;
+ await showPhoto();await loadMemberships();await loadLearningSummary();loading.hidden=true;content.hidden=false;
 }
 async function showPhoto(){
  preview.removeAttribute('src');
@@ -153,6 +179,60 @@ function esc(v=''){
 function statusLabel(v){
  return v==='approved'?'승인':v==='rejected'?'반려':v==='hold'?'보류':'심사중';
 }
+
+function formatLearningTime(seconds){
+ seconds=Number(seconds||0);
+ const h=Math.floor(seconds/3600);
+ const m=Math.floor((seconds%3600)/60);
+ if(h>0)return `${h}시간 ${m}분`;
+ return `${m}분`;
+}
+async function loadLearningSummary(){
+ const totalCourses=33;
+ const box=document.getElementById('ipmaRecentCourses');
+ try{
+  const {data,error}=await db.from('learning_progress')
+    .select('content_code,content_title,watched_seconds,progress_percent,completed,last_activity_at')
+    .eq('member_id',member.id)
+    .eq('organization_code','IPMA')
+    .eq('content_type','video')
+    .order('last_activity_at',{ascending:false});
+  if(error)throw error;
+
+  const rows=data||[];
+  const totalSeconds=rows.reduce((sum,x)=>sum+Number(x.watched_seconds||0),0);
+  const completed=rows.filter(x=>x.completed).length;
+  const sumProgress=rows.reduce((sum,x)=>sum+Math.min(100,Number(x.progress_percent||0)),0);
+
+  // 전체 33편을 기준으로 한 진도
+  const overall=sumProgress/totalCourses;
+  // 실제 시청한 영상들만의 평균 진행률
+  const average=rows.length?sumProgress/rows.length:0;
+
+  document.getElementById('ipmaTotalTime').textContent=formatLearningTime(totalSeconds);
+  document.getElementById('ipmaCompletedCount').textContent=`${completed} / ${totalCourses}`;
+  document.getElementById('ipmaAverageProgress').textContent=`${average.toFixed(1)}%`;
+  document.getElementById('ipmaOverallLabel').textContent=`${overall.toFixed(1)}%`;
+  document.getElementById('ipmaOverallBar').style.width=`${Math.min(100,overall)}%`;
+
+  box.innerHTML='';
+  if(!rows.length){
+    box.innerHTML='<div class="mc-note">아직 IPMA 학습기록이 없습니다. 호신술 학습관에서 영상을 시청하면 여기에 자동으로 표시됩니다.</div>';
+    return;
+  }
+
+  rows.slice(0,5).forEach(x=>{
+    const d=document.createElement('div');
+    d.className='mc-learning-course';
+    d.innerHTML=`<div><b>${x.content_code||''}</b><br><small>${x.content_title||''}</small></div>
+      <div style="text-align:right"><b>${Number(x.progress_percent||0).toFixed(1)}%</b><br><small>${formatLearningTime(x.watched_seconds)}</small></div>`;
+    box.appendChild(d);
+  });
+ }catch(e){
+  box.innerHTML=`<div class="mc-note mc-err">학습기록을 불러오지 못했습니다: ${e.message}</div>`;
+ }
+}
+
 async function loadMemberships(){
  const {data,error}=await db.from('organization_memberships').select('*').eq('member_id',member.id).order('joined_at',{ascending:true});
  if(error){document.getElementById('orgList').textContent=error.message;return}
