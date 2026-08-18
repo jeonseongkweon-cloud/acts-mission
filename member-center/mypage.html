@@ -23,6 +23,8 @@
 .mc-modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.mc-modal-head h3{margin:0;color:var(--mc-gold)}
 .mc-close{border:1px solid var(--mc-line);background:#172942;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
 .mc-field textarea{width:100%;min-height:96px;padding:12px 13px;border:1px solid var(--mc-line);border-radius:10px;background:#08162a;color:#fff;font:inherit;resize:vertical}
+
+.mc-wtkf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}.mc-wtkf-stat{padding:14px;border:1px solid var(--mc-line);border-radius:13px;background:#08162a}.mc-wtkf-stat span{display:block;color:var(--mc-muted);font-size:11px}.mc-wtkf-stat b{display:block;font-size:20px;margin-top:3px}.mc-wtkf-bar{height:10px;background:#071426;border:1px solid var(--mc-line);border-radius:999px;overflow:hidden;margin-top:10px}.mc-wtkf-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#987328,#d7b35a)}@media(max-width:720px){.mc-wtkf-grid{grid-template-columns:1fr 1fr}}
 .mc-divider{height:1px;background:var(--mc-line);margin:18px 0}
 @media(max-width:720px){.mc-grid,.mc-orgs{grid-template-columns:1fr}.mc-field.full{grid-column:auto}.mc-top{align-items:flex-start}.mc-brand small{display:block}}
 </style>
@@ -72,6 +74,20 @@
   <p class="mc-note">IPMA 홈페이지에서 로그인 후 학습한 기록이 자동으로 이 마이페이지에 반영됩니다.</p>
 </section>
 
+
+<section class="mc-card" id="wtkfLearningCard">
+<div class="mc-row" style="justify-content:space-between"><h2>태권검도 교육·수련 현황</h2><span class="mc-badge">WTKF LEARNING</span></div>
+<div class="mc-wtkf-grid">
+<div class="mc-wtkf-stat"><span>총 시청시간</span><b id="wtkfTotalWatch">0분</b></div>
+<div class="mc-wtkf-stat"><span>공인 교육시간</span><b id="wtkfRecognizedTime">0분</b></div>
+<div class="mc-wtkf-stat"><span>완료 영상</span><b id="wtkfCompleted">0 / 17</b></div>
+<div class="mc-wtkf-stat"><span>전체 진행률</span><b id="wtkfOverall">0%</b></div>
+</div>
+<div class="mc-wtkf-bar"><i id="wtkfOverallBar"></i></div>
+<a class="mc-btn" style="display:inline-block;margin-top:14px" href="https://ipma1822-png.github.io/taekwonkumdo/media/#wtkf-learning" target="_blank" rel="noopener">WTKF 태권검도 학습관 바로가기</a>
+<p class="mc-note">태권검도 학습관에서 로그인 후 시청한 기록이 이곳에 자동 합산됩니다.</p>
+</section>
+
 <section class="mc-card"><h2>나의 단체 가입현황</h2><div id="orgList" class="mc-orgs"></div><p class="mc-note">여기서 단체를 추가하면 기본정보와 사진을 다시 입력하지 않습니다. 단체별 자격·경력 같은 추가정보는 다음 단계에서 별도 입력창으로 연결합니다.</p></section>
 </div>
 
@@ -111,7 +127,7 @@ async function init(){
  if(error){loading.textContent='회원 프로필을 불러오지 못했습니다: '+error.message;return}
  member=data;
  pf.name.value=member.name||'';pf.email.value=member.email||user.email||'';pf.age.value=member.age||'';pf.region.value=member.region||'';pf.phone.value=member.phone||'';
- await showPhoto();await loadMemberships();await loadLearningSummary();loading.hidden=true;content.hidden=false;
+ await showPhoto();await loadMemberships();await loadWTKFLearningSummary();await loadLearningSummary();loading.hidden=true;content.hidden=false;
 }
 async function showPhoto(){
  preview.removeAttribute('src');
@@ -231,6 +247,26 @@ async function loadLearningSummary(){
  }catch(e){
   box.innerHTML=`<div class="mc-note mc-err">학습기록을 불러오지 못했습니다: ${e.message}</div>`;
  }
+}
+
+
+async function loadWTKFLearningSummary(){
+ try{
+  const {data,error}=await db.from('learning_progress').select('watched_seconds,recognized_seconds,progress_percent,completed')
+    .eq('member_id',member.id).eq('organization_code','WTKF').eq('content_type','video');
+  if(error)throw error;
+  const rows=data||[],total=17;
+  const watch=rows.reduce((a,x)=>a+Number(x.watched_seconds||0),0);
+  const recognized=rows.reduce((a,x)=>a+Number(x.recognized_seconds||0),0);
+  const completed=rows.filter(x=>x.completed).length;
+  const overall=rows.reduce((a,x)=>a+Math.min(100,Number(x.progress_percent||0)),0)/total;
+  const fmt=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h?`${h}시간 ${m}분`:`${m}분`};
+  document.getElementById('wtkfTotalWatch').textContent=fmt(watch);
+  document.getElementById('wtkfRecognizedTime').textContent=fmt(recognized);
+  document.getElementById('wtkfCompleted').textContent=`${completed} / ${total}`;
+  document.getElementById('wtkfOverall').textContent=`${overall.toFixed(1)}%`;
+  document.getElementById('wtkfOverallBar').style.width=`${Math.min(100,overall)}%`;
+ }catch(e){console.error('WTKF learning summary',e)}
 }
 
 async function loadMemberships(){
