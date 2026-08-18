@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>통합 회원관리 | ACTS</title>
+<style>
+:root{--bg:#071426;--panel:#0d1d33;--line:rgba(255,255,255,.12);--gold:#d7b35a;--text:#eef4ff;--muted:#aebbd1;--ok:#6dde9c;--warn:#f0cc74;--bad:#ff8b8b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#061221,#0a1930);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+a{color:inherit;text-decoration:none}.wrap{width:min(1320px,calc(100% - 28px));margin:auto;padding:26px 0 70px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.brand b{display:block;font-size:20px}.brand small{color:var(--muted)}.link{border:1px solid var(--line);padding:9px 13px;border-radius:11px}
+.card{background:rgba(13,29,51,.95);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 20px 48px rgba(0,0,0,.18)}
+h1,h2,h3{margin-top:0}h2{color:var(--gold);font-size:20px}
+.login{max-width:560px;margin:70px auto}input,select,button,textarea{font:inherit}input,select,textarea{background:#08162a;color:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 11px}
+button{border:0;border-radius:10px;padding:10px 14px;background:linear-gradient(135deg,#d7b35a,#987328);color:#fff;font-weight:900;cursor:pointer}
+button.secondary{background:#172942;border:1px solid var(--line)}button:disabled{opacity:.55}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:14px;background:#0a1830}
+.stat span{display:block;color:var(--muted);font-size:12px}.stat b{display:block;font-size:28px;margin-top:2px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.filters input{min-width:220px;flex:1}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:1180px;font-size:13px}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#0a1830;position:sticky;top:0;z-index:1}
+.photo{width:58px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#08162a}
+.muted{color:var(--muted)}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:900}
+.pending{background:rgba(240,204,116,.15);color:var(--warn)}.approved{background:rgba(109,222,156,.14);color:var(--ok)}.hold{background:rgba(132,167,255,.15);color:#a7c1ff}.rejected{background:rgba(255,139,139,.14);color:var(--bad)}
+.orgchips{display:flex;gap:5px;flex-wrap:wrap}.chip{border:1px solid var(--line);padding:3px 7px;border-radius:999px;font-size:11px}
+.detailbtn{margin-top:5px;padding:7px 9px;font-size:12px}.modal{position:fixed;inset:0;background:rgba(2,8,20,.78);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+.modal.open{display:flex}.modalbox{width:min(900px,100%);max-height:90vh;overflow:auto;background:#0d1d33;border:1px solid var(--line);border-radius:18px;padding:22px}
+.modalhead{display:flex;justify-content:space-between;gap:12px;align-items:center}.details{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail{padding:11px;border:1px solid var(--line);border-radius:11px;background:#08162a}
+.detail b{display:block;color:var(--gold);font-size:12px;margin-bottom:4px}.status{min-height:20px;font-weight:800}.ok{color:var(--ok)}.err{color:var(--bad)}.work{color:var(--warn)}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.details{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <a class="brand" href="../"><b>GLOBAL MEMBER ADMIN</b><small>ACTS · IDP · WTKF · IPMA 통합 회원관리</small></a>
+  <a class="link" href="../member-center/mypage.html">회원 마이페이지</a>
+</div>
+
+<section id="loginCard" class="card login">
+  <h2>관리자 로그인</h2>
+  <div class="filters">
+    <input id="email" type="email" placeholder="관리자 이메일">
+    <input id="password" type="password" placeholder="비밀번호">
+    <button id="loginBtn">Log In (로그 인)</button>
+  </div>
+  <div id="loginStatus" class="status"></div>
+</section>
+
+<div id="app" hidden>
+<section class="card">
+  <div class="top">
+    <div><h1 style="margin:0">통합 회원관리 대시보드</h1><div class="muted">전체 회원과 단체별 가입심사를 한 화면에서 관리합니다.</div></div>
+    <div class="filters"><button id="refresh" class="secondary">Refresh (리프레시)</button><button id="logout" class="secondary">Log Out (로그 아웃)</button></div>
+  </div>
+  <div class="grid">
+    <div class="stat"><span>전체 공통회원</span><b id="statMembers">0</b></div>
+    <div class="stat"><span>전체 단체가입</span><b id="statMemberships">0</b></div>
+    <div class="stat"><span>심사중</span><b id="statPending">0</b></div>
+    <div class="stat"><span>승인</span><b id="statApproved">0</b></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Search & Filter (서치 앤 필터 · 검색/필터)</h2>
+  <div class="filters">
+    <input id="search" placeholder="이름 · 이메일 · 전화번호 검색">
+    <select id="orgFilter">
+      <option value="">전체 단체</option>
+      <option value="ACTS">ACTS 선교연합</option>
+      <option value="IDP">국제드론순찰대</option>
+      <option value="WTKF">세계태권검도연맹</option>
+      <option value="IPMA">국제경찰무도연합회</option>
+    </select>
+    <select id="statusFilter">
+      <option value="">전체 상태</option>
+      <option value="pending">심사중</option>
+      <option value="approved">승인</option>
+      <option value="hold">보류</option>
+      <option value="rejected">반려</option>
+    </select>
+  </div>
+</section>
+
+<section class="card">
+  <div class="tablewrap">
+    <table>
+      <thead><tr>
+        <th>사진</th><th>회원</th><th>지역/전화</th><th>가입 단체</th><th>단체</th><th>상태</th><th>회원번호</th><th>추가정보</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+</section>
+</div>
+</div>
+
+<div id="modal" class="modal">
+ <div class="modalbox">
+   <div class="modalhead"><h2 id="modalTitle">추가정보</h2><button id="closeModal" class="secondary">닫기</button></div>
+   <div id="modalBody" class="details"></div>
+ </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const db=supabase.createClient('https://ojxarsfaewehwjidwgac.supabase.co','sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0');
+const ADMIN_EMAIL='jeonseongkweon@gmail.com';
+let members=[], memberships=[], details=[];
+const el=id=>document.getElementById(id);
+const labelOrg=c=>({ACTS:'ACTS 선교연합',IDP:'국제드론순찰대',WTKF:'세계태권검도연맹',IPMA:'국제경찰무도연합회'}[c]||c);
+const labelStatus=s=>s==='approved'?'승인':s==='hold'?'보류':s==='rejected'?'반려':'심사중';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function authUI(){
+ const {data}=await db.auth.getSession();
+ const session=data.session;
+ if(!session){el('loginCard').hidden=false;el('app').hidden=true;return}
+ if((session.user.email||'').toLowerCase()!==ADMIN_EMAIL.toLowerCase()){await db.auth.signOut();el('loginStatus').textContent='관리자 계정만 접근할 수 있습니다.';return}
+ el('loginCard').hidden=true;el('app').hidden=false;await loadAll();
+}
+
+el('loginBtn').onclick=async()=>{
+ el('loginStatus').textContent='로그인 중...';el('loginStatus').className='status work';
+ const {error}=await db.auth.signInWithPassword({email:el('email').value.trim(),password:el('password').value});
+ if(error){el('loginStatus').textContent=error.message;el('loginStatus').className='status err';return}
+ authUI();
+};
+el('logout').onclick=async()=>{await db.auth.signOut();location.reload()};
+el('refresh').onclick=loadAll;
+
+async function loadAll(){
+ el('rows').innerHTML='<tr><td colspan="8">불러오는 중...</td></tr>';
+ const [m1,m2,m3]=await Promise.all([
+   db.from('members').select('*').order('created_at',{ascending:false}),
+   db.from('organization_memberships').select('*').order('joined_at',{ascending:false}),
+   db.from('membership_details').select('*')
+ ]);
+ if(m1.error||m2.error||m3.error){
+   el('rows').innerHTML='<tr><td colspan="8" class="err">'+esc((m1.error||m2.error||m3.error).message)+'</td></tr>';return;
+ }
+ members=m1.data||[];memberships=m2.data||[];details=m3.data||[];
+ el('statMembers').textContent=members.length;
+ el('statMemberships').textContent=memberships.length;
+ el('statPending').textContent=memberships.filter(x=>(x.membership_status||'pending')==='pending').length;
+ el('statApproved').textContent=memberships.filter(x=>x.membership_status==='approved').length;
+ render();
+}
+
+async function signedPhoto(path){
+ if(!path)return '';
+ const {data}=await db.storage.from('member-photos').createSignedUrl(path,3600);
+ return data?.signedUrl||'';
+}
+
+async function render(){
+ const q=el('search').value.trim().toLowerCase(), of=el('orgFilter').value, sf=el('statusFilter').value;
+ const memberMap=Object.fromEntries(members.map(x=>[x.id,x]));
+ let list=memberships.filter(ms=>{
+   const m=memberMap[ms.member_id]||{};
+   const hit=!q||[m.name,m.email,m.phone].some(v=>String(v||'').toLowerCase().includes(q));
+   return hit && (!of||ms.organization_code===of) && (!sf||(ms.membership_status||'pending')===sf);
+ });
+ const tbody=el('rows');tbody.innerHTML='';
+ if(!list.length){tbody.innerHTML='<tr><td colspan="8" class="muted">조건에 맞는 가입정보가 없습니다.</td></tr>';return}
+ for(const ms of list){
+   const m=memberMap[ms.member_id]||{};
+   const allOrg=memberships.filter(x=>x.member_id===ms.member_id);
+   const url=await signedPhoto(m.photo_url);
+   const tr=document.createElement('tr');
+   tr.innerHTML=`
+    <td>${url?`<img class="photo" src="${url}" alt="">`:''}</td>
+    <td><b>${esc(m.name)}</b><br><span class="muted">${esc(m.email)}</span></td>
+    <td>${esc(m.region)}<br><span class="muted">${esc(m.phone)}</span></td>
+    <td><div class="orgchips">${allOrg.map(x=>`<span class="chip">${esc(x.organization_code)}</span>`).join('')}</div></td>
+    <td><b>${esc(labelOrg(ms.organization_code))}</b><br><span class="muted">${new Date(ms.joined_at).toLocaleDateString('ko-KR')}</span></td>
+    <td><select class="statusSel" data-id="${ms.id}">
+      <option value="pending">심사중</option><option value="approved">승인</option><option value="hold">보류</option><option value="rejected">반려</option>
+    </select></td>
+    <td><input class="numInput" data-id="${ms.id}" value="${esc(ms.member_number||'')}" placeholder="승인 시 자동발급"></td>
+    <td><button class="detailbtn secondary" data-detail="${ms.id}">보기</button></td>`;
+   tbody.appendChild(tr);
+   tr.querySelector('.statusSel').value=ms.membership_status||'pending';
+ }
+ wireRows();
+}
+
+function wireRows(){
+ document.querySelectorAll('.statusSel').forEach(sel=>sel.onchange=async()=>{
+   const id=Number(sel.dataset.id), ms=memberships.find(x=>x.id===id), input=document.querySelector(`.numInput[data-id="${id}"]`);
+   let num=input.value.trim();
+   if(sel.value==='approved'&&!num){
+     num=`${ms.organization_code}-${new Date().getFullYear()}-${String(id).padStart(5,'0')}`;
+     input.value=num;
+   }
+   const payload={membership_status:sel.value,member_number:num||null,approved_at:sel.value==='approved'?new Date().toISOString():null};
+   const {error}=await db.from('organization_memberships').update(payload).eq('id',id);
+   if(error){alert(error.message);return}
+   Object.assign(ms,payload);
+   el('statPending').textContent=memberships.filter(x=>(x.membership_status||'pending')==='pending').length;
+   el('statApproved').textContent=memberships.filter(x=>x.membership_status==='approved').length;
+ });
+ document.querySelectorAll('.numInput').forEach(inp=>inp.onchange=async()=>{
+   const id=Number(inp.dataset.id);
+   const {error}=await db.from('organization_memberships').update({member_number:inp.value.trim()||null}).eq('id',id);
+   if(error)alert(error.message);
+   else{const ms=memberships.find(x=>x.id===id);if(ms)ms.member_number=inp.value.trim()||null}
+ });
+ document.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>showDetail(Number(b.dataset.detail)));
+}
+
+function showDetail(id){
+ const ms=memberships.find(x=>x.id===id), d=details.find(x=>x.membership_id===id);
+ const m=members.find(x=>x.id===ms.member_id)||{};
+ el('modalTitle').textContent=`${m.name||''} · ${labelOrg(ms.organization_code)} 추가정보`;
+ const body=el('modalBody');body.innerHTML='';
+ const fields=d?Object.entries(d).filter(([k,v])=>!['id','membership_id','organization_code','updated_at'].includes(k)&&v!==null&&v!==''):[];
+ if(!fields.length){body.innerHTML='<div class="muted">등록된 추가정보가 없습니다.</div>'}
+ else for(const [k,v] of fields){
+   const div=document.createElement('div');div.className='detail';div.innerHTML=`<b>${esc(k)}</b><div>${esc(v)}</div>`;body.appendChild(div);
+ }
+ el('modal').classList.add('open');
+}
+el('closeModal').onclick=()=>el('modal').classList.remove('open');
+el('modal').onclick=e=>{if(e.target===el('modal'))el('modal').classList.remove('open')};
+['search','orgFilter','statusFilter'].forEach(id=>el(id).addEventListener(id==='search'?'input':'change',render));
+authUI();
+</script>
+</body></html>
