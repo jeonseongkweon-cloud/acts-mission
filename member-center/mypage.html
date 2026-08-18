@@ -1,0 +1,109 @@
+<!doctype html><html lang="ko"><head><title>통합회원 마이페이지 | ACTS</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../styles.css?v=5.1.2">
+<style>
+:root{--mc-bg:#071426;--mc-panel:#0d1d33;--mc-line:rgba(255,255,255,.12);--mc-gold:#d7b35a;--mc-text:#eef4ff;--mc-muted:#aebbd1}
+*{box-sizing:border-box}.mc-page{min-height:100vh;background:linear-gradient(180deg,#061221,#0a1930);color:var(--mc-text);padding:32px 16px 72px}
+.mc-wrap{width:min(980px,100%);margin:auto}.mc-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+.mc-brand{display:flex;align-items:center;gap:12px}.mc-brand img{width:48px;height:48px;object-fit:contain}.mc-brand b{display:block;font-size:18px}.mc-brand small{color:var(--mc-muted)}
+.mc-link{color:var(--mc-text);border:1px solid var(--mc-line);padding:9px 13px;border-radius:11px;text-decoration:none}
+.mc-hero,.mc-card{background:rgba(13,29,51,.94);border:1px solid var(--mc-line);border-radius:20px;box-shadow:0 20px 48px rgba(0,0,0,.2)}
+.mc-hero{padding:28px;margin-bottom:18px}.mc-hero .eyebrow{color:var(--mc-gold);font-weight:900;letter-spacing:.08em}.mc-hero h1{margin:6px 0 8px}.mc-hero p{margin:0;color:var(--mc-muted)}
+.mc-card{padding:24px;margin:16px 0}.mc-card h2{margin:0 0 16px;color:var(--mc-gold);font-size:20px}.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mc-field{display:grid;gap:7px}.mc-field.full{grid-column:1/-1}.mc-field label{font-weight:800}.mc-field input,.mc-field select{width:100%;padding:12px 13px;border:1px solid var(--mc-line);border-radius:10px;background:#08162a;color:#fff;font:inherit}
+.mc-btn{border:0;border-radius:11px;padding:13px 19px;background:linear-gradient(135deg,#d7b35a,#987328);color:#fff;font-weight:900;font-size:15px;cursor:pointer}.mc-btn.secondary{background:#172942;border:1px solid var(--mc-line)}.mc-btn:disabled{opacity:.55}
+.mc-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.mc-status{font-weight:800;min-height:22px}.mc-ok{color:#68dc9a}.mc-err{color:#ff8b8b}.mc-work{color:#f0cc74}
+.mc-orgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.mc-org{padding:16px;border:1px solid var(--mc-line);border-radius:14px;background:#0a1830}.mc-org b{display:block;margin-bottom:5px}.mc-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(215,179,90,.14);color:#e3c477;font-size:12px;font-weight:900}
+.mc-photo{width:104px;height:128px;border-radius:12px;object-fit:cover;border:1px solid var(--mc-line);background:#08162a}
+.mc-note{font-size:13px;color:var(--mc-muted);line-height:1.6}.mc-divider{height:1px;background:var(--mc-line);margin:18px 0}
+@media(max-width:720px){.mc-grid,.mc-orgs{grid-template-columns:1fr}.mc-field.full{grid-column:auto}.mc-top{align-items:flex-start}.mc-brand small{display:block}}
+</style>
+</head><body>
+<div class="mc-page"><div class="mc-wrap">
+<div class="mc-top">
+<a class="mc-brand" href="../"><img src="../assets/official/official-logo.webp" alt="ACTS"><span><b>GLOBAL MEMBER CENTER</b><small>ACTS · IDP · WTKF · IPMA 통합회원센터</small></span></a>
+<a class="mc-link" href="../">ACTS 홈</a>
+</div>
+<section class="mc-hero"><div class="eyebrow">MY PAGE · 마이 페이지</div><h1>나의 통합회원 정보</h1>
+<p>기본정보와 사진은 한 번만 관리하고, 원하는 단체를 추가로 연결할 수 있습니다.</p></section>
+<div id="loading" class="mc-card">회원정보를 불러오고 있습니다...</div>
+<div id="content" hidden>
+<section class="mc-card"><div class="mc-row" style="justify-content:space-between"><h2>공통 프로필</h2><button id="logout" class="mc-btn secondary">로그아웃</button></div>
+<form id="profileForm"><div class="mc-grid">
+<div class="mc-field"><label>이름</label><input name="name" required></div>
+<div class="mc-field"><label>이메일</label><input name="email" readonly></div>
+<div class="mc-field"><label>나이</label><input name="age" type="number" min="1" max="120"></div>
+<div class="mc-field"><label>지역</label><input name="region" maxlength="80"></div>
+<div class="mc-field full"><label>핸드폰번호</label><input name="phone" maxlength="30"></div>
+<div class="mc-field full"><label>프로필 사진</label><div class="mc-row"><img id="photoPreview" class="mc-photo" alt="프로필 사진"><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></div><div class="mc-note">최대 5MB. 새 사진을 선택하면 공통 사진으로 등록됩니다.</div></div>
+</div><div class="mc-divider"></div><div class="mc-row"><button id="saveProfile" class="mc-btn">프로필 저장</button><span id="profileStatus" class="mc-status"></span></div></form></section>
+
+<section class="mc-card"><h2>나의 단체 가입현황</h2><div id="orgList" class="mc-orgs"></div><p class="mc-note">여기서 단체를 추가하면 기본정보와 사진을 다시 입력하지 않습니다. 단체별 자격·경력 같은 추가정보는 다음 단계에서 별도 입력창으로 연결합니다.</p></section>
+</div>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>const SUPABASE_URL='https://ojxarsfaewehwjidwgac.supabase.co',SUPABASE_KEY='sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0',db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const orgs=[
+ ['ACTS','ACTS 선교연합'],
+ ['IDP','국제드론순찰대'],
+ ['WTKF','세계태권검도연맹'],
+ ['IPMA','국제경찰무도연합회']
+];
+let session,user,member;
+const loading=document.getElementById('loading'),content=document.getElementById('content'),pf=document.getElementById('profileForm');
+const ps=document.getElementById('profileStatus'),preview=document.getElementById('photoPreview');
+
+async function init(){
+ const r=await db.auth.getSession();session=r.data.session;
+ if(!session){location.href='login.html';return} user=session.user;
+ const {data,error}=await db.from('members').select('*').eq('auth_user_id',user.id).single();
+ if(error){loading.textContent='회원 프로필을 불러오지 못했습니다: '+error.message;return}
+ member=data;
+ pf.name.value=member.name||'';pf.email.value=member.email||user.email||'';pf.age.value=member.age||'';pf.region.value=member.region||'';pf.phone.value=member.phone||'';
+ await showPhoto();await loadMemberships();loading.hidden=true;content.hidden=false;
+}
+async function showPhoto(){
+ preview.removeAttribute('src');
+ if(!member.photo_url)return;
+ const {data}=await db.storage.from('member-photos').createSignedUrl(member.photo_url,3600);
+ if(data?.signedUrl)preview.src=data.signedUrl;
+}
+pf.addEventListener('submit',async e=>{
+ e.preventDefault();ps.textContent='저장 중...';ps.className='mc-status mc-work';
+ let photoPath=member.photo_url;
+ const file=document.getElementById('photo').files[0];
+ try{
+  if(file){
+   if(file.size>5*1024*1024)throw new Error('사진은 5MB 이하로 올려주세요.');
+   const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[file.type];
+   if(!ext)throw new Error('JPG, PNG, WEBP 사진만 가능합니다.');
+   photoPath=`${user.id}/profile-${Date.now()}.${ext}`;
+   const {error}=await db.storage.from('member-photos').upload(photoPath,file,{upsert:false,contentType:file.type});if(error)throw error;
+  }
+  const update={name:pf.name.value.trim(),age:pf.age.value?Number(pf.age.value):null,region:pf.region.value.trim()||null,phone:pf.phone.value.trim()||null,photo_url:photoPath};
+  const {data,error}=await db.from('members').update(update).eq('auth_user_id',user.id).select().single();if(error)throw error;
+  member=data;ps.textContent='프로필이 저장되었습니다.';ps.className='mc-status mc-ok';document.getElementById('photo').value='';await showPhoto();
+ }catch(e){ps.textContent=e.message;ps.className='mc-status mc-err'}
+});
+async function loadMemberships(){
+ const {data,error}=await db.from('organization_memberships').select('*').eq('member_id',member.id);
+ if(error){document.getElementById('orgList').textContent=error.message;return}
+ const map=Object.fromEntries((data||[]).map(x=>[x.organization_code,x]));
+ const el=document.getElementById('orgList');el.innerHTML='';
+ for(const [code,label] of orgs){
+  const m=map[code],d=document.createElement('div');d.className='mc-org';
+  d.innerHTML=`<b>${label}</b>${m?`<span class="mc-badge">${m.membership_status==='approved'?'승인':m.membership_status==='rejected'?'반려':m.membership_status==='hold'?'보류':'심사중'}</span>${m.member_number?`<div class="mc-note" style="margin-top:8px">회원번호 ${m.member_number}</div>`:''}`:`<div class="mc-note">아직 연결되지 않았습니다.</div><button class="mc-btn" data-code="${code}" style="margin-top:10px">가입 연결</button>`}`;
+  el.appendChild(d);
+ }
+ el.querySelectorAll('button[data-code]').forEach(b=>b.onclick=()=>joinOrg(b.dataset.code,b));
+}
+async function joinOrg(code,btn){
+ btn.disabled=true;btn.textContent='처리 중...';
+ const {error}=await db.from('organization_memberships').insert({member_id:member.id,organization_code:code,membership_status:'pending',join_source:'member-center'});
+ if(error){alert(error.message);btn.disabled=false;btn.textContent='가입 연결'}else loadMemberships();
+}
+document.getElementById('logout').onclick=async()=>{await db.auth.signOut();location.href='login.html'};
+init();
+</script>
+</body></html>

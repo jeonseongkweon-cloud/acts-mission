@@ -1,0 +1,47 @@
+<!doctype html><html lang="ko"><head><title>통합회원 로그인 | ACTS</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../styles.css?v=5.1.2">
+<style>
+:root{--mc-bg:#071426;--mc-panel:#0d1d33;--mc-line:rgba(255,255,255,.12);--mc-gold:#d7b35a;--mc-text:#eef4ff;--mc-muted:#aebbd1}
+*{box-sizing:border-box}.mc-page{min-height:100vh;background:linear-gradient(180deg,#061221,#0a1930);color:var(--mc-text);padding:32px 16px 72px}
+.mc-wrap{width:min(980px,100%);margin:auto}.mc-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+.mc-brand{display:flex;align-items:center;gap:12px}.mc-brand img{width:48px;height:48px;object-fit:contain}.mc-brand b{display:block;font-size:18px}.mc-brand small{color:var(--mc-muted)}
+.mc-link{color:var(--mc-text);border:1px solid var(--mc-line);padding:9px 13px;border-radius:11px;text-decoration:none}
+.mc-hero,.mc-card{background:rgba(13,29,51,.94);border:1px solid var(--mc-line);border-radius:20px;box-shadow:0 20px 48px rgba(0,0,0,.2)}
+.mc-hero{padding:28px;margin-bottom:18px}.mc-hero .eyebrow{color:var(--mc-gold);font-weight:900;letter-spacing:.08em}.mc-hero h1{margin:6px 0 8px}.mc-hero p{margin:0;color:var(--mc-muted)}
+.mc-card{padding:24px;margin:16px 0}.mc-card h2{margin:0 0 16px;color:var(--mc-gold);font-size:20px}.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mc-field{display:grid;gap:7px}.mc-field.full{grid-column:1/-1}.mc-field label{font-weight:800}.mc-field input,.mc-field select{width:100%;padding:12px 13px;border:1px solid var(--mc-line);border-radius:10px;background:#08162a;color:#fff;font:inherit}
+.mc-btn{border:0;border-radius:11px;padding:13px 19px;background:linear-gradient(135deg,#d7b35a,#987328);color:#fff;font-weight:900;font-size:15px;cursor:pointer}.mc-btn.secondary{background:#172942;border:1px solid var(--mc-line)}.mc-btn:disabled{opacity:.55}
+.mc-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.mc-status{font-weight:800;min-height:22px}.mc-ok{color:#68dc9a}.mc-err{color:#ff8b8b}.mc-work{color:#f0cc74}
+.mc-orgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.mc-org{padding:16px;border:1px solid var(--mc-line);border-radius:14px;background:#0a1830}.mc-org b{display:block;margin-bottom:5px}.mc-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(215,179,90,.14);color:#e3c477;font-size:12px;font-weight:900}
+.mc-photo{width:104px;height:128px;border-radius:12px;object-fit:cover;border:1px solid var(--mc-line);background:#08162a}
+.mc-note{font-size:13px;color:var(--mc-muted);line-height:1.6}.mc-divider{height:1px;background:var(--mc-line);margin:18px 0}
+@media(max-width:720px){.mc-grid,.mc-orgs{grid-template-columns:1fr}.mc-field.full{grid-column:auto}.mc-top{align-items:flex-start}.mc-brand small{display:block}}
+</style>
+</head><body>
+<div class="mc-page"><div class="mc-wrap">
+<div class="mc-top">
+<a class="mc-brand" href="../"><img src="../assets/official/official-logo.webp" alt="ACTS"><span><b>GLOBAL MEMBER CENTER</b><small>ACTS · IDP · WTKF · IPMA 통합회원센터</small></span></a>
+<a class="mc-link" href="../">ACTS 홈</a>
+</div>
+<section class="mc-hero"><div class="eyebrow">LOG IN · 로그 인</div><h1>통합회원 로그인</h1>
+<p>한 계정으로 여러 단체의 가입현황과 공통 프로필을 관리합니다.</p></section>
+<form id="loginForm" class="mc-card"><h2>이메일 로그인</h2><div class="mc-grid">
+<div class="mc-field full"><label>이메일</label><input name="email" type="email" required></div>
+<div class="mc-field full"><label>비밀번호</label><input name="password" type="password" required></div>
+</div><div class="mc-divider"></div>
+<div class="mc-row"><button class="mc-btn" id="loginBtn">로그인</button><a class="mc-link" href="signup.html">처음 가입하기</a><span id="status" class="mc-status"></span></div></form>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>const SUPABASE_URL='https://ojxarsfaewehwjidwgac.supabase.co',SUPABASE_KEY='sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0',db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const form=document.getElementById('loginForm'),btn=document.getElementById('loginBtn'),st=document.getElementById('status');
+db.auth.getSession().then(({data})=>{if(data.session)location.href='mypage.html'});
+form.addEventListener('submit',async e=>{
+ e.preventDefault();const f=new FormData(form);btn.disabled=true;st.textContent='로그인 중...';st.className='mc-status mc-work';
+ const {error}=await db.auth.signInWithPassword({email:String(f.get('email')).trim(),password:String(f.get('password'))});
+ if(error){st.textContent=error.message;st.className='mc-status mc-err';btn.disabled=false}
+ else location.href='mypage.html';
+});
+</script>
+</body></html>
