@@ -121,3 +121,37 @@
     if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
   });
 })();
+
+// ACTS 선교연합 공식 운영정보 푸터 — 모든 공개 페이지 공통 적용
+(() => {
+  const footer = document.querySelector('footer');
+  if (!footer || document.querySelector('.acts-registered-info')) return;
+
+  const style = document.createElement('style');
+  style.id = 'acts-registered-info-style';
+  style.textContent = `
+    .acts-registered-info{width:min(1180px,calc(100% - 28px));margin:22px auto 0;padding:22px;border:1px solid rgba(216,177,90,.34);border-radius:18px;background:linear-gradient(135deg,rgba(216,177,90,.12),rgba(6,24,43,.86));color:#eef4ff;box-sizing:border-box}
+    .acts-registered-info *{box-sizing:border-box}.acts-registered-head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .acts-registered-head small{display:block;color:#d8b15a;font-size:10px;font-weight:900;letter-spacing:.15em}.acts-registered-head b{display:block;margin-top:5px;font-size:18px;color:#fff}
+    .acts-registration-no{padding:9px 12px;border-radius:12px;background:#071426;border:1px solid rgba(216,177,90,.36);color:#ead18d;font-weight:900;white-space:nowrap}
+    .acts-registered-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:12px;margin-top:15px}.acts-info-item{padding:12px 13px;border-radius:13px;background:rgba(5,18,33,.62);border:1px solid rgba(255,255,255,.09)}
+    .acts-info-item span{display:block;color:#9fb0c7;font-size:10px;font-weight:900;margin-bottom:5px}.acts-info-item p,.acts-info-item a{margin:0;color:#eef4ff;font-size:13px;line-height:1.55;text-decoration:none}.acts-info-item a:hover{color:#d8b15a}
+    .acts-registered-note{margin:13px 0 0;color:#9fb0c7;font-size:11px;text-align:center}
+    @media(max-width:760px){.acts-registered-head{align-items:flex-start;flex-direction:column}.acts-registered-grid{grid-template-columns:1fr}.acts-registration-no{white-space:normal}}
+  `;
+  document.head.appendChild(style);
+
+  const info = document.createElement('section');
+  info.className = 'acts-registered-info';
+  info.setAttribute('aria-label', 'ACTS 선교연합 공식 운영정보');
+  info.innerHTML = `
+    <div class="acts-registered-head"><div><small>ACTS MISSION ALLIANCE · OFFICIAL INFORMATION</small><b>엑츠선교연합(ACTS) 공식 운영정보</b></div><div class="acts-registration-no">고유번호 413-82-73480</div></div>
+    <div class="acts-registered-grid">
+      <div class="acts-info-item"><span>HEADQUARTERS · 본부 주소</span><p>울산광역시 남구 중앙로290번길 53<br>강변센트럴하이츠 상가 203호</p></div>
+      <div class="acts-info-item"><span>CONTACT · 연락처</span><p><a href="tel:01044772772">010-4477-2772</a><br><a href="tel:+8228221822">국제전화 +82-2-822-1822</a></p></div>
+      <div class="acts-info-item"><span>EMAIL · 공식 이메일</span><p><a href="mailto:jeonseongkweon@gmail.com">jeonseongkweon@gmail.com</a></p></div>
+    </div>
+    <p class="acts-registered-note">ACTS 선교연합은 고유번호를 발급받은 등록단체로서 책임 있고 투명한 선교 협력을 지향합니다.</p>
+  `;
+  footer.appendChild(info);
+})();
