@@ -40,9 +40,10 @@
 .video-card.tk{transition:transform .2s ease,box-shadow .2s ease}.video-card.tk:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(18,42,72,.13)}
 .video-no{display:inline-block;color:#a87a18;font-weight:900;font-size:11px;letter-spacing:.08em;margin-bottom:5px}
 .youtube-link{display:inline-flex;margin-top:12px;text-decoration:none;color:#0b3156;font-size:12px;font-weight:900}.youtube-link:hover{text-decoration:underline}
+.sdj-head{margin-top:38px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#071a2e,#173f67);color:#fff}.sdj-head h3{margin:0 0 7px;font-size:23px}.sdj-head p{margin:0;color:#dce5ef;font-size:13px}.sdj-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-top:16px}.sdj-card{display:block;overflow:hidden;border:1px solid #dbe3ec;border-radius:14px;background:#fff;color:#071a2e;text-decoration:none;box-shadow:0 7px 20px rgba(18,42,72,.07);transition:transform .2s ease}.sdj-card:hover{transform:translateY(-3px)}.sdj-thumb{position:relative;display:block;aspect-ratio:16/9;background:#000}.sdj-thumb img{width:100%;height:100%;object-fit:cover;display:block}.sdj-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:rgba(188,135,39,.95);color:#fff}.sdj-info{display:block;padding:12px}.sdj-info b{display:block;font-size:13px;color:#a7771f}.sdj-info span{display:block;margin-top:4px;font-size:13px;font-weight:800}.sdj-more{display:flex;justify-content:center;margin-top:18px}.sdj-more a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:11px;background:#071a2e;color:#fff;text-decoration:none;font-size:13px;font-weight:900}
 @media(max-width:700px){.tk-head{align-items:flex-start;flex-direction:column}}
-@media(max-width:980px){.resource-cats{grid-template-columns:repeat(2,1fr)}.placeholder-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.video-grid{grid-template-columns:1fr}.placeholder-grid{grid-template-columns:1fr}}
+@media(max-width:980px){.resource-cats{grid-template-columns:repeat(2,1fr)}.placeholder-grid{grid-template-columns:repeat(2,1fr)}.sdj-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.video-grid{grid-template-columns:1fr}.placeholder-grid{grid-template-columns:1fr}.sdj-grid{grid-template-columns:repeat(2,1fr)}.sdj-head{padding:18px}.sdj-info{padding:10px}.sdj-info span{font-size:11px}}
 @media(max-width:520px){.resource-cats{grid-template-columns:1fr}}
 </style>
 </head>
@@ -161,12 +162,25 @@
 <article class="video-card tk"><div class="video-frame"><iframe loading="lazy" src="https://www.youtube.com/embed/4Tmt7BjQy_g" title="태권검도 국가대표 시범단 시범영상 04" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="video-info"><span class="video-no">DEMONSTRATION · 04</span><h3>태권검도 시범영상 04</h3><p>태권검도의 실전성과 예술성을 함께 보여주는 국가대표 시범단 영상입니다.</p><div class="video-tags"><span>태권검도</span><span>국가대표 시범단</span><span>시범영상</span></div><a class="youtube-link" href="https://www.youtube.com/watch?v=4Tmt7BjQy_g" target="_blank" rel="noopener">YouTube에서 크게 보기 ↗</a></div></article>
 <article class="video-card tk"><div class="video-frame"><iframe loading="lazy" src="https://www.youtube.com/embed/1YvyqVqrFqw" title="태권검도 국가대표 시범단 시범영상 05" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="video-info"><span class="video-no">DEMONSTRATION · 05</span><h3>태권검도 시범영상 05</h3><p>태권검도 국가대표 시범단의 다양한 시범 구성을 감상할 수 있는 공식 영상입니다.</p><div class="video-tags"><span>태권검도</span><span>국가대표 시범단</span><span>시범영상</span></div><a class="youtube-link" href="https://www.youtube.com/watch?v=1YvyqVqrFqw" target="_blank" rel="noopener">YouTube에서 크게 보기 ↗</a></div></article>
 </div>
-<h3 class="tk-subtitle">다음 교육자료 <span>COMING NEXT</span></h3><div class="placeholder-grid"><div class="placeholder"><strong>호신·경호무술</strong><span class="small-note">교육 영상 추가 예정</span></div><div class="placeholder"><strong>경찰무도</strong><span class="small-note">교육 영상 추가 예정</span></div><div class="placeholder"><strong>안전·드론 교육</strong><span class="small-note">교육 영상 추가 예정</span></div></div></section>
+<div class="sdj-head" id="ipma-sdj"><h3>🛡 경찰무도 호신술 지도자교육관</h3><p>국제경찰무도연합회 IPMA의 SDJ 001~022 전체 지도자교육 영상을 ACTS에서도 편리하게 찾아볼 수 있습니다.</p></div>
+<div class="sdj-grid" id="actsSdjGrid" aria-label="경찰무도 호신술 SDJ 교육영상"></div>
+<div class="sdj-more"><a href="https://ipma.kr/media/" target="_blank" rel="noopener">IPMA 전체 영상자료실에서 학습하기 ↗</a></div>
+<h3 class="tk-subtitle">다음 교육자료 <span>COMING NEXT</span></h3><div class="placeholder-grid"><div class="placeholder"><strong>안전·드론 교육</strong><span class="small-note">교육 영상 추가 예정</span></div><div class="placeholder"><strong>선교현장 활용법</strong><span class="small-note">교육 자료 추가 예정</span></div><div class="placeholder"><strong>어린이 안전교육</strong><span class="small-note">교육 자료 추가 예정</span></div></div></section>
 <section class="resource-section" id="mission-video"><h2>선교 자료</h2><p>세계 선교사와 지도자들의 사역을 돕는 현장자료, 교육사례, 국제교류와 선교 네트워크 자료입니다.</p><div class="placeholder-grid"><div class="placeholder"><strong>선교 현장</strong><span class="small-note">자료 추가 예정</span></div><div class="placeholder"><strong>지도자 교육</strong><span class="small-note">자료 추가 예정</span></div><div class="placeholder"><strong>국제교류</strong><span class="small-note">자료 추가 예정</span></div></div></section>
 <section class="resource-section" id="general-video"><h2>ACTS 일반 자료</h2><p>ACTS 소개, 행사, 소식, 인터뷰, 홍보 영상과 기록물을 정리하는 공간입니다.</p><div class="placeholder-grid"><div class="placeholder"><strong>ACTS 소식</strong><span class="small-note">자료 추가 예정</span></div><div class="placeholder"><strong>행사·세미나</strong><span class="small-note">자료 추가 예정</span></div><div class="placeholder"><strong>인터뷰·홍보</strong><span class="small-note">자료 추가 예정</span></div></div></section>
 
 </div></section></main>
-<footer><div class="container">ACTS MISSION ALLIANCE · 액츠 선교연합 · ACTION · CHRIST · TRAINING · SERVICE</div></footer>
+<footer><div class="container">ACTS MISSION ALLIANCE · 엑츠선교연합 · ACTION · CHRIST · TRAINING · SERVICE</div></footer>
+<script>
+(function(){
+  const videos=[
+    ['0hnRgcgcAQ8','001'],['GnpFoBDcAuM','002'],['S4dxdGg4nyI','003'],['GuWJ5WAyWBo','004'],['MCs2QjpTO4Q','005'],['VZVfHML3aSA','006'],['I4TiqnLLYYs','007'],['d3EKWGizggg','008'],['Xrv_usR6WT8','009'],['EogizdeMYEA','010'],['j8u3hBSTAeE','011'],['QynDMR6jX0A','012'],['AJAakCTQMIQ','013'],['AKlzZ1VlKj4','014'],['IE9InwFAT6E','015'],['PiXPjKPi9aY','016'],['jecoUhjuR1s','017'],['L6-RZEswaqk','018'],['8sgCjkG2TRU','019'],['rTYYB3xkSfY','020'],['rTZg8Lz02lE','021'],['DomHuQVNfls','022']
+  ];
+  const grid=document.getElementById('actsSdjGrid');
+  if(!grid) return;
+  grid.innerHTML=videos.map(([id,no])=>`<a class="sdj-card" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener"><span class="sdj-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="IPMA SDJ ${no} 썸네일"><i class="sdj-play">▶</i></span><span class="sdj-info"><b>IPMA-SDJ-${no}</b><span>호신술 지도자교육 ${Number(no)}</span></span></a>`).join('');
+})();
+</script>
 <script src="app.js"></script>
 <script src="mega-menu.js?v=5.1.2"></script><script src="assets/js/cross-site-network.js"></script>
 </body></html>

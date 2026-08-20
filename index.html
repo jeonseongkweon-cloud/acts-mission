@@ -57,6 +57,27 @@
   }
 </style>
 
+<style id="acts-open-video-style">
+  .acts-open-video{padding:68px 0;background:#071a2e;color:#fff}
+  .acts-open-video .v5-container{width:min(1180px,calc(100% - 32px))}
+  .aov-head{text-align:center;max-width:820px;margin:0 auto 28px}
+  .aov-kicker{display:inline-flex;padding:7px 12px;border:1px solid rgba(231,189,97,.45);border-radius:999px;color:#e7bd61;font-size:11px;font-weight:900;letter-spacing:.1em}
+  .aov-head h2{margin:14px 0 10px;font-size:clamp(28px,4vw,44px);line-height:1.25;word-break:keep-all}
+  .aov-head p{margin:0;color:#c8d5e3;line-height:1.75;word-break:keep-all}
+  .aov-feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .aov-feature{display:block;overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:18px;background:#102942;color:#fff;text-decoration:none;box-shadow:0 16px 36px rgba(0,0,0,.18);transition:transform .2s ease,border-color .2s ease}
+  .aov-feature:hover{transform:translateY(-4px);border-color:rgba(231,189,97,.7)}
+  .aov-thumb{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#000}
+  .aov-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .aov-play{position:absolute;left:50%;top:50%;width:54px;height:54px;display:grid;place-items:center;transform:translate(-50%,-50%);border-radius:50%;background:rgba(185,132,40,.95);color:#fff;font-size:21px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .aov-info{display:block;padding:18px}.aov-label{display:block;color:#e7bd61;font-size:11px;font-weight:900;letter-spacing:.08em}.aov-info strong{display:block;margin:7px 0 7px;font-size:19px;word-break:keep-all}.aov-info small{display:block;color:#c8d5e3;font-size:13px;line-height:1.6;word-break:keep-all}.aov-link{display:block;margin-top:12px;color:#f2ca70;font-size:12px;font-weight:900}
+  .aov-series{margin-top:28px;padding:22px;border:1px solid rgba(231,189,97,.28);border-radius:19px;background:rgba(255,255,255,.045)}
+  .aov-series-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:14px}.aov-series-head h3{margin:0;font-size:22px}.aov-series-head p{margin:5px 0 0;color:#b8c8d8;font-size:13px}.aov-all{color:#f2ca70;text-decoration:none;font-size:13px;font-weight:900;white-space:nowrap}
+  .aov-series-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.aov-series-card{display:block;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#0d2238;color:#fff;text-decoration:none}.aov-series-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.aov-series-card span{display:block;padding:10px;font-size:12px;font-weight:800}.aov-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}.aov-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:12px;background:#fff;color:#071a2e;text-decoration:none;font-size:13px;font-weight:900}.aov-btn.gold{background:linear-gradient(135deg,#e7bd61,#b98225)}
+  @media(max-width:900px){.aov-feature-grid{grid-template-columns:1fr 1fr}.aov-feature:last-child{grid-column:1/-1}.aov-series-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:600px){.acts-open-video{padding:48px 0}.acts-open-video .v5-container{width:min(100% - 24px,1180px)}.aov-head{text-align:center}.aov-head h2{font-size:28px}.aov-head p{font-size:13px}.aov-feature-grid{grid-template-columns:1fr;gap:12px}.aov-feature:last-child{grid-column:auto}.aov-info{padding:15px}.aov-info strong{font-size:17px}.aov-series{padding:16px 12px}.aov-series-head{align-items:flex-start;flex-direction:column}.aov-series-grid{display:flex;overflow-x:auto;padding-bottom:5px;scroll-snap-type:x mandatory}.aov-series-card{min-width:155px;scroll-snap-align:start}.aov-actions{display:grid;grid-template-columns:1fr}.aov-btn{width:100%}}
+</style>
+
 </head>
 <body class="v5-body">
 
@@ -262,6 +283,42 @@
 </section>
 
 <section class="acts-overview" id="actsOverview"><div class="v5-container"><div class="acts-overview-head"><span class="eyebrow">ACTS AT A GLANCE · 한눈에 보기</span><h2><span>하나의 홈페이지 안에</span><span>디지털 선교본부가 준비되어 있습니다</span></h2><p>기도만 모은 홈페이지가 아닙니다. 사람을 세우는 교육, 현장을 돕는 선교자료, 전문사역과 세계 네트워크까지 실제로 사용할 수 있는 공간입니다.</p></div><div class="acts-scale-grid"><a class="acts-scale-card" href="prayer.html"><div class="acts-scale-icon">🙏</div><strong>기도센터</strong><b>12개 분야 · 144개 기도문</b><span>세계선교·선교사·교회·다음세대·가정과 이웃을 위한 기도</span></a><a class="acts-scale-card" href="education-center.html"><div class="acts-scale-icon">🎓</div><strong>교육센터</strong><b>온라인·전문·지도자 과정</b><span>휴대전화로 배우고 현장에서 사람을 세우는 디지털 교육</span></a><a class="acts-scale-card" href="manuals.html"><div class="acts-scale-icon">📚</div><strong>Mission Library</strong><b>ACTS 공식 교본 15권</b><span>선교·교육·실천을 돕는 교본과 PDF·영상·교육자료</span></a><a class="acts-scale-card" href="committees.html"><div class="acts-scale-icon">🏛️</div><strong>조직·네트워크</strong><b>19개 위원회 · 전국 17개 시도</b><span>전문가·교회·선교사·지역과 세계를 연결하는 조직 기반</span></a><a class="acts-scale-card" href="mission-tools.html"><div class="acts-scale-icon">🥋</div><strong>전문사역 도구</strong><b>태권검도·호신술·안전봉사</b><span>선교 현장에서 바로 배우고 가르치며 섬길 수 있는 프로그램</span></a><a class="acts-scale-card" href="prayer-board.html"><div class="acts-scale-icon">🤝</div><strong>소통·참여</strong><b>기도·교육·선교·회원 게시판</b><span>기도제목과 활동을 나누고 동역자와 함께 성장하는 공동체</span></a></div><div class="acts-overview-actions"><a class="acts-overview-btn gold" href="mission-hq.html">ACTS 디지털 선교본부 둘러보기 →</a><a class="acts-overview-btn" href="member-center/signup.html">통합회원 가입</a><a class="acts-overview-btn" href="join-hq.html">동역자로 참여하기</a></div></div></section>
+
+<section class="acts-open-video" id="openTrainingVideos">
+  <div class="v5-container">
+    <div class="aov-head">
+      <span class="aov-kicker">바로 배우는 공개 교육자료</span>
+      <h2>태권검도·호신술 영상을<br>지금 바로 만나보세요</h2>
+      <p>처음 방문하신 분도 회원가입 없이 대표 영상을 볼 수 있습니다. 선교지·교회·도장·교육 현장에서 활용할 수 있는 전문 무도교육 자료입니다.</p>
+    </div>
+    <div class="aov-feature-grid">
+      <a class="aov-feature" href="https://www.youtube.com/watch?v=x4HFiyPCQC0" target="_blank" rel="noopener">
+        <span class="aov-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/x4HFiyPCQC0/hqdefault.jpg" alt="태권검도 태검 1장 영상"><i class="aov-play">▶</i></span>
+        <span class="aov-info"><span class="aov-label">태권검도 공개교육</span><strong>태검 1장부터 단계별로 배우기</strong><small>태검 품새 1장~8장과 기본동작·기본베기·시범영상을 만나보세요.</small><span class="aov-link">대표 영상 바로 보기 ↗</span></span>
+      </a>
+      <a class="aov-feature" href="https://www.youtube.com/watch?v=NFkuyVWWoiE" target="_blank" rel="noopener">
+        <span class="aov-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/NFkuyVWWoiE/hqdefault.jpg" alt="경찰무도 호신술 교육 영상"><i class="aov-play">▶</i></span>
+        <span class="aov-info"><span class="aov-label">호신·경호무술 공개교육</span><strong>누구나 익힐 수 있는 생활 호신술</strong><small>경찰무도 기반의 호신·안전 기술을 영상으로 쉽고 차근차근 배워보세요.</small><span class="aov-link">호신술 영상 바로 보기 ↗</span></span>
+      </a>
+      <a class="aov-feature" href="https://www.youtube.com/watch?v=0hnRgcgcAQ8" target="_blank" rel="noopener">
+        <span class="aov-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/0hnRgcgcAQ8/hqdefault.jpg" alt="IPMA SDJ001 호신술 지도자교육 영상"><i class="aov-play">▶</i></span>
+        <span class="aov-info"><span class="aov-label">경찰무도 지도자교육</span><strong>IPMA 호신술 SDJ 001</strong><small>국제경찰무도연합회의 현장 중심 호신술 지도자교육 시리즈를 확인하세요.</small><span class="aov-link">SDJ 001 바로 보기 ↗</span></span>
+      </a>
+    </div>
+    <div class="aov-series">
+      <div class="aov-series-head"><div><h3>경찰무도 호신술 SDJ 시리즈</h3><p>SDJ 001~022 · 총 22편의 지도자교육 영상</p></div><a class="aov-all" href="https://ipma.kr/media/" target="_blank" rel="noopener">전체 22편 자료실 보기 ↗</a></div>
+      <div class="aov-series-grid">
+        <a class="aov-series-card" href="https://www.youtube.com/watch?v=0hnRgcgcAQ8" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/0hnRgcgcAQ8/mqdefault.jpg" alt="SDJ 001"><span>SDJ 001 · 지도자교육 01</span></a>
+        <a class="aov-series-card" href="https://www.youtube.com/watch?v=GnpFoBDcAuM" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/GnpFoBDcAuM/mqdefault.jpg" alt="SDJ 002"><span>SDJ 002 · 지도자교육 02</span></a>
+        <a class="aov-series-card" href="https://www.youtube.com/watch?v=S4dxdGg4nyI" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/S4dxdGg4nyI/mqdefault.jpg" alt="SDJ 003"><span>SDJ 003 · 지도자교육 03</span></a>
+        <a class="aov-series-card" href="https://www.youtube.com/watch?v=GuWJ5WAyWBo" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/GuWJ5WAyWBo/mqdefault.jpg" alt="SDJ 004"><span>SDJ 004 · 지도자교육 04</span></a>
+        <a class="aov-series-card" href="https://www.youtube.com/watch?v=MCs2QjpTO4Q" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/MCs2QjpTO4Q/mqdefault.jpg" alt="SDJ 005"><span>SDJ 005 · 지도자교육 05</span></a>
+        <a class="aov-series-card" href="https://www.youtube.com/watch?v=VZVfHML3aSA" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/VZVfHML3aSA/mqdefault.jpg" alt="SDJ 006"><span>SDJ 006 · 지도자교육 06</span></a>
+      </div>
+      <div class="aov-actions"><a class="aov-btn gold" href="media.html#training-video">ACTS 태권검도 영상자료 보기</a><a class="aov-btn" href="https://ipma.kr/media/" target="_blank" rel="noopener">경찰무도 전체 영상자료 보기 ↗</a></div>
+    </div>
+  </div>
+</section>
 
 
 <section class="v52-journey">
