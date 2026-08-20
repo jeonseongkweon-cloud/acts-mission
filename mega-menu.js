@@ -47,6 +47,62 @@
 
   const items = [...header.querySelectorAll('.mega-item')];
 
+  // 휴대전화에서는 주요 메뉴를 가로로 항상 보여주고,
+  // 누른 메뉴의 하위 항목을 바로 아래에 펼쳐 보여줍니다.
+  const navWrap = header.querySelector('.mega-nav-wrap');
+  let mobilePrimary = null;
+  let mobilePrimaryPanel = null;
+  if (navWrap && !header.querySelector('.acts-mobile-primary')) {
+    mobilePrimary = document.createElement('div');
+    mobilePrimary.className = 'acts-mobile-primary';
+    mobilePrimary.setAttribute('aria-label', '모바일 주요 메뉴');
+    mobilePrimary.innerHTML = `
+      <div class="acts-mobile-primary-scroll"></div>
+      <div class="acts-mobile-primary-hint">메뉴를 누르면 세부 항목이 펼쳐집니다</div>
+      <div class="acts-mobile-primary-panel"></div>`;
+    navWrap.insertAdjacentElement('afterend', mobilePrimary);
+    mobilePrimaryPanel = mobilePrimary.querySelector('.acts-mobile-primary-panel');
+    const quickRow = mobilePrimary.querySelector('.acts-mobile-primary-scroll');
+
+    items.forEach((item, index) => {
+      const sourceTrigger = item.querySelector('.mega-trigger');
+      const sourcePanel = item.querySelector('.mega-panel');
+      if (!sourceTrigger || !sourcePanel) return;
+      const quickButton = document.createElement('button');
+      quickButton.type = 'button';
+      quickButton.textContent = sourceTrigger.childNodes[0]?.textContent?.trim() || sourceTrigger.textContent.replace('⌄', '').trim();
+      quickButton.setAttribute('aria-expanded', 'false');
+      quickButton.dataset.menuIndex = String(index);
+      quickButton.addEventListener('click', event => {
+        event.stopPropagation();
+        const wasOpen = quickButton.classList.contains('is-active');
+        quickRow.querySelectorAll('button').forEach(button => {
+          button.classList.remove('is-active');
+          button.setAttribute('aria-expanded', 'false');
+        });
+        if (wasOpen) {
+          mobilePrimaryPanel.classList.remove('is-open');
+          mobilePrimaryPanel.replaceChildren();
+          return;
+        }
+        quickButton.classList.add('is-active');
+        quickButton.setAttribute('aria-expanded', 'true');
+        mobilePrimaryPanel.innerHTML = sourcePanel.innerHTML;
+        mobilePrimaryPanel.classList.add('is-open');
+      });
+      quickRow.appendChild(quickButton);
+    });
+
+    mobilePrimaryPanel.addEventListener('click', event => {
+      if (!event.target.closest('a')) return;
+      mobilePrimaryPanel.classList.remove('is-open');
+      quickRow.querySelectorAll('button').forEach(button => {
+        button.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
   const setOpen = (item, open) => {
     item.classList.toggle('is-open', open);
     const trigger = item.querySelector('.mega-trigger');
@@ -96,6 +152,13 @@
       closeAll();
       header.classList.remove('menu-open');
       if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
+      if (mobilePrimaryPanel) {
+        mobilePrimaryPanel.classList.remove('is-open');
+        mobilePrimary?.querySelectorAll('button').forEach(button => {
+          button.classList.remove('is-active');
+          button.setAttribute('aria-expanded', 'false');
+        });
+      }
     }
   });
 
