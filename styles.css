@@ -143,6 +143,8 @@ header .menu{gap:10px!important;font-size:10.5px!important}@media(max-width:1180
   .acts-mobile-primary{display:block;position:relative;background:#0a2540;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(216,170,72,.32)}
   .acts-mobile-primary-scroll{display:flex;gap:4px;overflow-x:auto;padding:7px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .acts-mobile-primary-scroll::-webkit-scrollbar{display:none}
+  .acts-mobile-more{position:absolute;right:0;top:0;bottom:25px;z-index:3;width:44px;display:flex;align-items:center;justify-content:center;border:0;background:linear-gradient(90deg,rgba(10,37,64,0),#0a2540 46%);color:#f3c967;font-size:25px;font-weight:900;pointer-events:none;transition:opacity .18s ease}
+  .acts-mobile-more.is-hidden{opacity:0;visibility:hidden}
   .acts-mobile-primary button{flex:0 0 auto;min-height:38px;padding:0 13px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:#102f4e;color:#f5f8fb;font-size:12px;font-weight:900;white-space:nowrap;cursor:pointer}
   .acts-mobile-primary button::after{content:'⌄';margin-left:6px;color:#e2b55c}
   .acts-mobile-primary button.is-active{background:#d7aa4d;border-color:#e7c779;color:#071a2e}
@@ -154,6 +156,9 @@ header .menu{gap:10px!important;font-size:10.5px!important}@media(max-width:1180
   .acts-mobile-primary-hint{padding:0 12px 7px;color:#aebed0;font-size:9px;text-align:right}
 }
 @media(max-width:560px){.acts-mobile-primary-panel.is-open{grid-template-columns:1fr}}
+
+/* 한글 문장이 글자 중간에서 부자연스럽게 끊기지 않도록 조정 */
+.v5-section-head h2,.v5-section-head p,.v5-card h3,.v5-card p,.v52-lead,.network-footer-links h2,.network-footer-links .nfl-desc{word-break:keep-all;overflow-wrap:break-word}
 
 /* =========================================================
    v5.1.1 — Mega menu hover stability + compact height

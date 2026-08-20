@@ -58,11 +58,18 @@
     mobilePrimary.setAttribute('aria-label', '모바일 주요 메뉴');
     mobilePrimary.innerHTML = `
       <div class="acts-mobile-primary-scroll"></div>
+      <div class="acts-mobile-more" aria-hidden="true">›</div>
       <div class="acts-mobile-primary-hint">메뉴를 누르면 세부 항목이 펼쳐집니다</div>
       <div class="acts-mobile-primary-panel"></div>`;
     navWrap.insertAdjacentElement('afterend', mobilePrimary);
     mobilePrimaryPanel = mobilePrimary.querySelector('.acts-mobile-primary-panel');
     const quickRow = mobilePrimary.querySelector('.acts-mobile-primary-scroll');
+    const moreArrow = mobilePrimary.querySelector('.acts-mobile-more');
+
+    const updateMoreArrow = () => {
+      const hasMore = quickRow.scrollLeft + quickRow.clientWidth < quickRow.scrollWidth - 4;
+      moreArrow?.classList.toggle('is-hidden', !hasMore);
+    };
 
     items.forEach((item, index) => {
       const sourceTrigger = item.querySelector('.mega-trigger');
@@ -92,6 +99,10 @@
       });
       quickRow.appendChild(quickButton);
     });
+
+    quickRow.addEventListener('scroll', updateMoreArrow, { passive: true });
+    window.addEventListener('resize', updateMoreArrow, { passive: true });
+    requestAnimationFrame(updateMoreArrow);
 
     mobilePrimaryPanel.addEventListener('click', event => {
       if (!event.target.closest('a')) return;
