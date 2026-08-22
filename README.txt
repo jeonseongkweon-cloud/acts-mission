@@ -1,11 +1,9 @@
-ACTS v5.0 기도센터 클릭 확대 전용 패치
+ACTS 20-language photo chooser patch
 
-수정 내용
-- 기도문 썸네일을 클릭하면 검은 배경 위에 크게 표시됩니다.
-- 모바일에서도 화면 폭에 맞춰 크게 표시되고 위아래 스크롤이 가능합니다.
-- X 버튼, 검은 배경, ESC 키로 닫을 수 있습니다.
-- 다른 홈페이지 파일은 수정하지 않습니다.
+Changed file only: join.html
 
-적용 방법
-GitHub acts-mission 저장소 최상위의 prayer.html만 이 파일로 덮어쓰세요.
-업로드 후 acts.pe.kr/prayer.html에서 Ctrl+F5를 눌러 새로고침하세요.
+Upload join.html to the root of the ACTS GitHub repository and overwrite the existing join.html.
+No Supabase SQL changes are required.
+After deployment, press Ctrl+F5.
+
+Change: browser-native Korean file chooser text is replaced with an ACTS custom photo selection control translated in all 20 supported languages.
