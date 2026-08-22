@@ -1,9 +1,27 @@
-ACTS 20-language photo chooser patch
+ACTS 선교연합 20개 언어 홈페이지 패치 v6.0
 
-Changed file only: join.html
+[목적]
+전 세계 선교사와 기독교인이 ACTS 홈페이지의 주요 내용을 자기 언어로 볼 수 있도록 20개 언어 선택 기능을 추가한 패치입니다.
 
-Upload join.html to the root of the ACTS GitHub repository and overwrite the existing join.html.
-No Supabase SQL changes are required.
-After deployment, press Ctrl+F5.
+[지원 언어]
+한국어, 영어, 중국어, 일본어, 스페인어, 프랑스어, 독일어, 포르투갈어, 이탈리아어, 러시아어, 몽골어, 베트남어, 태국어, 인도네시아어, 말레이어, 필리핀어, 힌디어, 아랍어, 터키어, 네팔어
 
-Change: browser-native Korean file chooser text is replaced with an ACTS custom photo selection control translated in all 20 supported languages.
+[설치 방법]
+1. 이 ZIP을 압축 해제합니다.
+2. 안의 파일과 폴더를 ACTS GitHub 저장소의 같은 위치에 덮어씁니다.
+3. assets/flags 폴더도 반드시 함께 올립니다.
+4. 업로드 후 홈페이지에서 Ctrl+F5로 새로고침합니다.
+
+[주의]
+- Supabase 및 회원 DB는 수정하지 않습니다.
+- join.html의 기존 20개 언어 회원가입 기능은 그대로 유지합니다.
+- 동영상 자막과 PDF 교재 번역은 이번 패치에 포함하지 않습니다.
+- 홈페이지 본문 번역은 Google 번역 서비스를 이용하므로 사용자의 인터넷 환경에 따라 번역 서비스 접속이 제한될 수 있습니다.
+
+[수정 파일]
+- 공개 HTML 페이지 40여 개
+- assets/acts-global-language.js
+- assets/acts-global-language.css
+- assets/flags/*.png
+
+버전: ACTS Global Language v6.0
