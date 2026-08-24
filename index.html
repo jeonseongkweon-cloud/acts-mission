@@ -322,7 +322,7 @@
         <span class="acts-gms-kicker"><span data-acts-gms-i18n="kicker">CONNECTED PROFESSIONAL NETWORK · LIVE</span></span>
         <h2><span data-acts-gms-i18n="title">ACTS와 연결된 글로벌 전문 네트워크</span></h2>
         <p><span data-acts-gms-i18n="subtitle">ACTS는 선교단체로서 독립 운영되며, 아래 숫자는 선교·교육·안전·무도 현장에서 연결되는 전문 네트워크의 실시간 공개 지표입니다.</span></p>
-        <div class="acts-gms-version">ACTS v6.1.5 · HOME LINK STANDARD · GMS LIVE</div>
+        <div class="acts-gms-version">ACTS v6.1.6 · GATEWAY STATS · GMS LIVE</div>
       </div>
       <div class="acts-gms-status">
         <span><span data-acts-gms-i18n="statusLabel">실시간 연결 상태</span></span>
@@ -1413,26 +1413,17 @@ command.style.setProperty(
   async function loadActsNetwork(){
     const status=document.getElementById('actsGmsStatus');
     try{
-      const [all,wtkf,ipma,idp]=await Promise.all([
-        db.rpc('gms_get_public_stats',{p_organization_code:null}),
-        db.rpc('gms_get_public_stats',{p_organization_code:'WTKF'}),
-        db.rpc('gms_get_public_stats',{p_organization_code:'IPMA'}),
-        db.rpc('gms_get_public_stats',{p_organization_code:'IDP'})
-      ]);
+      // v6.1.6: IPMA Gateway와 동일한 단일 공개 통계 RPC를 사용합니다.
+      // 이렇게 해야 일괄 등록/조직 지정 회원도 모든 사이트에서 같은 기준으로 집계됩니다.
+      const gateway=await db.rpc('gms_get_gateway_stats_v1');
+      if(gateway.error) throw gateway.error;
 
-      if(all.error||wtkf.error||ipma.error||idp.error) throw new Error('GMS stats error');
+      const A=Array.isArray(gateway.data)?(gateway.data[0]||{}):(gateway.data||{});
 
-      const A=Array.isArray(all.data)?(all.data[0]||{}):(all.data||{});
-      const W=Array.isArray(wtkf.data)?(wtkf.data[0]||{}):(wtkf.data||{});
-      const P=Array.isArray(ipma.data)?(ipma.data[0]||{}):(ipma.data||{});
-      const D=Array.isArray(idp.data)?(idp.data[0]||{}):(idp.data||{});
-
-      const allTotal=n(A.public_members_total) || (n(A.legacy_unique_people)+n(A.online_members_total));
-
-      put('actsNetAll',allTotal);
-      put('actsNetWTKF',orgTotal(W));
-      put('actsNetIPMA',orgTotal(P));
-      put('actsNetIDP',orgTotal(D));
+      put('actsNetAll',A.public_members_total);
+      put('actsNetWTKF',A.wtkf_members_total);
+      put('actsNetIPMA',A.ipma_members_total);
+      put('actsNetIDP',A.idp_members_total);
       put('actsNetGlobal',A.global_approved);
 
       if(status){
