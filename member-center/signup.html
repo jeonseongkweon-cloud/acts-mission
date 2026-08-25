@@ -50,7 +50,7 @@ form.addEventListener('submit',async e=>{
  const {data,error}=await db.auth.signUp({
    email:String(f.get('email')).trim(),
    password:String(p),
-   options:{data:{name:String(f.get('name')).trim()},emailRedirectTo:'https://acts.pe.kr/member-center/login.html'}
+   options:{data:{name:String(f.get('name')).trim(),gms_portal_signup:true,source_org:'GLOBAL'},emailRedirectTo:'https://acts.pe.kr/member-center/login.html'}
  });
  if(error)set(error.message,'mc-err');
  else {form.reset();set('가입되었습니다. 이메일의 인증 링크를 누른 뒤 로그인해 주세요.','mc-ok')}
