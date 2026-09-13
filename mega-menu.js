@@ -1,4 +1,4 @@
-// ACTS MISSION ALLIANCE v5.1.5 — SIMPLE DESKTOP MEGA MENU
+// ACTS MISSION ALLIANCE v5.1.6 — SIMPLE DESKTOP MEGA MENU + MEMBER ACCESS
 // Desktop: keep the first horizontal navigation compact and move secondary areas into one All Menu.
 (() => {
   const header = document.querySelector('.mega-header');
@@ -59,7 +59,38 @@
     }
   }
 
-  // 참여하기 메가메뉴 최상단에 회원가입/로그인/MY PAGE를 항상 먼저 보이게 합니다.
+  // 상단 로그인 메뉴: 신규 가입, 기존 로그인, 아이디 안내, 비밀번호 재설정을 한 곳에서 제공합니다.
+  if (menu && !menu.querySelector('[data-login-menu]')) {
+    const loginItem = document.createElement('div');
+    loginItem.className = 'mega-item acts-login-menu-item';
+    loginItem.setAttribute('data-login-menu', 'true');
+    loginItem.setAttribute('data-primary-top', 'true');
+    loginItem.innerHTML = `
+      <button class="mega-trigger acts-login-trigger" type="button">로그인 <span>⌄</span></button>
+      <div class="mega-panel mega-panel-3 acts-login-panel">
+        <section class="acts-login-main">
+          <h3>MEMBER LOGIN · 회원 로그인</h3>
+          <a class="acts-member-strong" href="/member-center/login.html">🔐 통합회원 로그인</a>
+          <a class="acts-member-strong" href="/member-center/signup.html">✨ 처음 오셨나요? 회원가입</a>
+          <a href="/member-center/mypage.html">MY PAGE</a>
+        </section>
+        <section>
+          <h3>ACCOUNT HELP · 계정 도움</h3>
+          <a href="/member-center/account-help.html#id-help">아이디(가입 이메일) 안내</a>
+          <a href="/member-center/account-help.html#password-reset">비밀번호 재설정</a>
+          <p class="acts-login-note">ACTS 통합계정의 아이디는 가입할 때 사용한 이메일입니다.</p>
+        </section>
+        <section>
+          <h3>FIRST VISIT · 처음 오신 분</h3>
+          <a href="/participation.html">ACTS 참여 안내</a>
+          <a href="/member-center/signup.html">통합회원 가입 시작</a>
+          <a href="/admin.html">⚙ 관리자 로그인</a>
+        </section>
+      </div>`;
+    menu.prepend(loginItem);
+  }
+
+  // 참여하기 메가메뉴 최상단에도 회원 접근 동선을 유지합니다.
   if (menu) {
     const joinTrigger = [...menu.querySelectorAll('.mega-trigger')]
       .find(btn => btn.textContent.includes('참여하기'));
@@ -78,7 +109,7 @@
     }
   }
 
-  // 데스크톱 상단은 소개 / 소통센터 / 참여하기 / 전체메뉴만 보이게 정리합니다.
+  // 데스크톱 상단은 로그인 / 소개 / 소통센터 / 참여하기 / 전체메뉴만 보이게 정리합니다.
   // 숨기는 것이 아니라 기존 메뉴 패널들을 전체메뉴에 복제해 접근성을 그대로 보존합니다.
   if (menu && !menu.querySelector('[data-all-menu]')) {
     const allItem = document.createElement('div');
@@ -89,7 +120,7 @@
       <div class="mega-panel mega-panel-4 acts-all-menu-panel"></div>`;
 
     const allPanel = allItem.querySelector('.acts-all-menu-panel');
-    const keepTop = ['소개', '소통센터', '참여하기'];
+    const keepTop = ['로그인', '소개', '소통센터', '참여하기'];
     const currentItems = [...menu.querySelectorAll(':scope > .mega-item')];
 
     currentItems.forEach(item => {
@@ -129,8 +160,10 @@
         #megaMenu > .mega-item[data-primary-top="true"],
         #megaMenu > .mega-item[data-all-menu="true"]{display:block!important}
         .acts-all-menu-panel{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-height:72vh;overflow:auto}
-        .acts-member-quick{background:linear-gradient(180deg,#fff9e9,#fff);border-radius:12px;padding:14px!important;border:1px solid rgba(196,143,37,.25)}
-        .acts-member-quick .acts-member-strong{font-weight:900;color:#8b6114!important}
+        .acts-member-quick,.acts-login-main{background:linear-gradient(180deg,#fff9e9,#fff);border-radius:12px;padding:14px!important;border:1px solid rgba(196,143,37,.25)}
+        .acts-member-quick .acts-member-strong,.acts-login-panel .acts-member-strong{font-weight:900;color:#8b6114!important}
+        .acts-login-note{font-size:12px;line-height:1.6;color:#667085;margin:9px 0 0}
+        .acts-login-trigger{color:#e5b74f!important;font-weight:900!important}
       }
       @media(max-width:980px){
         #megaMenu > .mega-item[data-secondary-top="true"]{display:block!important}
