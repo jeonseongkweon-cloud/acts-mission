@@ -5,7 +5,7 @@
 <title>ACTS 신고관리</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;background:#f4f6f9;color:#1f2937}header{background:#061A33;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}header a{color:#d6ae55;text-decoration:none;font-weight:800}.wrap{max-width:1100px;margin:32px auto;padding:0 18px 60px}.intro{background:#fff;border-top:4px solid #d6ae55;border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,.05)}.intro h2{margin:0 0 8px;color:#061A33}.intro p{margin:0;color:#667085;line-height:1.7}.status{padding:20px;text-align:center;color:#667085}.list{display:grid;gap:14px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.04)}.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.title{font-size:18px;font-weight:900;color:#061A33}.meta{font-size:12px;color:#8a94a3;margin-top:6px}.reason{margin-top:14px;padding:13px;background:#fff8e8;border:1px solid #f1d89b;border-radius:10px;line-height:1.6}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.actions button{border:0;border-radius:8px;padding:9px 13px;font-weight:800;cursor:pointer}.review{background:#e8eef6;color:#061A33}.hide{background:#b42318;color:#fff}.keep{background:#e7f6ec;color:#176b37}.open{background:#061A33;color:#fff}.empty{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:40px 20px;text-align:center;color:#667085}.error-detail{margin-top:8px;font-size:12px;color:#b42318;word-break:break-word}@media(max-width:700px){.actions button{flex:1;min-width:120px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;background:#f4f6f9;color:#1f2937}header{background:#061A33;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}header a{color:#d6ae55;text-decoration:none;font-weight:800}.wrap{max-width:1100px;margin:32px auto;padding:0 18px 60px}.intro{background:#fff;border-top:4px solid #d6ae55;border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,.05)}.intro h2{margin:0 0 8px;color:#061A33}.intro p{margin:0;color:#667085;line-height:1.7}.status{padding:20px;text-align:center;color:#667085}.list{display:grid;gap:14px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.04)}.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.title{font-size:18px;font-weight:900;color:#061A33}.meta{font-size:12px;color:#8a94a3;margin-top:6px}.reason{margin-top:14px;padding:13px;background:#fff8e8;border:1px solid #f1d89b;border-radius:10px;line-height:1.6}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.actions button{border:0;border-radius:8px;padding:9px 13px;font-weight:800;cursor:pointer}.actions button:disabled{opacity:.55;cursor:wait}.review{background:#e8eef6;color:#061A33}.hide{background:#b42318;color:#fff}.keep{background:#e7f6ec;color:#176b37}.open{background:#061A33;color:#fff}.empty{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:40px 20px;text-align:center;color:#667085}.error-detail{margin-top:8px;font-size:12px;color:#b42318;word-break:break-word}@media(max-width:700px){.actions button{flex:1;min-width:120px}}
 </style></head><body>
 <header><div><h1>ACTS 신고관리</h1><div style="color:#d6ae55;font-size:12px;margin-top:4px">GRAND OPEN MODERATION</div></div><a href="/admin-dashboard.html">← 관리자 대시보드</a></header>
 <main class="wrap"><section class="intro"><h2>게시글 신고 접수함</h2><p>회원 신고를 확인하고 게시글을 검토중·숨김·유지 처리할 수 있습니다.</p></section><div id="status" class="status">관리자 권한을 확인하고 있습니다...</div><section id="list" class="list"></section></main>
@@ -41,27 +41,27 @@ async function load(){
     list.querySelectorAll('button[data-action]').forEach(btn=>btn.addEventListener('click',handleAction));
   }catch(e){
     console.error('ACTS report admin load error:',e);
+    status.style.display='block';
     status.innerHTML='신고 목록을 불러오지 못했습니다.<div class="error-detail">'+esc(e?.message||e?.code||'Unknown error')+'</div>';
   }
 }
 async function handleAction(e){
-  const card=e.currentTarget.closest('.card');
-  const reportId=Number(card.dataset.reportId),postId=Number(card.dataset.postId),category=card.dataset.category,action=e.currentTarget.dataset.action;
+  const button=e.currentTarget;
+  const card=button.closest('.card');
+  const reportId=Number(card.dataset.reportId),postId=Number(card.dataset.postId),category=card.dataset.category,action=button.dataset.action;
   if(action==='open'){window.open('/post-detail.html?id='+encodeURIComponent(postId)+'&category='+encodeURIComponent(category),'_blank','noopener');return}
-  e.currentTarget.disabled=true;
+  const allButtons=[...card.querySelectorAll('button[data-action]')];
+  allButtons.forEach(b=>b.disabled=true);
   try{
-    if(action==='review'){
-      let r=await client.from('posts').update({moderation_status:'review'}).eq('id',postId);if(r.error)throw r.error;
-      r=await client.from('acts_post_reports').update({status:'reviewed',reviewed_at:new Date().toISOString()}).eq('id',reportId);if(r.error)throw r.error;
-    }else if(action==='hide'){
-      let r=await client.from('posts').update({moderation_status:'hidden'}).eq('id',postId);if(r.error)throw r.error;
-      r=await client.from('acts_post_reports').update({status:'actioned',reviewed_at:new Date().toISOString()}).eq('id',reportId);if(r.error)throw r.error;
-    }else if(action==='keep'){
-      let r=await client.from('posts').update({moderation_status:'visible'}).eq('id',postId);if(r.error)throw r.error;
-      r=await client.from('acts_post_reports').update({status:'dismissed',reviewed_at:new Date().toISOString()}).eq('id',reportId);if(r.error)throw r.error;
-    }
+    const {data,error}=await client.rpc('acts_moderate_report',{p_report_id:reportId,p_action:action});
+    if(error) throw error;
+    console.log('ACTS moderation result:',data);
     await load();
-  }catch(err){console.error(err);alert('처리하지 못했습니다. 잠시 후 다시 시도해주세요.');e.currentTarget.disabled=false}
+  }catch(err){
+    console.error('ACTS report moderation error:',err);
+    alert('처리하지 못했습니다.\n'+(err?.message||err?.code||'알 수 없는 오류'));
+    allButtons.forEach(b=>b.disabled=false);
+  }
 }
 document.addEventListener('DOMContentLoaded',load);
 </script><script src="assets/js/cross-site-network.js"></script></body></html>
