@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ACTS 신고관리</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;background:#f4f6f9;color:#1f2937}header{background:#061A33;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}header a{color:#d6ae55;text-decoration:none;font-weight:800}.wrap{max-width:1100px;margin:32px auto;padding:0 18px 60px}.intro{background:#fff;border-top:4px solid #d6ae55;border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,.05)}.intro h2{margin:0 0 8px;color:#061A33}.intro p{margin:0;color:#667085;line-height:1.7}.status{padding:20px;text-align:center;color:#667085}.list{display:grid;gap:14px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.04)}.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.title{font-size:18px;font-weight:900;color:#061A33}.meta{font-size:12px;color:#8a94a3;margin-top:6px}.reason{margin-top:14px;padding:13px;background:#fff8e8;border:1px solid #f1d89b;border-radius:10px;line-height:1.6}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.actions button{border:0;border-radius:8px;padding:9px 13px;font-weight:800;cursor:pointer}.review{background:#e8eef6;color:#061A33}.hide{background:#b42318;color:#fff}.keep{background:#e7f6ec;color:#176b37}.open{background:#061A33;color:#fff}.empty{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:40px 20px;text-align:center;color:#667085}@media(max-width:700px){.actions button{flex:1;min-width:120px}}
+</style>
+</head>
+<body>
+<header><div><h1>ACTS 신고관리</h1><div style="color:#d6ae55;font-size:12px;margin-top:4px">GRAND OPEN MODERATION</div></div><a href="/admin-dashboard.html">← 관리자 대시보드</a></header>
+<main class="wrap">
+<section class="intro"><h2>게시글 신고 접수함</h2><p>회원 신고를 확인하고 게시글을 검토중·숨김·유지 처리할 수 있습니다.</p></section>
+<div id="status" class="status">관리자 권한을 확인하고 있습니다...</div>
+<section id="list" class="list"></section>
+</main>
+<script>
+async function getClient(){
+  const html=await fetch('/admin-dashboard.html',{cache:'no-store'}).then(r=>r.text());
+  const url=(html.match(/https:\/\/[a-z0-9]+\.supabase\.co/i)||[])[0];
+  const key=(html.match(/sb_publishable_[A-Za-z0-9_\-]+/)||[])[0];
+  if(!url||!key) throw new Error('Supabase config not found');
+  return window.supabase.createClient(url,key);
+}
+function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;')}
+function fmt(v){return v?new Date(v).toLocaleString('ko-KR'):''}
+let client;
+async function load(){
+  const status=document.getElementById('status');
+  const list=document.getElementById('list');
+  try{
+    client=await getClient();
+    const {data:{session}}=await client.auth.getSession();
+    if(!session){location.replace('/admin.html');return}
+    const {data:isAdmin,error:adminError}=await client.rpc('acts_is_admin');
+    if(adminError||isAdmin!==true){await client.auth.signOut();location.replace('/admin.html?denied=1');return}
+    const {data:reports,error}=await client.from('acts_post_reports').select('id,post_id,reason,details,status,created_at').order('created_at',{ascending:false});
+    if(error) throw error;
+    const ids=[...new Set((reports||[]).map(r=>r.post_id))];
+    let posts=[];
+    if(ids.length){
+      const res=await client.from('posts').select('id,title,author,category,moderation_status,is_published').in('id',ids);
+      if(res.error) throw res.error;
+      posts=res.data||[];
+    }
+    const postMap=Object.fromEntries(posts.map(p=>[String(p.id),p]));
+    status.style.display='none';
+    if(!reports||!reports.length){list.innerHTML='<div class="empty">접수된 신고가 없습니다.</div>';return}
+    list.innerHTML=reports.map(r=>{
+      const p=postMap[String(r.post_id)]||{};
+      return `<article class="card" data-report-id="${r.id}" data-post-id="${r.post_id}"><div class="top"><div><div class="title">${esc(p.title||'삭제되었거나 확인할 수 없는 게시글')}</div><div class="meta">${esc(p.category||'')} · ${esc(p.author||'')} · 신고 ${esc(fmt(r.created_at))}</div></div><div class="meta">신고상태: ${esc(r.status)} / 게시글: ${esc(p.moderation_status||'-')}</div></div><div class="reason"><b>신고 사유</b><br>${esc(r.reason)}${r.details?`<br><small>${esc(r.details)}</small>`:''}</div><div class="actions"><button class="open" data-action="open">게시글 보기</button><button class="review" data-action="review">검토중</button><button class="hide" data-action="hide">숨김</button><button class="keep" data-action="keep">유지·종결</button></div></article>`;
+    }).join('');
+    list.querySelectorAll('button[data-action]').forEach(btn=>btn.addEventListener('click',handleAction));
+  }catch(e){console.error(e);status.textContent='신고 목록을 불러오지 못했습니다.'}
+}
+async function handleAction(e){
+  const card=e.currentTarget.closest('.card');
+  const reportId=Number(card.dataset.reportId), postId=Number(card.dataset.postId), action=e.currentTarget.dataset.action;
+  if(action==='open'){window.open('/post-detail.html?id='+postId,'_blank','noopener');return}
+  e.currentTarget.disabled=true;
+  try{
+    if(action==='review'){
+      let r=await client.from('posts').update({moderation_status:'review'}).eq('id',postId); if(r.error) throw r.error;
+      r=await client.from('acts_post_reports').update({status:'reviewed',reviewed_at:new Date().toISOString()}).eq('id',reportId); if(r.error) throw r.error;
+    }else if(action==='hide'){
+      let r=await client.from('posts').update({moderation_status:'hidden'}).eq('id',postId); if(r.error) throw r.error;
+      r=await client.from('acts_post_reports').update({status:'actioned',reviewed_at:new Date().toISOString()}).eq('id',reportId); if(r.error) throw r.error;
+    }else if(action==='keep'){
+      let r=await client.from('posts').update({moderation_status:'visible'}).eq('id',postId); if(r.error) throw r.error;
+      r=await client.from('acts_post_reports').update({status:'dismissed',reviewed_at:new Date().toISOString()}).eq('id',reportId); if(r.error) throw r.error;
+    }
+    await load();
+  }catch(err){console.error(err);alert('처리하지 못했습니다. 잠시 후 다시 시도해주세요.');e.currentTarget.disabled=false}
+}
+document.addEventListener('DOMContentLoaded',load);
+</script>
+<script src="assets/js/cross-site-network.js"></script>
+</body></html>
