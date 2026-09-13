@@ -3,6 +3,7 @@
   const path=location.pathname;
   const isAdminPage=/(^|\/)admin(?:-dashboard|-posts)?\.html$/i.test(path);
   const isAdminDashboard=/\/admin-dashboard\.html$/i.test(path);
+  const isAdminPosts=/\/admin-posts\.html$/i.test(path);
   const isCommunityPage=/\/community-board\.html$/i.test(path);
   const isPostDetail=/\/post-detail\.html$/i.test(path);
 
@@ -44,6 +45,7 @@
       .acts-community-compose textarea{min-height:120px;resize:vertical;margin-top:9px;line-height:1.6}.acts-community-compose input:focus,.acts-community-compose textarea:focus{border-color:#d6ae55;box-shadow:0 0 0 3px rgba(214,174,85,.12)}
       .acts-compose-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:10px}.acts-compose-btn,.acts-login-cta{border:0;border-radius:9px;padding:10px 15px;background:#061A33;color:#fff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.acts-compose-btn:hover,.acts-login-cta:hover{background:#0B2B50}.acts-compose-status{font-size:12px;font-weight:700;color:#6b7280}
       .acts-report-wrap{margin-top:18px;padding-top:14px;border-top:1px solid #eef1f5;display:flex;justify-content:flex-end}.acts-report-btn{border:1px solid #d8dee7;background:#fff;color:#667085;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer}.acts-report-btn:hover{border-color:#b42318;color:#b42318;background:#fff8f7}
+      .acts-admin-post-link{cursor:pointer;text-decoration:underline;text-underline-offset:3px}.acts-admin-post-link:hover{color:#9a7426}.acts-view-btn{background:#061A33!important;color:#fff!important}
       @media(max-width:700px){.acts-community-compose{padding:16px}.acts-compose-btn,.acts-login-cta{width:100%;min-height:44px}.acts-report-wrap{justify-content:flex-start}}
     `;document.head.appendChild(style);
   }
@@ -54,6 +56,43 @@
     const card=document.createElement('div');card.className='card';card.id='actsReportAdminCard';card.setAttribute('role','button');card.tabIndex=0;
     card.innerHTML='<h3>🚨 신고관리</h3><p>회원 신고 확인 · 검토 · 숨김 · 유지 처리</p><small>ACTS Moderation</small>';
     const open=()=>location.href='admin-reports.html';card.addEventListener('click',open);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});grid.appendChild(card);
+  }
+
+  function setupAdminPostLinks(){
+    if(!isAdminPosts) return;
+    addGrandOpenStyles();
+    const list=document.getElementById('postsList');if(!list) return;
+    const client=getActsClient();if(!client) return;
+    const category=new URLSearchParams(location.search).get('category')||'news';
+
+    async function openPost(item){
+      const titleEl=item.querySelector('.post-title');
+      const title=(titleEl?.textContent||'').trim();
+      if(!title) return;
+      try{
+        const {data,error}=await client.from('posts').select('id,category').eq('category',category).eq('title',title).order('created_at',{ascending:false}).limit(1).maybeSingle();
+        if(error) throw error;
+        if(!data?.id){alert('게시글 상세주소를 찾지 못했습니다.');return;}
+        location.href='/post-detail.html?id='+encodeURIComponent(data.id)+'&category='+encodeURIComponent(data.category||category);
+      }catch(error){console.error('ACTS admin post open error:',error);alert('게시글을 열지 못했습니다.');}
+    }
+
+    function decorate(){
+      list.querySelectorAll('.post-item').forEach(item=>{
+        const title=item.querySelector('.post-title');
+        if(title&&!title.dataset.detailLinked){
+          title.dataset.detailLinked='1';title.classList.add('acts-admin-post-link');title.title='게시글 상세보기';title.tabIndex=0;title.setAttribute('role','link');
+          title.addEventListener('click',()=>openPost(item));
+          title.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPost(item);}});
+        }
+        const actions=item.querySelector('.post-actions');
+        if(actions&&!actions.querySelector('.acts-view-btn')){
+          const view=document.createElement('button');view.type='button';view.className='acts-view-btn';view.textContent='보기';view.addEventListener('click',()=>openPost(item));actions.insertBefore(view,actions.firstChild);
+        }
+      });
+    }
+    decorate();
+    new MutationObserver(decorate).observe(list,{childList:true,subtree:true});
   }
 
   async function setupCommunityWriter(){
@@ -98,7 +137,7 @@
     if(inject()) return;const observer=new MutationObserver(()=>{if(inject()) observer.disconnect();});observer.observe(root,{childList:true,subtree:true});
   }
 
-  enforceActsAdmin();setupAdminReportCard();setupCommunityWriter();setupPostReport();
+  enforceActsAdmin();setupAdminReportCard();setupAdminPostLinks();setupCommunityWriter();setupPostReport();
 
   if(document.getElementById('acts-external-sites-dock')) return;
   const style=document.createElement('style');style.textContent='#acts-external-sites-dock{position:fixed;right:16px;bottom:16px;z-index:2147483000;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}#acts-external-sites-dock .ae-toggle{border:1px solid rgba(216,177,90,.5);background:#fff;color:#17233b;border-radius:999px;padding:10px 14px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.18);cursor:pointer}#acts-external-sites-dock .ae-panel{display:none;position:absolute;right:0;bottom:48px;width:250px;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:16px;padding:10px;box-shadow:0 16px 44px rgba(0,0,0,.22)}#acts-external-sites-dock.open .ae-panel{display:block}#acts-external-sites-dock .ae-title{font-size:11px;color:#9a762b;font-weight:900;padding:4px 6px 8px}#acts-external-sites-dock a{display:block;text-decoration:none;color:#17233b;padding:10px;border-radius:10px;font-size:13px;font-weight:800}#acts-external-sites-dock a:hover{background:#f4f6f9}#acts-external-sites-dock small{display:block;color:#667085;padding:7px 6px 2px;line-height:1.4}';document.head.appendChild(style);
