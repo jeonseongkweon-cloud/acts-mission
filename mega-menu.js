@@ -1,16 +1,14 @@
-// ACTS MISSION ALLIANCE v5.1.4 — STICKY DESKTOP MEGA MENU
-// Desktop: hover/click opens a menu and it stays open until another menu,
-// an outside click, Escape, or a submenu link is selected.
+// ACTS MISSION ALLIANCE v5.1.5 — SIMPLE DESKTOP MEGA MENU
+// Desktop: keep the first horizontal navigation compact and move secondary areas into one All Menu.
 (() => {
   const header = document.querySelector('.mega-header');
   if (!header) return;
 
   const desktopMQ = window.matchMedia('(min-width: 981px)');
   const mobileBtn = header.querySelector('.mega-mobile-btn');
+  const menu = header.querySelector('#megaMenu');
 
   // ACTS MISSION TOOLS: shared navigation injected on every page that uses this menu script.
-  // This avoids editing dozens of duplicated HTML headers individually.
-  const menu = header.querySelector('#megaMenu');
   if (menu && !menu.querySelector('[data-mission-tools-menu]')) {
     const item = document.createElement('div');
     item.className = 'mega-item';
@@ -37,7 +35,6 @@
         </section>
       </div>`;
 
-    // Place it immediately before Prayer Center when possible.
     const prayerTrigger = [...menu.querySelectorAll('.mega-trigger')]
       .find(btn => btn.textContent.includes('기도센터'));
     const prayerItem = prayerTrigger?.closest('.mega-item');
@@ -45,8 +42,7 @@
     else menu.appendChild(item);
   }
 
-  // 관리자 로그인은 상단에 별도 버튼을 만들지 않고 '참여하기' 메가메뉴 안에 숨겨 둡니다.
-  // PC/모바일 모두 같은 메가메뉴 구조를 사용하므로 한 번만 추가하면 공통 적용됩니다.
+  // 관리자 로그인은 상단에 별도 버튼을 만들지 않고 '참여하기' 메가메뉴 안에 둡니다.
   if (menu && !menu.querySelector('[data-acts-admin-link]')) {
     const joinTrigger = [...menu.querySelectorAll('.mega-trigger')]
       .find(btn => btn.textContent.includes('참여하기'));
@@ -61,6 +57,88 @@
       adminLink.title = 'ACTS 관리자 로그인';
       target.appendChild(adminLink);
     }
+  }
+
+  // 참여하기 메가메뉴 최상단에 회원가입/로그인/MY PAGE를 항상 먼저 보이게 합니다.
+  if (menu) {
+    const joinTrigger = [...menu.querySelectorAll('.mega-trigger')]
+      .find(btn => btn.textContent.includes('참여하기'));
+    const joinPanel = joinTrigger?.closest('.mega-item')?.querySelector('.mega-panel');
+    if (joinPanel && !joinPanel.querySelector('[data-member-quick]')) {
+      const quick = document.createElement('section');
+      quick.setAttribute('data-member-quick', 'true');
+      quick.className = 'acts-member-quick';
+      quick.innerHTML = `
+        <h3>MEMBER · 회원</h3>
+        <a class="acts-member-strong" href="/member-center/signup.html">✨ 통합회원 가입</a>
+        <a class="acts-member-strong" href="/member-center/login.html">🔐 통합회원 로그인</a>
+        <a href="/member-center/mypage.html">MY PAGE</a>
+        <a href="/participation.html">ACTS 참여 안내</a>`;
+      joinPanel.prepend(quick);
+    }
+  }
+
+  // 데스크톱 상단은 소개 / 소통센터 / 참여하기 / 전체메뉴만 보이게 정리합니다.
+  // 숨기는 것이 아니라 기존 메뉴 패널들을 전체메뉴에 복제해 접근성을 그대로 보존합니다.
+  if (menu && !menu.querySelector('[data-all-menu]')) {
+    const allItem = document.createElement('div');
+    allItem.className = 'mega-item acts-all-menu-item';
+    allItem.setAttribute('data-all-menu', 'true');
+    allItem.innerHTML = `
+      <button class="mega-trigger" type="button">전체메뉴 <span>⌄</span></button>
+      <div class="mega-panel mega-panel-4 acts-all-menu-panel"></div>`;
+
+    const allPanel = allItem.querySelector('.acts-all-menu-panel');
+    const keepTop = ['소개', '소통센터', '참여하기'];
+    const currentItems = [...menu.querySelectorAll(':scope > .mega-item')];
+
+    currentItems.forEach(item => {
+      const trigger = item.querySelector(':scope > .mega-trigger');
+      const panel = item.querySelector(':scope > .mega-panel');
+      if (!trigger || !panel) return;
+      const label = (trigger.childNodes[0]?.textContent || trigger.textContent).replace('⌄', '').trim();
+      if (keepTop.some(name => label.includes(name))) {
+        item.setAttribute('data-primary-top', 'true');
+        return;
+      }
+
+      item.setAttribute('data-secondary-top', 'true');
+      const section = document.createElement('section');
+      const title = document.createElement('h3');
+      title.textContent = label;
+      section.appendChild(title);
+
+      panel.querySelectorAll('a').forEach(link => {
+        const cloned = link.cloneNode(true);
+        section.appendChild(cloned);
+      });
+
+      if (section.querySelector('a')) allPanel.appendChild(section);
+    });
+
+    menu.appendChild(allItem);
+  }
+
+  // 데스크톱 가로 메뉴 정리 스타일. 모바일에서는 기존 전체 메뉴 구조를 유지합니다.
+  if (!document.getElementById('acts-simple-nav-style')) {
+    const style = document.createElement('style');
+    style.id = 'acts-simple-nav-style';
+    style.textContent = `
+      @media(min-width:981px){
+        #megaMenu > .mega-item[data-secondary-top="true"]{display:none!important}
+        #megaMenu > .mega-item[data-primary-top="true"],
+        #megaMenu > .mega-item[data-all-menu="true"]{display:block!important}
+        .acts-all-menu-panel{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-height:72vh;overflow:auto}
+        .acts-member-quick{background:linear-gradient(180deg,#fff9e9,#fff);border-radius:12px;padding:14px!important;border:1px solid rgba(196,143,37,.25)}
+        .acts-member-quick .acts-member-strong{font-weight:900;color:#8b6114!important}
+      }
+      @media(max-width:980px){
+        #megaMenu > .mega-item[data-secondary-top="true"]{display:block!important}
+        #megaMenu > .mega-item[data-all-menu="true"]{display:none!important}
+      }
+      @media(max-width:1200px) and (min-width:981px){.acts-all-menu-panel{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+    `;
+    document.head.appendChild(style);
   }
 
   const items = [...header.querySelectorAll('.mega-item')];
@@ -90,6 +168,7 @@
     };
 
     items.forEach((item, index) => {
+      if (item.matches('[data-all-menu]')) return;
       const sourceTrigger = item.querySelector('.mega-trigger');
       const sourcePanel = item.querySelector('.mega-panel');
       if (!sourceTrigger || !sourcePanel) return;
@@ -149,14 +228,12 @@
     if (!trigger) return;
     trigger.setAttribute('aria-expanded', 'false');
 
-    // Desktop: hovering a top-level trigger opens it and DOES NOT auto-close.
     trigger.addEventListener('mouseenter', () => {
       if (!desktopMQ.matches) return;
       closeAll(item);
       setOpen(item, true);
     });
 
-    // Click works on both desktop and mobile.
     trigger.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
@@ -175,7 +252,6 @@
     });
   }
 
-  // Only an outside click closes the desktop menu.
   document.addEventListener('click', e => {
     if (!header.contains(e.target)) {
       closeAll();
