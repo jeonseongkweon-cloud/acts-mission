@@ -1,4 +1,4 @@
-// ACTS MISSION ALLIANCE v5.1.3 — STICKY DESKTOP MEGA MENU
+// ACTS MISSION ALLIANCE v5.1.4 — STICKY DESKTOP MEGA MENU
 // Desktop: hover/click opens a menu and it stays open until another menu,
 // an outside click, Escape, or a submenu link is selected.
 (() => {
@@ -43,6 +43,24 @@
     const prayerItem = prayerTrigger?.closest('.mega-item');
     if (prayerItem) menu.insertBefore(item, prayerItem);
     else menu.appendChild(item);
+  }
+
+  // 관리자 로그인은 상단에 별도 버튼을 만들지 않고 '참여하기' 메가메뉴 안에 숨겨 둡니다.
+  // PC/모바일 모두 같은 메가메뉴 구조를 사용하므로 한 번만 추가하면 공통 적용됩니다.
+  if (menu && !menu.querySelector('[data-acts-admin-link]')) {
+    const joinTrigger = [...menu.querySelectorAll('.mega-trigger')]
+      .find(btn => btn.textContent.includes('참여하기'));
+    const joinPanel = joinTrigger?.closest('.mega-item')?.querySelector('.mega-panel');
+    if (joinPanel) {
+      const sections = joinPanel.querySelectorAll('section');
+      const target = sections[sections.length - 1] || joinPanel;
+      const adminLink = document.createElement('a');
+      adminLink.href = '/admin.html';
+      adminLink.setAttribute('data-acts-admin-link', 'true');
+      adminLink.textContent = '⚙ 관리자 로그인';
+      adminLink.title = 'ACTS 관리자 로그인';
+      target.appendChild(adminLink);
+    }
   }
 
   const items = [...header.querySelectorAll('.mega-item')];
