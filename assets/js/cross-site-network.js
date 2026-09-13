@@ -1,5 +1,41 @@
 
 (function(){
+  const isAdminPage = /(^|\/)admin(?:-dashboard|-posts)?\.html$/i.test(location.pathname);
+
+  async function enforceActsAdmin(){
+    if(!isAdminPage) return;
+    try{
+      const scripts=[...document.scripts].map(s=>s.textContent||'').join('\n');
+      const urlMatch=scripts.match(/https:\/\/[a-z0-9]+\.supabase\.co/i);
+      const keyMatch=scripts.match(/sb_publishable_[A-Za-z0-9_\-]+/);
+      if(!urlMatch||!keyMatch||!window.supabase){
+        console.error('ACTS admin guard: Supabase config not found');
+        return;
+      }
+      const guardClient=window.supabase.createClient(urlMatch[0],keyMatch[0]);
+      const {data:{session},error:sessionError}=await guardClient.auth.getSession();
+      if(sessionError||!session){
+        if(!/\/admin\.html$/i.test(location.pathname)) location.replace('/admin.html');
+        return;
+      }
+      const {data:isAdmin,error:adminError}=await guardClient.rpc('acts_is_admin');
+      if(adminError||isAdmin!==true){
+        await guardClient.auth.signOut();
+        if(/\/admin\.html$/i.test(location.pathname)){
+          const msg=document.getElementById('message');
+          if(msg) msg.textContent='ACTS 관리자 권한이 없는 계정입니다.';
+        }else{
+          location.replace('/admin.html?denied=1');
+        }
+      }
+    }catch(error){
+      console.error('ACTS admin guard error:',error);
+      if(!/\/admin\.html$/i.test(location.pathname)) location.replace('/admin.html');
+    }
+  }
+
+  enforceActsAdmin();
+
   if (document.getElementById('acts-external-sites-dock')) return;
   const style=document.createElement('style');
   style.textContent=`
